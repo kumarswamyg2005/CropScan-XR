@@ -2,6 +2,8 @@
 
 An end-to-end deep learning application that identifies plant diseases from leaf images across 38 disease classes with **99.3% test accuracy**.
 
+**Live Demo:** [https://crop-disease-detector-three.vercel.app/](https://crop-disease-detector-three.vercel.app/)
+
 ![Training Curves](training_curves%20(2).png)
 
 ---
@@ -134,5 +136,6 @@ Apple (4), Blueberry, Cherry, Corn (4), Grape (4), Orange, Peach, Bell Pepper, P
 
 ## Deployment
 
+- **Live site:** [https://crop-disease-detector-three.vercel.app/](https://crop-disease-detector-three.vercel.app/)
 - **Backend:** Deployable on Render or Hugging Face Spaces (Dockerfile included)
 - **Frontend:** Deployable on Vercel (`npm run build` → deploy `dist/`)
