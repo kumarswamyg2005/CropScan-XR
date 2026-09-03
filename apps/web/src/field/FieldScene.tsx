@@ -3,15 +3,16 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { XR } from '@react-three/xr'
 
-import type { DiseaseCycle, Intervention } from '../lib/api'
+import type { DiseaseCycle, Intervention, Video } from '../lib/api'
 import { tokenHex } from '../tokens'
 import DiseaseTriangle from './DiseaseTriangle'
+import FieldTheatre from './FieldTheatre'
 import InfectionTheatre from './InfectionTheatre'
 import TheRow from './TheRow'
 import { optimalDials, runCycle, suggestBreak, type Dials } from './cycleMachine'
 import { xrStore } from './store'
 
-export type SceneName = 'row' | 'theatre'
+export type SceneName = 'row' | 'theatre' | 'video'
 
 /**
  * The 3D half of the field module. Everything three.js lives at or below this
@@ -28,6 +29,7 @@ export default function FieldScene({
   interventions,
   gradcamUrl,
   diseaseName,
+  video,
 }: {
   cycle: DiseaseCycle
   scene: SceneName
@@ -36,6 +38,7 @@ export default function FieldScene({
   interventions: Intervention[]
   gradcamUrl: string | null
   diseaseName: string
+  video?: Video | null
 }) {
   const run = runCycle(cycle, dials, interventions)
 
@@ -52,9 +55,9 @@ export default function FieldScene({
 
       <XR store={xrStore}>
         <Suspense fallback={null}>
-          {scene === 'row' ? (
-            <TheRow healthLabel={diseaseName} />
-          ) : (
+          {scene === 'row' && <TheRow healthLabel={diseaseName} />}
+
+          {scene === 'theatre' && (
             <InfectionTheatre
               run={run}
               currentStage={currentStage}
@@ -62,8 +65,14 @@ export default function FieldScene({
             />
           )}
 
-          {/* Persistent HUD glyph, 1.2 m out and inside the forward cone. */}
-          <DiseaseTriangle run={run} position={[-0.75, 1.5, -1.2]} scale={1.6} />
+          {scene === 'video' && video && <FieldTheatre video={video} />}
+
+          {/* Persistent HUD glyph, 1.2 m out and inside the forward cone. It
+              is hidden in the video scene so it cannot sit in front of a 360
+              clip the viewer is trying to read symptoms off. */}
+          {scene !== 'video' && (
+            <DiseaseTriangle run={run} position={[-0.75, 1.5, -1.2]} scale={1.6} />
+          )}
         </Suspense>
       </XR>
 

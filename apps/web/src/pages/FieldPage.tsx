@@ -61,7 +61,14 @@ export default function FieldPage() {
     enabled: Boolean(diseaseId),
   })
 
+  const videosQuery = useQuery({
+    queryKey: ['videos', diseaseId, lang],
+    queryFn: () => api.listVideos(diseaseId!, lang),
+    enabled: Boolean(diseaseId),
+  })
+
   const cycle = cycleQuery.data?.cycle ?? null
+  const videos = videosQuery.data ?? []
 
   useEffect(() => {
     if (cycle && !dials) setDials(optimalDials(cycle))
@@ -134,6 +141,7 @@ export default function FieldPage() {
               interventions={applied}
               gradcamUrl={scanQuery.data?.gradcam_url ?? null}
               diseaseName={scanQuery.data?.info?.name ?? diseaseId.split('___')[1] ?? ''}
+              video={videos[0] ?? null}
             />
           </div>
 
@@ -146,13 +154,25 @@ export default function FieldPage() {
             >
               {t('enterInVR')}
             </button>
-            <button
-              type="button"
-              onClick={() => setScene(scene === 'row' ? 'theatre' : 'row')}
-              className="border border-ink px-4 py-2"
-            >
-              {scene === 'row' ? 'Infection Theatre' : 'The Row'}
-            </button>
+            {(
+              [
+                ['row', 'The Row'],
+                ['theatre', 'Infection Theatre'],
+                ...(videos.length > 0 ? [['video', 'Field Theatre'] as const] : []),
+              ] as const
+            ).map(([name, label]) => (
+              <button
+                key={name}
+                type="button"
+                onClick={() => setScene(name)}
+                aria-pressed={scene === name}
+                className={`border px-4 py-2 ${
+                  scene === name ? 'border-ink text-ink' : 'border-rule text-ink-soft'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
             <span className="determination self-center">
               {xrSupported === true ? t('headsetSupported') : t('headsetMissing')}
             </span>
