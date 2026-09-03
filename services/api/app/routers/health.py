@@ -35,3 +35,29 @@ def healthz(db: Session = Depends(get_db)) -> HealthOut:
         storage_reachable=storage.healthy(),
         cycles_loaded=len(load_cycles()),
     )
+
+
+@router.get("/api/model")
+def model_card() -> dict:
+    """The numbers /about publishes.
+
+    Served from meta.json rather than hardcoded in the frontend, so the site
+    cannot drift from the model that is actually deployed. If there is no
+    model, the page says so instead of showing a stale figure.
+    """
+    try:
+        model = load_model()
+    except Exception:
+        return {"available": False}
+
+    meta = model.meta
+    return {
+        "available": True,
+        "model_name": meta["model_name"],
+        "model_version": model.version,
+        "trained_at": meta.get("trained_at"),
+        "num_classes": meta["num_classes"],
+        "metrics": meta["metrics"],
+        "confidence_threshold": meta["confidence_threshold"],
+        "entropy_threshold": meta["entropy_threshold"],
+    }

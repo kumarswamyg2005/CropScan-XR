@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════════════════════
+   The single token source.
+
+   Tailwind v4 CSS-first @theme. There is no tailwind.config.js and no
+   duplicated palette in TypeScript -- src/tokens.ts READS these custom
+   properties at runtime and hands them to the XR panels, so one palette
+   drives two renderers (docs/design_plan.md section 7).
+
+   Every value is a flat hex. A token that only works as a gradient or
+   depends on alpha compositing cannot survive being a colour on a 3D
+   panel, and would therefore be the wrong token.
+   ══════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* Ground -- cool paper. Deliberately not #F4F1EA-family cream. */
+  --color-ground: #e8ebee;
+  --color-sheet: #f7f9fa;
+  --color-ink: #14181c;
+  --color-ink-soft: #5a646e;
+  --color-rule: #c3cbd2;
+
+  /* Tissue ramp -- data colours. Severity and confidence, never decoration. */
+  --color-chlorophyll: #2f6b3a;
+  --color-chlorosis: #b8951c;
+  --color-necrosis: #7a3b22;
+  --color-sporulation: #6b5e7a;
+
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+  /* Major third, 16px base. */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.5625rem;
+  --text-xl: 1.9375rem;
+  --text-2xl: 2.4375rem;
+}
+
+@layer base {
+  html {
+    background: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-size: var(--text-base);
+    line-height: 1.6;
+  }
+
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    font-weight: 600;
+  }
+
+  /* Visible keyboard focus is an accessibility floor, not a preference. */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-chlorophyll);
+    color: var(--color-sheet);
+  }
+}
+
+@layer components {
+  /* A mounting sheet. Hairline rule, never a shadow -- this is a
+     documentation plate, not a floating panel. */
+  .plate {
+    background: var(--color-sheet);
+    border: 1px solid var(--color-rule);
+  }
+
+  /* Anything the model or the ledger asserts is typewritten, so an
+     assertion never looks like prose. */
+  .determination {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink-soft);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
