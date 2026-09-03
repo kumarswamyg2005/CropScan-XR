@@ -33,6 +33,8 @@ function stripXrEmulator(): Plugin {
   }
 }
 
+const API_URL = process.env.API_URL ?? 'http://localhost:8000'
+
 export default defineConfig({
   plugins: [react(), tailwindcss(), stripXrEmulator()],
   build: {
@@ -44,6 +46,11 @@ export default defineConfig({
     chunkSizeWarningLimit: 1400,
   },
   server: {
-    proxy: { '/api': 'http://localhost:8000', '/healthz': 'http://localhost:8000' },
+    // Port is configurable because 8000 is a popular default and is often
+    // already taken by something else on a dev machine.
+    proxy: {
+      '/api': API_URL,
+      '/healthz': API_URL,
+    },
   },
 })

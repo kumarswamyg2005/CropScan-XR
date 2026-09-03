@@ -13,7 +13,12 @@
    panel, and would therefore be the wrong token.
    ══════════════════════════════════════════════════════════════════════ */
 
-@theme {
+/* `static` matters. A plain @theme block only emits the custom properties
+   Tailwind can see used in CSS, and the tissue-ramp colours are referenced
+   from TypeScript (tokens.ts -> the three.js scene), which it cannot see. They
+   were being tree-shaken away, so the XR renderer fell back to black.
+   `static` emits every declared variable. scripts/check-budget.mjs asserts it. */
+@theme static {
   /* Ground -- cool paper. Deliberately not #F4F1EA-family cream. */
   --color-ground: #e8ebee;
   --color-sheet: #f7f9fa;

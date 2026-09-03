@@ -64,7 +64,29 @@ if (rooms.length > 0) {
   console.log('ok  no XR emulator fixtures in the build')
 }
 
-// --- 4. the XR chunk itself, for reference -----------------------------------
+// --- 4. every design token must survive into the built CSS -------------------
+// The XR scene reads these custom properties at runtime. Tailwind's @theme
+// tree-shakes variables it cannot see used in CSS, and the tissue-ramp colours
+// are only referenced from TypeScript -- they were silently dropped once, and
+// the 3D ground rendered black. One palette, two renderers, or neither.
+const TOKENS = [
+  'ground', 'sheet', 'ink', 'ink-soft', 'rule',
+  'chlorophyll', 'chlorosis', 'necrosis', 'sporulation',
+]
+const cssFile = readdirSync(ASSETS).find((f) => f.endsWith('.css'))
+if (!cssFile) {
+  failures.push('no stylesheet in the build')
+} else {
+  const css = readFileSync(join(ASSETS, cssFile), 'utf8')
+  const missing = TOKENS.filter((t) => !css.includes(`--color-${t}:`))
+  if (missing.length > 0) {
+    failures.push(`design tokens missing from the built CSS: ${missing.join(', ')}`)
+  } else {
+    console.log(`ok  all ${TOKENS.length} design tokens present in the built CSS`)
+  }
+}
+
+// --- 5. the XR chunk itself, for reference -----------------------------------
 const xrChunk = readdirSync(ASSETS).find((f) => f.startsWith('FieldPage-'))
 if (xrChunk) {
   const size = gzipSync(readFileSync(join(ASSETS, xrChunk))).length
