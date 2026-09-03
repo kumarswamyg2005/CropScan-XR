@@ -1,0 +1,4 @@
+packages:
+  - "apps/*"
+  # frontend/ moves to apps/web during the Phase 6 TypeScript migration (PRD D3)
+  - "frontend"

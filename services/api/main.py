@@ -14,13 +14,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load disease info once at startup
-_disease_info_path = os.path.join(os.path.dirname(__file__), "disease_info.json")
-with open(_disease_info_path) as f:
+# Content lives in data/, outside the service, because it is shared with ml/ and the web app.
+DATA_DIR = os.environ.get(
+    "DATA_DIR", os.path.join(os.path.dirname(__file__), "..", "..", "data")
+)
+
+with open(os.path.join(DATA_DIR, "disease_info.json")) as f:
     DISEASE_INFO: dict = json.load(f)
 
-_translations_path = os.path.join(os.path.dirname(__file__), "translations_te.json")
-with open(_translations_path) as f:
+with open(os.path.join(DATA_DIR, "translations_te.json")) as f:
     TRANSLATIONS_TE: dict = json.load(f)
 
 

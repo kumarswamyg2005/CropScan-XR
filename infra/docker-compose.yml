@@ -1,0 +1,48 @@
+# Postgres + MinIO only. No Redis, no queue, no broker (PRD section 3).
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: cropscan
+      POSTGRES_PASSWORD: cropscan
+      POSTGRES_DB: cropscan
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cropscan"]
+      interval: 5s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: cropscan
+      MINIO_ROOT_PASSWORD: cropscan123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      retries: 10
+
+  # Creates the media bucket once, then exits.
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 cropscan cropscan123 &&
+      mc mb --ignore-existing local/cropscan-media &&
+      echo 'bucket ready'"
+
+volumes:
+  pgdata:
+  miniodata:

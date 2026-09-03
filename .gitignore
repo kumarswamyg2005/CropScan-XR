@@ -1,5 +1,10 @@
-# Dataset (too large for git)
-data/
+# Datasets — images are never committed, manifests and content JSON are
+data/images/
+data/raw/
+*.pt
+*.pth
+*.onnx
+!services/api/model/.gitkeep
 
 # Python
 __pycache__/
@@ -8,11 +13,17 @@ __pycache__/
 *.pyd
 .Python
 *.egg-info/
+.venv/
 .env
 
 # Node
-frontend/node_modules/
-frontend/dist/
+node_modules/
+dist/
+.pnpm-store/
+
+# ML artefacts
+ml/runs/
+ml/checkpoints/
 
 # OS
 .DS_Store
