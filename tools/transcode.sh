@@ -11,6 +11,8 @@
 #     anything over 4K gets an h.265 rendition and h.264 is capped at 1080p.
 #   * 6-second segments: long enough to keep the request rate sane, short
 #     enough that seeking in a 360 clip does not stall.
+#   * Each variant gets its own audio mapping. Pointing two variants at the
+#     same a:0 makes ffmpeg reject the job outright.
 #   * Do not assume AV1 hardware decode on older Quest hardware.
 
 set -euo pipefail
@@ -42,12 +44,12 @@ ffmpeg -hide_banner -loglevel warning -y -i "$INPUT" \
   -filter_complex "[0:v]split=2[v1][v2];[v1]scale=-2:720[v1out];[v2]scale=-2:1080[v2out]" \
   -map "[v1out]" -c:v:0 libx264 -b:v:0 2800k -preset veryfast -profile:v main \
   -map "[v2out]" -c:v:1 libx264 -b:v:1 5500k -preset veryfast -profile:v main \
-  -map a:0 -c:a aac -b:a 128k -ac 2 \
+  -map a:0 -map a:0 -c:a aac -b:a 128k -ac 2 \
   -f hls -hls_time 6 -hls_playlist_type vod -hls_flags independent_segments \
   -hls_segment_type mpegts \
   -hls_segment_filename "$OUTDIR/h264_%v_%03d.ts" \
   -master_pl_name index.m3u8 \
-  -var_stream_map "v:0,a:0,name:720p v:1,a:0,name:1080p" \
+  -var_stream_map "v:0,a:0,name:720p v:1,a:1,name:1080p" \
   "$OUTDIR/h264_%v.m3u8"
 
 # ---- h.265 for anything above 4K, which is every 360 clip worth having ----
@@ -63,7 +65,7 @@ fi
 
 # ---- poster frame, taken 10% in so it is not a black lead-in ----
 ffmpeg -hide_banner -loglevel warning -y -i "$INPUT" \
-  -ss "$(( DURATION / 10 ))" -vframes 1 -q:v 3 "$OUTDIR/poster.jpg"
+  -ss "$(( DURATION / 10 ))" -frames:v 1 -update 1 -q:v 3 "$OUTDIR/poster.jpg"
 
 cat > "$OUTDIR/video.json" <<JSON
 {

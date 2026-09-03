@@ -9,7 +9,7 @@ One product, three surfaces, one API.
 | Surface | What it is | For |
 | --- | --- | --- |
 | **Scan** (2D web) | Photograph a leaf → diagnosis, confidence, Grad-CAM, treatment | A farmer on a phone |
-| **Field** (WebXR) | Walk a crop row, replay the infection cycle of the diagnosed disease, break it by changing one condition | Students, extension workers, agronomists |
+| **Field** (WebXR) | Watch the disease in 360° field footage while its infection cycle runs alongside — then stall it by changing one condition | Students, extension workers, agronomists |
 | **Ledger** | Every scan and payment appended to a hash chain that visibly detects tampering | Farmer, buyer, auditor |
 
 The through-line, and the thing that makes this not another CNN demo:
@@ -57,12 +57,12 @@ page either way.
 
 ```
                         ┌──────────────────────────────┐
-   phone / desktop ───► │  apps/web   React 19 + TS    │
+   phone / desktop ───► │  frontend    React 18 + Vite  │
                         │  ───────────────────────────  │
-                        │  /scan  /diseases  /ledger    │
+                        │  /  /detect  /result  /about  │
                         │  /field ── lazy chunk ───────┼──► three.js
                         └──────────────┬───────────────┘    @react-three/xr
-                                       │ HTTP                (Quest 3)
+                                       │ HTTP           360° video, Quest 3
                         ┌──────────────▼───────────────┐
                         │  services/api   FastAPI       │
                         │  ───────────────────────────  │
@@ -83,7 +83,7 @@ page either way.
 **Repo layout**
 
 ```
-apps/web/           React app; 2D routes plus the lazy /field XR route
+frontend/           React app; 2D routes plus the lazy /field video-XR route
 services/api/       FastAPI, Alembic, tests
 ml/                 training, eval, export — own requirements.txt
 data/               taxonomy, manifests, disease_cycle.json, disease_info.json
@@ -107,8 +107,16 @@ fourteen diseases across apple, tomato and potato, each with the nine canonical
 stages, the environmental thresholds that gate them, interventions bound to the
 stage they act on, and a citation on every entry. The simulator is the disease
 triangle wired to three sliders: drop leaf wetness below *Venturia inaequalis*'s
-nine hours and the cycle **visibly halts** at germination. That number comes from
-the Mills table via the JSON, not from a shader.
+nine hours and the cycle **visibly halts** at germination, in the headset and on
+the page, with the same sentence. That number comes from the Mills table via the
+JSON, not from a shader.
+
+**The XR module is 360° footage, not a 3D diorama.** A headset is excellent at
+putting you in a real orchard and poor at procedural greenery, so the footage is
+the experience and the cycle rides over it on flat panels. Video goes through
+WebXR Media Layers so the compositor samples it once at source resolution, and
+one clip plays at a time because two 4K decodes on Quest do not degrade
+gracefully. See [ADR 0005](docs/adr/0005-video-first-xr-and-restored-frontend.md).
 
 **Tamper-evidence you can demonstrate in five seconds.** Edit one payload in
 psql, press verify, watch it name the broken entry. Recompute the hash to cover
@@ -135,10 +143,14 @@ alembic upgrade head
 python seed.py
 uvicorn app.main:app --reload --port 8000
 
-# web
+# web  (API_URL only if the API is not on :8000)
 pnpm install
-pnpm --filter web dev
+API_URL=http://127.0.0.1:8000 pnpm --filter crop-disease-detector dev
 ```
+
+Video: `tools/transcode.sh clip.mp4 out/name --projection equirect` builds the
+HLS ladder, then upload it under `videos/` and register the row with
+`services/api/register_video.py`.
 
 `/healthz` reports whether the model, database and object storage are reachable.
 The API runs without a model — `/api/scans` returns 503 and everything else
@@ -148,8 +160,8 @@ works.
 
 ```bash
 pytest services/api/tests ml/tests     # 123 passing
-pnpm --filter web test                 # 45 passing
-pnpm --filter web build                # typecheck, build, bundle budget
+pnpm --filter crop-disease-detector test   # 32 passing
+pnpm --filter crop-disease-detector build
 ```
 
 ### Training
@@ -177,9 +189,8 @@ model cannot get behind the API.
 | Disease-cycle knowledge base (apple, tomato, potato) | done, 14 diseases, sourced |
 | API: scans, diseases, cycle, ledger | done |
 | API: payments, webhooks, video registry | done |
-| Web: 2D rebuild in TypeScript | done |
-| XR: The Row, Infection Theatre | done, **needs a 72 FPS capture on Quest** |
-| XR: Field Theatre | done |
+| Web: original design, rewired to the new API | done |
+| XR: 360° video theatre + cycle overlay | done, **needs a 72 FPS capture on Quest** |
 | Docs | done |
 | Polygon Amoy anchoring (optional) | not started, flag-gated |
 
@@ -205,9 +216,16 @@ Quest 3 for the frame-rate gate.
 - **Payments are Razorpay test mode.** Nothing is charged.
 - **`model.pt` (15.7 MB) is still in git history** from before the deletion
   commit. Removing it needs a history rewrite, which is opt-in.
+- **The homepage still advertises 99.3% accuracy and EfficientNet-B0.** Both
+  describe the deleted model. They must be replaced with the field number before
+  this is published — see the note at the end of ADR 0005.
+- **Field footage is a generated placeholder.** `tools/transcode.sh` and the
+  registry work end to end; the clip itself is a synthetic equirect pattern
+  until real orchard capture replaces it.
 
 ## Documentation
 
 [PRD](docs/prd.md) · [issues](docs/issues.md) · [design plan](docs/design_plan.md) ·
 [model card](docs/model_card.md) · [demo script](docs/demo.md) ·
-[XR test plan](docs/xr_test_plan.md) · [ADRs](docs/adr/)
+[XR test plan](docs/xr_test_plan.md) · [ADRs](docs/adr/) ·
+[design plan](docs/design_plan.md) (superseded)

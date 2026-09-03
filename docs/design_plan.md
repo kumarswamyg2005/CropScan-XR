@@ -1,3 +1,12 @@
+> **SUPERSEDED (2026-09-04).** This plan described a replacement visual
+> direction for the 2D app. That app has been removed and the original
+> `frontend/` restored at the owner's request — see
+> [ADR 0005](adr/0005-video-first-xr-and-restored-frontend.md). The document
+> is kept because the review against the AI-design tells in section 6 is
+> still a useful record of what was considered and why.
+
+---
+
 # Design plan — CropScan XR
 
 Required deliverable, written before any component (PRD 8, Gate 3).

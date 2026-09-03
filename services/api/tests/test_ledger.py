@@ -14,6 +14,7 @@ import pytest
 
 from app.ledger import (
     GENESIS_HASH,
+    utc_day,
     canonical_json,
     compute_entry_hash,
     entry_hash_of,
@@ -253,3 +254,25 @@ def test_proof_fails_against_the_wrong_root():
 def test_merkle_proof_index_out_of_range():
     with pytest.raises(IndexError):
         merkle_proof([f"{i:064x}" for i in range(3)], 5)
+
+
+# --- day bucketing ----------------------------------------------------------
+
+def test_utc_day_ignores_the_server_timezone():
+    """Entries are stored in UTC, so the day they are bucketed into must be the
+    UTC day. Using date.today() means a server east of Greenwich looks for the
+    wrong day for hours every night and builds an empty root while entries are
+    still being written."""
+    from datetime import timedelta
+
+    late = datetime(2026, 9, 3, 23, 30, tzinfo=timezone.utc)
+    assert utc_day(late) == "2026-09-03"
+
+    # The same instant, expressed in India time, is already the 4th locally.
+    india = late.astimezone(timezone(timedelta(hours=5, minutes=30)))
+    assert india.date().isoformat() == "2026-09-04"
+    assert utc_day(india) == "2026-09-03"
+
+
+def test_utc_day_of_a_naive_timestamp_is_treated_as_utc():
+    assert utc_day(datetime(2026, 9, 3, 23, 30, tzinfo=timezone.utc)) == "2026-09-03"

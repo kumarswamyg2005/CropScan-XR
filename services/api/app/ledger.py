@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from typing import Any, Iterable, Sequence
 
 from sqlalchemy import func, select, text
@@ -327,9 +327,21 @@ def _day_leaves(db: Session, day: str) -> list[LedgerEntry]:
     ).scalars())
 
 
+def utc_day(moment: datetime | None = None) -> str:
+    """The day a ledger entry belongs to, in UTC.
+
+    Must be UTC, not date.today(). created_at is stored in UTC and _day_leaves
+    compares against that stored value, so a server in any other timezone would
+    look for the wrong day for part of every day -- in India, five and a half
+    hours of it -- and build an empty root while entries were being written.
+    Silently.
+    """
+    return (moment or datetime.now(timezone.utc)).astimezone(timezone.utc).date().isoformat()
+
+
 def build_daily_root(db: Session, day: str | None = None) -> MerkleRoot | None:
     """Build (or rebuild) the Merkle root for one day. Idempotent."""
-    day = day or date.today().isoformat()
+    day = day or utc_day()
     entries = _day_leaves(db, day)
     if not entries:
         return None
@@ -357,7 +369,8 @@ def inclusion_proof(db: Session, entry_id: str) -> dict | None:
     if entry is None:
         return None
 
-    day = entry.created_at.astimezone(timezone.utc).date().isoformat()
+    day = utc_day(entry.created_at if entry.created_at.tzinfo
+                  else entry.created_at.replace(tzinfo=timezone.utc))
     entries = _day_leaves(db, day)
     leaves = [e.entry_hash for e in entries]
     index = next(i for i, e in enumerate(entries) if e.id == entry.id)

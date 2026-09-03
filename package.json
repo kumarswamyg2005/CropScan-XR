@@ -3,8 +3,8 @@
   "private": true,
   "packageManager": "pnpm@9.12.0",
   "scripts": {
-    "dev": "pnpm --filter web dev",
-    "build": "pnpm --filter web build",
-    "test": "pnpm --filter web test"
+    "dev": "pnpm --filter crop-disease-detector dev",
+    "build": "pnpm --filter crop-disease-detector build",
+    "test": "pnpm --filter crop-disease-detector test"
   }
 }

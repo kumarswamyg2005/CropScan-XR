@@ -21,7 +21,7 @@ Record the date, build SHA and device. A failed line blocks the release.
 
 ## 2. Comfort — the ones that make people ill
 
-- [ ] Teleport only. No smooth locomotion anywhere
+- [ ] No locomotion at all — the viewer stands at the centre of the sphere
 - [ ] No forced camera movement, no artificial rotation, no acceleration
 - [ ] The horizon stays level at all times
 - [ ] Nothing is head-locked; any following UI uses a delayed lerp
@@ -41,57 +41,53 @@ Record the date, build SHA and device. A failed line blocks the release.
 - [ ] Hit targets are generously spaced; hover and press both give feedback
 - [ ] Nothing important sits where a hand naturally occludes it
 
-## 4. The Row
+## 4. The video theatre
 
-- [ ] The diagnosed plant is in front of the user and marked
-- [ ] Plants are instanced — check the draw-call count, not the look
-- [ ] Teleport works to every reachable part of the row
-- [ ] Teleport cannot put the user inside a plant or under the ground
-
-## 5. Infection Theatre — the core
-
-- [ ] The cycle runs end to end at the pathogen's optimum
-- [ ] Dragging **leaf wetness** below the threshold halts the run **visibly**:
-      spores stop, an × marks the stage, the panel names the missing condition
-- [ ] The failure sentence matches the API's wording for the same stage
-- [ ] The **disease triangle** glyph is legible, always visible, and its
-      environment leg goes dark when the run halts
-- [ ] Later stages read "not reached", not "failed"
-- [ ] A `blocks` intervention halts the cycle at its stage
-- [ ] A `reduces_inoculum` intervention does **not** halt it
-- [ ] Re-running after applying an intervention shows the changed outcome
-- [ ] The user's own Grad-CAM is visible beside the simulated lesion
-- [ ] Tomato leaf mould below 85% RH halts — the cleanest teaching case
-- [ ] Spider mites behave in reverse: dry air favours them
-
-## 6. Field Theatre
-
-- [ ] 360 clips use an equirect layer; flat clips use a quad layer
+- [ ] 360 clips wrap correctly; 180 clips fill a hemisphere with no seam artefact
 - [ ] Stereo layout matches the video row's `stereo` column
 - [ ] Layer video is visibly sharper than the texture fallback
 - [ ] The polyfill path works in desktop Chrome
 - [ ] **Only one video plays at a time.** Switch clips repeatedly and confirm
-      the previous one stops
+      the previous one stops and releases its decoder
 - [ ] Seeking a 4K 360 clip does not stall for more than ~2 s
-- [ ] Spot-the-symptom hotspots are selectable and score correctly
+- [ ] Switching clips mid-playback does not leave audio from the previous one
+- [ ] The poster frame shows before playback starts
 
-## 7. Performance — acceptance criteria, not aspiration
+## 5. The cycle overlay
+
+- [ ] The stage panel, timeline and disease-triangle glyph are all legible
+      against bright footage, each on its own opaque plate
+- [ ] The cycle runs end to end at the pathogen's optimum
+- [ ] Dragging **leaf wetness** below the threshold halts the run **visibly**:
+      an × marks the stage on the timeline and the panel names the missing
+      condition
+- [ ] The failure sentence matches the API's wording for the same stage, and
+      matches what the 2D sidebar says
+- [ ] The **disease triangle**'s environment leg goes dark when the run halts
+- [ ] Later stages read "not reached", not "failed"
+- [ ] Tomato leaf mould below 85% RH halts — the cleanest teaching case
+- [ ] Spider mites behave in reverse: dry air favours them
+- [ ] Nothing on the overlay obscures the part of the footage the user is
+      being asked to look at
+
+## 6. Performance — acceptance criteria, not aspiration
 
 Measured with the **in-headset performance HUD**, not by feel.
 
-- [ ] **72 FPS sustained** in the Infection Theatre with the full spore effect
-- [ ] Draw calls under ~120
+- [ ] **72 FPS sustained** while a 360 clip plays with the overlay up
+- [ ] Draw calls under ~60 — the scene is a sphere and a few plates
 - [ ] Multiview enabled
-- [ ] Fixed foveated rendering on for the heavy scene
-- [ ] No frame-time spikes when switching scenes
-- [ ] XR chunk plus assets ≤ 12 MB on first entry
+- [ ] Fixed foveated rendering on
+- [ ] No frame-time spike when a clip starts or loops
+- [ ] Video decode does not stall the render thread on seek
+- [ ] XR chunk plus first clip segment ≤ 12 MB on entry
 - [ ] No `console.log` in the render loop
 - [ ] No per-frame allocation in `useFrame` — check the heap over 60 s
 
-**Gate 4 evidence:** a Quest screen capture of the Infection Theatre at 72 FPS
-with the HUD visible. Attach it to the release.
+**Gate 4 evidence:** a Quest screen capture of a 360 clip playing at 72 FPS with
+the cycle overlay and the performance HUD visible. Attach it to the release.
 
-## 8. Accessibility and exit
+## 7. Accessibility and exit
 
 - [ ] Everything reachable with either hand
 - [ ] Works seated and standing
