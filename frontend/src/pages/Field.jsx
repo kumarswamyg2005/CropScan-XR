@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react
 import { Link, useSearchParams } from 'react-router-dom'
 
 import { api } from '../lib/api'
+import ErrorBoundary from '../components/ErrorBoundary'
 import VideoOptions from '../components/VideoOptions'
 import { useLang } from '../context/LanguageContext'
 import { dialRanges, optimalDials, runCycle, suggestBreak } from '../field/cycleMachine'
@@ -32,6 +33,19 @@ const T = {
   pick: { en: 'Pick a disease to enter the field.', te: 'క్షేత్రంలోకి వెళ్లడానికి ఒక వ్యాధిని ఎంచుకోండి.' },
 }
 
+function useWebglSupport() {
+  const [ok, setOk] = useState(null)
+  useEffect(() => {
+    try {
+      const canvas = document.createElement('canvas')
+      setOk(Boolean(canvas.getContext('webgl2') || canvas.getContext('webgl')))
+    } catch {
+      setOk(false)
+    }
+  }, [])
+  return ok
+}
+
 function useXrSupport() {
   const [supported, setSupported] = useState(null)
   useEffect(() => {
@@ -57,6 +71,7 @@ export default function Field() {
   const { lang } = useLang()
   const [params] = useSearchParams()
   const xrSupported = useXrSupport()
+  const webglSupported = useWebglSupport()
 
   const scanId = params.get('scan')
   const diseaseParam = params.get('disease')
@@ -196,6 +211,19 @@ export default function Field() {
               position: 'relative', aspectRatio: '16 / 10', borderRadius: 12, overflow: 'hidden',
               border: '1px solid var(--color-border)', background: 'var(--color-surface-raised)',
             }}>
+              {webglSupported === false ? (
+                <div style={{
+                  display: 'grid', placeItems: 'center', height: '100%',
+                  padding: 24, textAlign: 'center', color: 'var(--color-text-muted)',
+                }}>
+                  <p style={{ margin: 0, maxWidth: 380 }}>
+                    {lang === 'te'
+                      ? 'ఈ బ్రౌజర్‌లో WebGL అందుబాటులో లేదు. చక్రం కుడివైపున ఇంకా నడుస్తుంది.'
+                      : 'WebGL is unavailable in this browser, so the scene cannot render. The cycle on the right still works.'}
+                  </p>
+                </div>
+              ) : (
+              <ErrorBoundary title="The 3D scene failed to start">
               <Suspense fallback={<div style={{ display: 'grid', placeItems: 'center', height: '100%', color: 'var(--color-text-muted)' }}>Loading the field…</div>}>
                 <FieldScene
                   video={video}
@@ -205,6 +233,8 @@ export default function Field() {
                   onStrategy={setStrategy}
                 />
               </Suspense>
+              </ErrorBoundary>
+              )}
             </div>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 14, alignItems: 'center' }}>

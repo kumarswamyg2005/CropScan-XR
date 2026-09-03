@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+import ErrorBoundary from './components/ErrorBoundary'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Detect from './pages/Detect'
@@ -11,13 +12,17 @@ export default function App() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/detect" element={<Detect />} />
-          <Route path="/result" element={<Result />} />
-          <Route path="/field" element={<Field />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
+        {/* The navbar sits outside the boundary on purpose: if a page throws,
+            the user should still be able to navigate away from it. */}
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/detect" element={<Detect />} />
+            <Route path="/result" element={<Result />} />
+            <Route path="/field" element={<Field />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </ErrorBoundary>
       </main>
     </div>
   )
