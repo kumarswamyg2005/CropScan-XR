@@ -48,6 +48,13 @@ export default defineConfig({
     include: ['src/**/*.test.js'],
   },
   server: {
+    // NOT 5173. That origin is poisoned: another project (FractureAI)
+    // registered a service worker on localhost:5173, and a service worker
+    // serves its own cached app before the request ever reaches a server --
+    // so restarting vite, clearing its cache and rebuilding all change
+    // nothing. Moving ports sidesteps the whole origin.
+    port: Number(process.env.PORT ?? 5199),
+    strictPort: true,
     proxy: { '/api': API_URL, '/healthz': API_URL },
   },
 })

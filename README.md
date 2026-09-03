@@ -153,8 +153,13 @@ uvicorn app.main:app --reload --port 8000
 
 # web  (API_URL only if the API is not on :8000)
 pnpm install
-API_URL=http://127.0.0.1:8000 pnpm --filter crop-disease-detector dev
+API_URL=http://127.0.0.1:8000 pnpm --filter crop-disease-detector dev   # http://localhost:5199
 ```
+
+The dev server runs on **5199**, not Vite's default 5173. A service worker
+registered by an unrelated project on `localhost:5173` was intercepting every
+request and serving its own cached app, which no amount of restarting this
+server could fix. Override with `PORT=... pnpm dev` if you need to.
 
 Video: `python tools/ingest_catalogue.py` downloads everything in
 `data/video_catalogue.json`, builds the HLS ladder, uploads it and registers the
