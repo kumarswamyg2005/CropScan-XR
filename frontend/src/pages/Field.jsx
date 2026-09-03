@@ -84,14 +84,29 @@ const card = {
 
 export default function Field() {
   const { lang } = useLang()
-  const [params] = useSearchParams()
+  const [params, setParams] = useSearchParams()
   const xrSupported = useXrSupport()
   const webglSupported = useWebglSupport()
 
   const scanId = params.get('scan')
   const diseaseParam = params.get('disease')
 
-  const [diseaseId, setDiseaseId] = useState(diseaseParam)
+  // The selected disease lives in the URL, not in component state.
+  //
+  // It used to be state, which meant picking a disease changed the screen
+  // without adding a history entry -- so one Back press skipped straight past
+  // the picker to whatever came before /field, and felt like two presses. It
+  // also made the view unshareable and unbookmarkable.
+  //
+  // A disease derived from a ?scan= lookup stays in state on purpose: it is a
+  // consequence of the scan already in the URL, not a separate step to go back to.
+  const [scanDisease, setScanDisease] = useState(null)
+  const diseaseId = diseaseParam ?? scanDisease
+
+  const pickDisease = useCallback(
+    (id) => setParams(id ? { disease: id } : {}),
+    [setParams],
+  )
   const [cycle, setCycle] = useState(null)
   const [videos, setVideos] = useState([])
   const [videoIndex, setVideoIndex] = useState(0)
@@ -115,7 +130,7 @@ export default function Field() {
     setBlocked(null)
     api.getScan(scanId, lang).then((scan) => {
       if (!scan.canEnterField) setBlocked(scan.fieldBlockedReason)
-      else setDiseaseId(scan.class_name)
+      else setScanDisease(scan.class_name)
     }).catch((e) => setBlocked(describe(e, lang)))
   }, [scanId, lang])
 
@@ -129,6 +144,9 @@ export default function Field() {
     // forever: the retry succeeds, the cycle loads, and the stale error is
     // still on screen with no way to dismiss it short of a reload.
     setLoadError(null)
+    setCycle(null)
+    setDials(null)
+    setVideos([])
     api.getCycle(diseaseId, lang).then((r) => {
       setCycle(r.cycle)
       if (r.cycle) setDials(optimalDials(r.cycle))
@@ -210,11 +228,12 @@ export default function Field() {
             className="btn-secondary"
             style={{ fontSize: 13 }}
             onClick={() => {
-              setDiseaseId(null)
+              setScanDisease(null)
               setCycle(null)
               setVideos([])
               setDials(null)
               setLoadError(null)
+              pickDisease(null)
             }}
           >
             {lang === 'te' ? 'వేరే వ్యాధిని ఎంచుకోండి' : 'Pick another disease'}
@@ -230,7 +249,7 @@ export default function Field() {
               {choices.map((d) => (
                 <button
                   key={d.id}
-                  onClick={() => setDiseaseId(d.id)}
+                  onClick={() => pickDisease(d.id)}
                   className="btn-secondary"
                   style={{ fontSize: 14 }}
                 >
