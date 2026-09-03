@@ -1,0 +1,117 @@
+# Canonical class taxonomy. Defined ONCE, here.
+#
+# Sources disagree on label naming ("Apple Scab Leaf" vs "Apple___Apple_scab" vs
+# "apple scab"). Every disagreement is resolved in this file and nowhere else --
+# never in training code.
+#
+# The canonical ids are the 38 existing PlantVillage ids, unchanged, because
+# data/disease_info.json already carries hand-written symptom/treatment content
+# keyed by exactly those ids. Re-keying the taxonomy would orphan that content
+# for no gain. Source labels that have no canonical home are listed under
+# `exclude` with a reason -- they are dropped deliberately, never silently.
+#
+# build_manifest.py FAILS on any raw label that is neither mapped nor excluded.
+# That is intentional: a silently dropped class is a hole in the eval you will
+# not notice until the field numbers look wrong.
+
+version: 1
+
+canonical:
+  Apple___Apple_scab:                                  { crop: Apple,       healthy: false }
+  Apple___Black_rot:                                   { crop: Apple,       healthy: false }
+  Apple___Cedar_apple_rust:                            { crop: Apple,       healthy: false }
+  Apple___healthy:                                     { crop: Apple,       healthy: true  }
+  Blueberry___healthy:                                 { crop: Blueberry,   healthy: true  }
+  Cherry_(including_sour)___Powdery_mildew:            { crop: Cherry,      healthy: false }
+  Cherry_(including_sour)___healthy:                   { crop: Cherry,      healthy: true  }
+  Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot:  { crop: Corn,        healthy: false }
+  Corn_(maize)___Common_rust_:                         { crop: Corn,        healthy: false }
+  Corn_(maize)___Northern_Leaf_Blight:                 { crop: Corn,        healthy: false }
+  Corn_(maize)___healthy:                              { crop: Corn,        healthy: true  }
+  Grape___Black_rot:                                   { crop: Grape,       healthy: false }
+  Grape___Esca_(Black_Measles):                        { crop: Grape,       healthy: false }
+  Grape___Leaf_blight_(Isariopsis_Leaf_Spot):          { crop: Grape,       healthy: false }
+  Grape___healthy:                                     { crop: Grape,       healthy: true  }
+  Orange___Haunglongbing_(Citrus_greening):            { crop: Orange,      healthy: false }
+  Peach___Bacterial_spot:                              { crop: Peach,       healthy: false }
+  Peach___healthy:                                     { crop: Peach,       healthy: true  }
+  "Pepper,_bell___Bacterial_spot":                     { crop: Bell Pepper, healthy: false }
+  "Pepper,_bell___healthy":                            { crop: Bell Pepper, healthy: true  }
+  Potato___Early_blight:                               { crop: Potato,      healthy: false }
+  Potato___Late_blight:                                { crop: Potato,      healthy: false }
+  Potato___healthy:                                    { crop: Potato,      healthy: true  }
+  Raspberry___healthy:                                 { crop: Raspberry,   healthy: true  }
+  Soybean___healthy:                                   { crop: Soybean,     healthy: true  }
+  Squash___Powdery_mildew:                             { crop: Squash,      healthy: false }
+  Strawberry___Leaf_scorch:                            { crop: Strawberry,  healthy: false }
+  Strawberry___healthy:                                { crop: Strawberry,  healthy: true  }
+  Tomato___Bacterial_spot:                             { crop: Tomato,      healthy: false }
+  Tomato___Early_blight:                               { crop: Tomato,      healthy: false }
+  Tomato___Late_blight:                                { crop: Tomato,      healthy: false }
+  Tomato___Leaf_Mold:                                  { crop: Tomato,      healthy: false }
+  Tomato___Septoria_leaf_spot:                         { crop: Tomato,      healthy: false }
+  Tomato___Spider_mites Two-spotted_spider_mite:       { crop: Tomato,      healthy: false }
+  Tomato___Target_Spot:                                { crop: Tomato,      healthy: false }
+  Tomato___Tomato_Yellow_Leaf_Curl_Virus:              { crop: Tomato,      healthy: false }
+  Tomato___Tomato_mosaic_virus:                        { crop: Tomato,      healthy: false }
+  Tomato___healthy:                                    { crop: Tomato,      healthy: true  }
+
+sources:
+
+  # PlantVillage ships directory names identical to the canonical ids.
+  # Listed as an explicit identity map anyway -- an implicit "same as canonical"
+  # rule is the kind of thing that quietly breaks when a source is re-released.
+  plantvillage: identity
+
+  # PlantDoc, 2,598 field images. Directory names as published on GitHub.
+  # Annotation noise in this set is documented in the paper; build_manifest.py
+  # writes a spot-check sample to docs/dataset_card.md for manual review.
+  plantdoc:
+    "Apple Scab Leaf":                    Apple___Apple_scab
+    "Apple leaf":                         Apple___healthy
+    "Apple rust leaf":                    Apple___Cedar_apple_rust
+    "Bell_pepper leaf":                   "Pepper,_bell___healthy"
+    "Bell_pepper leaf spot":              "Pepper,_bell___Bacterial_spot"
+    "Blueberry leaf":                     Blueberry___healthy
+    "Cherry leaf":                        Cherry_(including_sour)___healthy
+    "Corn Gray leaf spot":                Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot
+    "Corn leaf blight":                   Corn_(maize)___Northern_Leaf_Blight
+    "Corn rust leaf":                     Corn_(maize)___Common_rust_
+    "Peach leaf":                         Peach___healthy
+    "Potato leaf early blight":           Potato___Early_blight
+    "Potato leaf late blight":            Potato___Late_blight
+    "Raspberry leaf":                     Raspberry___healthy
+    "Soyabean leaf":                      Soybean___healthy
+    "Squash Powdery mildew leaf":         Squash___Powdery_mildew
+    "Strawberry leaf":                    Strawberry___healthy
+    "Tomato Early blight leaf":           Tomato___Early_blight
+    "Tomato Septoria leaf spot":          Tomato___Septoria_leaf_spot
+    "Tomato leaf":                        Tomato___healthy
+    "Tomato leaf bacterial spot":         Tomato___Bacterial_spot
+    "Tomato leaf late blight":            Tomato___Late_blight
+    "Tomato leaf mosaic virus":           Tomato___Tomato_mosaic_virus
+    "Tomato leaf yellow virus":           Tomato___Tomato_Yellow_Leaf_Curl_Virus
+    "Tomato mold leaf":                   Tomato___Leaf_Mold
+    "Tomato two spotted spider mites leaf": Tomato___Spider_mites Two-spotted_spider_mite
+    "grape leaf":                         Grape___healthy
+    "grape leaf black rot":               Grape___Black_rot
+
+  # PlantWild, 18,542 in-the-wild images across 89 classes. This is the main
+  # field volume and the biggest lever on the Gate 1 field number.
+  #
+  # NOT PREFILLED ON PURPOSE. The published label strings are not reproduced
+  # here from memory -- a guessed mapping on agronomic data is worse than an
+  # empty one, because it mislabels silently and the error surfaces only as an
+  # unexplained field-accuracy drop.
+  #
+  # To fill it:
+  #     python ml/data/build_manifest.py --report-unmapped
+  # prints every unseen raw label found on disk, alphabetically, ready to paste
+  # here. Map what has a canonical home, add the rest to `exclude` with a reason.
+  plantwild: {}
+
+exclude:
+  plantdoc:
+    "Potato leaf":       "PlantDoc has no healthy-potato equivalent that is reliably healthy; too few images to form a split"
+  plantwild:
+    "*":                 "Crops and conditions outside the 38 canonical ids, e.g. rice, wheat, coffee, cassava. Kept out of v1 because data/disease_info.json carries no content for them and the XR module would have nothing to say."

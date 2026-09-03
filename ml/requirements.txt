@@ -1,0 +1,18 @@
+# ml/ is a separate package. The API never imports it, and it never imports the API.
+torch>=2.3.0
+torchvision>=0.18.0
+timm>=1.0.9
+albumentations>=1.4.14
+opencv-python-headless>=4.10.0
+numpy>=1.26.0
+pandas>=2.2.0
+scikit-learn>=1.5.0
+matplotlib>=3.9.0
+Pillow>=10.4.0
+PyYAML>=6.0
+tqdm>=4.66.0
+onnx>=1.16.0
+onnxruntime>=1.19.0
+onnxsim>=0.4.36
+grad-cam>=1.5.0
+pytest>=8.3.0
