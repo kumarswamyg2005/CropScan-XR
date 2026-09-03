@@ -120,14 +120,71 @@ export default function Field() {
       <p style={{ color: 'var(--color-text-muted)', maxWidth: 620, marginBottom: 'var(--space-xl)' }}>{t('intro')}</p>
 
       {!diseaseId && (
-        <div style={card}>
-          <p style={{ marginTop: 0, color: 'var(--color-text-muted)' }}>{t('pick')}</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {choices.map((d) => (
-              <button key={d.id} onClick={() => setDiseaseId(d.id)} className="btn-secondary" style={{ fontSize: 14 }}>
-                {d.name}
-              </button>
-            ))}
+        <div style={{ display: 'grid', gap: 'var(--space-lg)', gridTemplateColumns: 'minmax(0,1.4fr) minmax(260px,1fr)' }}>
+          <div style={card}>
+            <p style={{ marginTop: 0, color: 'var(--color-text-muted)' }}>{t('pick')}</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {choices.map((d) => (
+                <button
+                  key={d.id}
+                  onClick={() => setDiseaseId(d.id)}
+                  className="btn-secondary"
+                  style={{ fontSize: 14 }}
+                >
+                  {d.name}
+                  {d.has_video && (
+                    <span style={{ marginLeft: 8, fontSize: 11, color: 'var(--color-accent)' }}>
+                      ▶
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+            <p style={{
+              marginBottom: 0, marginTop: 20, paddingTop: 16,
+              borderTop: '1px solid var(--color-border)',
+              fontSize: 13, color: 'var(--color-text-muted)',
+            }}>
+              {lang === 'te'
+                ? '▶ గుర్తు ఉన్నవాటికి ఫుటేజ్ ఉంది. మిగిలినవి చక్రాన్ని మాత్రమే చూపిస్తాయి.'
+                : '▶ marks a disease with footage. The others still run the cycle.'}
+            </p>
+          </div>
+
+          <div style={{ ...card, background: 'var(--color-surface-raised)' }}>
+            <div className="label-caps" style={{ marginBottom: 12 }}>
+              {lang === 'te' ? 'ఇందులో ఏమి ఉంది' : "What's in here"}
+            </div>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 14, lineHeight: 1.6 }}>
+              {[
+                lang === 'te'
+                  ? 'వ్యాధికారకం యొక్క నిజమైన ఫుటేజ్ — బీజాంశాలు, వాహకాలు, సంక్రమణ'
+                  : 'Real footage of the pathogen — zoospores, vectors, infection',
+                lang === 'te'
+                  ? 'తొమ్మిది దశల సంక్రమణ చక్రం, మూలాధారాలతో'
+                  : 'The nine-stage infection cycle, every stage sourced',
+                lang === 'te'
+                  ? 'ఉష్ణోగ్రత, ఆకు తడి, తేమ — మూడు నియంత్రణలు'
+                  : 'Three dials: temperature, leaf wetness, humidity',
+                lang === 'te'
+                  ? 'ఒక పరిస్థితిని మార్చండి, చక్రం ఆగిపోతుంది'
+                  : 'Break one condition and the cycle visibly stalls',
+              ].map((line) => (
+                <li key={line} style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+                  <span style={{ color: 'var(--color-accent)' }}>—</span>
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+            <p style={{
+              margin: '16px 0 0', paddingTop: 14,
+              borderTop: '1px solid var(--color-border)',
+              fontSize: 12, color: 'var(--color-text-muted)', lineHeight: 1.5,
+            }}>
+              {lang === 'te'
+                ? 'హెడ్‌సెట్‌లో ఫుటేజ్ WebXR లేయర్‌లో ప్లే అవుతుంది. హెడ్‌సెట్ లేకపోతే ఇక్కడే పనిచేస్తుంది.'
+                : 'In a headset the footage plays on a WebXR layer. Without one it works right here.'}
+            </p>
           </div>
         </div>
       )}
@@ -143,6 +200,7 @@ export default function Field() {
                 <FieldScene
                   video={video}
                   run={run}
+                  pathogen={cycle?.pathogen?.name}
                   onElement={useCallback((element, playback) => setMedia({ element, playback }), [])}
                   onStrategy={setStrategy}
                 />
