@@ -33,6 +33,21 @@ const T = {
   pick: { en: 'Pick a disease to enter the field.', te: 'క్షేత్రంలోకి వెళ్లడానికి ఒక వ్యాధిని ఎంచుకోండి.' },
 }
 
+/** User-facing message for a failed request. The raw one goes to the console. */
+function describe(error, lang) {
+  if (error?.status === 404) {
+    return lang === 'te' ? 'ఇది కనిపించలేదు.' : 'That could not be found.'
+  }
+  if (error?.status >= 500) {
+    return lang === 'te'
+      ? 'సర్వర్‌లో సమస్య. కొద్దిసేపటి తర్వాత ప్రయత్నించండి.'
+      : 'The server had a problem. Try again in a moment.'
+  }
+  return lang === 'te'
+    ? 'సర్వర్‌కి కనెక్ట్ కాలేదు. బ్యాకెండ్ నడుస్తోందా అని చూడండి.'
+    : 'Could not reach the server. Check that the backend is running.'
+}
+
 function useWebglSupport() {
   const [ok, setOk] = useState(null)
   useEffect(() => {
@@ -85,16 +100,23 @@ export default function Field() {
   const [media, setMedia] = useState({ element: null, playback: null })
   const [strategy, setStrategy] = useState('video-texture')
   const [highlightStage, setHighlightStage] = useState(null)
+  // `blocked` is the server refusing this scan entry -- a real gate, and a
+  // full-page stop is right for it. `loadError` is a fetch that failed, which
+  // must NOT hide the picker: the disease is component state with no history
+  // entry, so blanking the page leaves the user with no way back to choose
+  // another one and Back cannot restore it.
   const [blocked, setBlocked] = useState(null)
+  const [loadError, setLoadError] = useState(null)
   const t = (k) => T[k][lang]
 
   // A scan the server refuses to let into the field cannot get in here either.
   useEffect(() => {
     if (!scanId) return
+    setBlocked(null)
     api.getScan(scanId, lang).then((scan) => {
       if (!scan.canEnterField) setBlocked(scan.fieldBlockedReason)
       else setDiseaseId(scan.class_name)
-    }).catch((e) => setBlocked(e.message))
+    }).catch((e) => setBlocked(describe(e, lang)))
   }, [scanId, lang])
 
   useEffect(() => {
@@ -103,18 +125,21 @@ export default function Field() {
 
   useEffect(() => {
     if (!diseaseId) return
+    // Cleared on every attempt. Without this a single transient failure sticks
+    // forever: the retry succeeds, the cycle loads, and the stale error is
+    // still on screen with no way to dismiss it short of a reload.
+    setLoadError(null)
     api.getCycle(diseaseId, lang).then((r) => {
       setCycle(r.cycle)
       if (r.cycle) setDials(optimalDials(r.cycle))
     }).catch((e) => {
-      // A mistyped or stale ?disease= used to fall through to the picker with
-      // only a 404 in the console. Say what happened.
-      setBlocked(
+      console.error('[CropScan] cycle fetch failed', e)
+      setLoadError(
         e.status === 404
           ? (lang === 'te'
               ? `'${diseaseId}' అనే వ్యాధి కనిపించలేదు.`
               : `No disease is registered under "${diseaseId}".`)
-          : e.message,
+          : describe(e, lang),
       )
     })
     api.listVideos(diseaseId, lang)
@@ -165,6 +190,37 @@ export default function Field() {
       <div className="label-caps" style={{ marginBottom: 8 }}>WebXR</div>
       <h1 style={{ fontFamily: '"Playfair Display", serif', fontSize: 38, margin: '0 0 8px' }}>{t('title')}</h1>
       <p style={{ color: 'var(--color-text-muted)', maxWidth: 620, marginBottom: 'var(--space-xl)' }}>{t('intro')}</p>
+
+      {loadError && (
+        <div
+          role="alert"
+          style={{
+            ...card,
+            borderLeft: '3px solid var(--color-alert)',
+            marginBottom: 'var(--space-lg)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 12,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <span>{loadError}</span>
+          <button
+            className="btn-secondary"
+            style={{ fontSize: 13 }}
+            onClick={() => {
+              setDiseaseId(null)
+              setCycle(null)
+              setVideos([])
+              setDials(null)
+              setLoadError(null)
+            }}
+          >
+            {lang === 'te' ? 'వేరే వ్యాధిని ఎంచుకోండి' : 'Pick another disease'}
+          </button>
+        </div>
+      )}
 
       {!diseaseId && (
         <div style={{ display: 'grid', gap: 'var(--space-lg)', gridTemplateColumns: 'minmax(0,1.4fr) minmax(260px,1fr)' }}>
