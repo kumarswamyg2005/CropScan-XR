@@ -6,6 +6,7 @@ import Detect from './pages/Detect'
 import Result from './pages/Result'
 import About from './pages/About'
 import Field from './pages/Field'
+import NotFound from './pages/NotFound'
 
 export default function App() {
   return (
@@ -21,6 +22,9 @@ export default function App() {
             <Route path="/result" element={<Result />} />
             <Route path="/field" element={<Field />} />
             <Route path="/about" element={<About />} />
+            {/* Catch-all. Without it an unknown URL renders an empty body,
+                which is indistinguishable from a crash. */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </ErrorBoundary>
       </main>

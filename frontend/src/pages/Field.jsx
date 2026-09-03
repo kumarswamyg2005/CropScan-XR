@@ -106,7 +106,17 @@ export default function Field() {
     api.getCycle(diseaseId, lang).then((r) => {
       setCycle(r.cycle)
       if (r.cycle) setDials(optimalDials(r.cycle))
-    }).catch(() => {})
+    }).catch((e) => {
+      // A mistyped or stale ?disease= used to fall through to the picker with
+      // only a 404 in the console. Say what happened.
+      setBlocked(
+        e.status === 404
+          ? (lang === 'te'
+              ? `'${diseaseId}' అనే వ్యాధి కనిపించలేదు.`
+              : `No disease is registered under "${diseaseId}".`)
+          : e.message,
+      )
+    })
     api.listVideos(diseaseId, lang)
       .then((v) => {
         // Real footage first. The synthetic 360 clip exists to keep the
