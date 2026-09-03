@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
 
 const stats = [
-  { value: '54K+', label: 'Training Images', sub: 'PlantVillage dataset' },
-  { value: '38',   label: 'Disease Classes', sub: 'Across 14 crops' },
-  { value: '99.3%',label: 'Test Accuracy',   sub: 'EfficientNet-B0' },
-  { value: '<1s',  label: 'Inference Time',  sub: 'Per image, on CPU' },
+  { value: '38',    label: 'Disease Classes', sub: 'Across 14 crops' },
+  { value: '14',    label: 'Disease Cycles',  sub: 'Sourced, apple · tomato · potato' },
+  { value: '360°',  label: 'Field Footage',   sub: 'In the browser or a headset' },
+  { value: 'EN·TE', label: 'Languages',       sub: 'English and Telugu' },
 ]
 
 const steps = [
@@ -19,7 +19,7 @@ const steps = [
     num: '02',
     icon: '🧠',
     title: 'AI Analyses Instantly',
-    desc: 'EfficientNet-B0 scans the image against 38 disease classes trained on 54,000+ real leaf images.',
+    desc: 'The image is scored against 38 disease classes. When the model is not confident enough, it says so instead of guessing.',
   },
   {
     num: '03',
@@ -86,7 +86,7 @@ export default function Home() {
                 display: 'inline-block', width: 6, height: 6, borderRadius: '50%',
                 background: 'var(--color-ai)', animation: 'pulse 2s infinite',
               }} />
-              AI-Powered · EfficientNet-B0
+              AI-Powered Diagnosis
             </span>
           </div>
 
@@ -119,8 +119,8 @@ export default function Home() {
                 maxWidth: 520,
               }}
             >
-              Upload a leaf photo and get an AI diagnosis in under a second —
-              covering 38 disease classes across 14 crops, with full treatment recommendations.
+              Upload a leaf photo and get a diagnosis across 38 disease classes and
+              14 crops — with treatment advice, and the disease cycle that caused it.
             </p>
 
             <div className="anim-fade-up anim-delay-3" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
@@ -133,40 +133,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Floating accuracy badge — grid break */}
-          <div
-            className="anim-fade-up anim-delay-4"
-            style={{
-              display: 'inline-flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              position: 'absolute',
-              right: 80,
-              bottom: 60,
-              background: 'rgba(255,255,255,0.1)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              borderRadius: 16,
-              padding: '16px 24px',
-              textAlign: 'center',
-            }}
-          >
-            <span style={{
-              fontFamily: '"DM Mono", monospace',
-              fontSize: '2rem',
-              fontWeight: 500,
-              color: '#fff',
-              lineHeight: 1,
-            }}>99.3%</span>
-            <span style={{
-              fontFamily: '"DM Sans", sans-serif',
-              fontSize: '0.7rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.6)',
-              marginTop: 4,
-            }}>Test Accuracy</span>
-          </div>
         </div>
       </section>
 
@@ -186,7 +152,7 @@ export default function Home() {
               className="reveal"
               style={{
                 padding: '32px 24px',
-                borderRight: i < 3 ? '1px solid var(--color-border)' : 'none',
+                borderRight: i < stats.length - 1 ? '1px solid var(--color-border)' : 'none',
                 textAlign: 'center',
                 transitionDelay: `${i * 0.08}s`,
               }}
@@ -347,7 +313,7 @@ export default function Home() {
               Ready to diagnose your crop?
             </h2>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '1rem', marginBottom: 32 }}>
-              Upload a leaf photo and get an AI-powered diagnosis in under a second — completely free.
+              Upload a leaf photo and get a diagnosis, treatment advice, and the disease cycle behind it — free.
             </p>
             <Link to="/detect" className="btn-primary" style={{ fontSize: '1rem', padding: '14px 36px' }}>
               🌿 Get Started
