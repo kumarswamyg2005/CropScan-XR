@@ -1,0 +1,3188 @@
+{
+  "Apple___Apple_scab": {
+    "pathogen": {
+      "name": "Venturia inaequalis",
+      "type": "fungus"
+    },
+    "primary_inoculum": "Ascospores discharged from pseudothecia in overwintered fallen leaves",
+    "overseasoning": "Infected leaves on the orchard floor, where the fungus completes its sexual stage over winter",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "wind",
+      "rain_splash"
+    ],
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The fungus survives winter inside fallen infected leaves on the orchard floor, forming tiny fruiting bodies called pseudothecia.",
+        "duration_hint": "Leaf fall to bud break",
+        "requires": {
+          "temp_c": [
+            0,
+            20
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "spores_dormant_in_litter"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Ascospores mature inside the pseudothecia and become ready to shoot out. Maturity tracks accumulated warmth after bud break.",
+        "duration_hint": "Green tip to petal fall",
+        "requires": {
+          "temp_c": [
+            4,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "pseudothecia_swelling"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Rain wets the leaf litter and ascospores are forcibly discharged, then carried up into the canopy by wind and landed on young leaves.",
+        "duration_hint": "Minutes to hours during rain",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "ascospore_release_plume"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "A spore germinates only while the leaf stays continuously wet. This is the step weather actually controls, and the step a protectant spray is aimed at.",
+        "duration_hint": "9 to 18 hours of continuous wetness",
+        "requires": {
+          "temp_c": [
+            6,
+            26
+          ],
+          "leaf_wetness_hr": [
+            9,
+            48
+          ],
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "germ_tube_growth"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "The germ tube breaches the leaf cuticle directly and settles between the cuticle and the epidermal cells. It does not need a wound or a stoma.",
+        "duration_hint": "A few hours after germination",
+        "requires": {
+          "temp_c": [
+            6,
+            26
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "cuticle_breach"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The fungus grows in the subcuticular layer and feeds. Nothing is visible on the leaf yet, which is why scouting misses this window.",
+        "duration_hint": "9 to 17 days, shorter when warm",
+        "requires": {
+          "temp_c": [
+            6,
+            26
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_hyphae"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Olive-green velvety lesions appear with a feathery edge. On fruit they become corky and cracked.",
+        "duration_hint": "Days after the latent period ends",
+        "requires": {
+          "temp_c": [
+            6,
+            26
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "lesion_growth_olive"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "The lesion produces conidia, a second kind of spore. This is what turns one infection into an epidemic.",
+        "duration_hint": "Continuous through the season while lesions are active",
+        "requires": {
+          "temp_c": [
+            6,
+            26
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "conidia_sporulation"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Rain splashes conidia onto healthy leaves and fruit nearby, and the cycle restarts at deposition. Every wetting event is a new round.",
+        "duration_hint": "Every rain event",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "rain_splash_dispersal"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 6,
+        "optimal": 17,
+        "max": 26
+      },
+      "leaf_wetness_hr": {
+        "min": 9,
+        "optimal": 18
+      },
+      "rh_pct": {
+        "min": 80,
+        "optimal": 95
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "survival",
+        "action": "Rake and destroy fallen leaves in autumn, or shred them with a flail mower and apply urea to speed decomposition",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Apply a protectant fungicide (captan or mancozeb) before the wetting event, not after",
+        "effect": "blocks",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "infection",
+        "action": "Apply a systemic fungicide (myclobutanil, difenoconazole) within the post-infection window if a wetting event was missed",
+        "effect": "reduces_inoculum",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "deposition",
+        "action": "Plant scab-resistant cultivars such as Enterprise, Liberty or Florina (Vf resistance)",
+        "effect": "blocks",
+        "kind": "resistant_variety"
+      },
+      {
+        "stage_id": "reproduction",
+        "action": "Prune for an open canopy so leaves dry faster after rain",
+        "effect": "slows",
+        "kind": "cultural"
+      }
+    ],
+    "sources": [
+      "MacHardy, W.E. (1996). Apple Scab: Biology, Epidemiology, and Management. APS Press.",
+      "Mills, W.D. & LaPlante, A.A. (1951). Diseases and insects in the orchard. Cornell Extension Bulletin 711 (the Mills table of wetness-hours by temperature).",
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 455-459.",
+      "CABI Compendium: Venturia inaequalis. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.56158"
+    ]
+  },
+  "Apple___Black_rot": {
+    "pathogen": {
+      "name": "Diplodia seriata (syn. Botryosphaeria obtusa)",
+      "type": "fungus"
+    },
+    "primary_inoculum": "Conidia from pycnidia in cankers, dead wood and mummified fruit",
+    "overseasoning": "Branch cankers, pruning stubs, dead wood and mummified fruit left hanging in the tree",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "rain_splash",
+      "wind"
+    ],
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The fungus survives in cankers on branches, in dead wood and in mummified fruit still hanging in the tree. Unlike scab, the inoculum is up in the canopy, not on the ground.",
+        "duration_hint": "All year",
+        "requires": {
+          "temp_c": [
+            -10,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "canker_dormant"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Pycnidia in the canker bark produce conidia whenever the wood is wetted.",
+        "duration_hint": "Spring through autumn",
+        "requires": {
+          "temp_c": [
+            10,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "pycnidia_forming"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Rain washes conidia out of the pycnidia and splashes them onto leaves, fruit and fresh pruning wounds below.",
+        "duration_hint": "During rain",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "conidia_wash_down"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "Conidia germinate on a wet surface. Warmer weather shortens the wetness needed sharply.",
+        "duration_hint": "4 to 9 hours of wetness at 20-27 C",
+        "requires": {
+          "temp_c": [
+            10,
+            32
+          ],
+          "leaf_wetness_hr": [
+            4,
+            48
+          ],
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "germ_tube_growth"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "Entry is mainly through wounds, insect injury, hail damage and the calyx end of the fruit. Healthy intact bark resists it.",
+        "duration_hint": "Hours",
+        "requires": {
+          "temp_c": [
+            10,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "wound_entry"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "On leaves symptoms appear quickly. On fruit the infection can stay latent until the fruit begins to ripen.",
+        "duration_hint": "Days on leaves, weeks to months on fruit",
+        "requires": {
+          "temp_c": [
+            10,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_hyphae"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Leaves show frogeye leaf spot, round tan lesions with a purple margin. Fruit rots in brown concentric rings from the calyx.",
+        "duration_hint": "1 to 3 weeks",
+        "requires": {
+          "temp_c": [
+            10,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "frogeye_lesion_growth"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "New pycnidia form as black dots in the rotted fruit and in the leaf spots.",
+        "duration_hint": "Continuous while tissue is infected",
+        "requires": {
+          "temp_c": [
+            10,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "pycnidia_black_dots"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Rain splash moves conidia to new wounds and fruit. Infected fruit that stays on the tree becomes next year's mummy and next year's inoculum.",
+        "duration_hint": "Every rain event",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "rain_splash_dispersal"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 10,
+        "optimal": 24,
+        "max": 32
+      },
+      "leaf_wetness_hr": {
+        "min": 4,
+        "optimal": 9
+      },
+      "rh_pct": {
+        "min": 85,
+        "optimal": 95
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "survival",
+        "action": "Prune out cankers and dead wood in dry weather and remove mummified fruit from the tree; burn or bury the prunings",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "penetration",
+        "action": "Avoid creating wounds during wet weather and protect fresh pruning cuts; control insects and prevent hail damage where possible",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Apply captan or thiophanate-methyl from petal fall onward, especially before predicted rain",
+        "effect": "blocks",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "survival",
+        "action": "Keep trees vigorous; drought-stressed and winter-injured wood is far more readily colonised",
+        "effect": "slows",
+        "kind": "cultural"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 484-486.",
+      "Michigan State University Extension: Black rot and frogeye leaf spot of apple. https://www.canr.msu.edu/resources/black-rot-and-frogeye-leaf-spot",
+      "CABI Compendium: Botryosphaeria obtusa. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.9793"
+    ]
+  },
+  "Apple___Cedar_apple_rust": {
+    "pathogen": {
+      "name": "Gymnosporangium juniperi-virginianae",
+      "type": "fungus"
+    },
+    "primary_inoculum": "Basidiospores released from gelatinous telial horns on juniper galls during spring rain",
+    "overseasoning": "Woody galls on juniper or eastern red cedar. The fungus cannot overwinter on apple at all.",
+    "cycle_type": "monocyclic",
+    "dispersal": [
+      "wind",
+      "rain_splash"
+    ],
+    "alternate_host": "Juniperus virginiana and related junipers, required to complete the cycle",
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The fungus survives only on juniper, as a hard brown gall on the twigs. It cannot survive on apple, so every apple infection starts from a nearby juniper.",
+        "duration_hint": "18 to 20 months on the juniper",
+        "requires": {
+          "temp_c": [
+            -20,
+            30
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "juniper_gall_dormant"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Spring rain makes the gall swell and push out bright orange gelatinous horns. These produce basidiospores.",
+        "duration_hint": "Spring, over several rain events",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "telial_horns_swelling"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Wind carries basidiospores to apple leaves, usually within a few hundred metres of the juniper, occasionally further.",
+        "duration_hint": "Hours during and after rain",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "basidiospore_drift"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "The spore germinates on a wet apple leaf. About 4 hours of wetness is enough in the optimal temperature band.",
+        "duration_hint": "4 or more hours of wetness at 10-24 C",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": [
+            4,
+            48
+          ],
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "germ_tube_growth"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "The germ tube enters the upper leaf surface directly.",
+        "duration_hint": "Hours",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "cuticle_breach"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The fungus establishes in the leaf. Nothing shows for a week or more.",
+        "duration_hint": "7 to 10 days",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_hyphae"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Bright yellow-orange spots appear on the upper leaf surface, often with a red border.",
+        "duration_hint": "10 to 14 days after infection",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "rust_spot_orange"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "Tube-like aecia form on the underside of the spot and release aeciospores in late summer.",
+        "duration_hint": "Late summer",
+        "requires": {
+          "temp_c": [
+            10,
+            30
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "aecia_tubes"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Aeciospores blow back to juniper, not to apple. This is the key point: the disease cannot spread apple to apple, so there is no secondary cycle to chase within the orchard.",
+        "duration_hint": "Late summer to autumn",
+        "requires": {
+          "temp_c": [
+            10,
+            30
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "aeciospore_to_juniper"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 10,
+        "optimal": 17,
+        "max": 24
+      },
+      "leaf_wetness_hr": {
+        "min": 4,
+        "optimal": 6
+      },
+      "rh_pct": {
+        "min": 90,
+        "optimal": 98
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "survival",
+        "action": "Remove juniper and red cedar within a few hundred metres, or remove the visible galls from them in late winter before the horns form",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "deposition",
+        "action": "Plant resistant apple cultivars such as Liberty, Enterprise, Freedom or Redfree",
+        "effect": "blocks",
+        "kind": "resistant_variety"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Apply myclobutanil or a similar fungicide from pink bud through about two weeks after petal fall, which is the only window that matters",
+        "effect": "blocks",
+        "kind": "chemical"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 561-564.",
+      "Pennsylvania State University Extension: Cedar-Apple Rust. https://extension.psu.edu/cedar-apple-rust",
+      "CABI Compendium: Gymnosporangium juniperi-virginianae. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.26177"
+    ]
+  },
+  "Tomato___Early_blight": {
+    "pathogen": {
+      "name": "Alternaria linariae (syn. A. tomatophila) and A. solani",
+      "type": "fungus"
+    },
+    "primary_inoculum": "Conidia from infected crop residue, volunteer plants and seed",
+    "overseasoning": "Infected tomato and potato debris in the soil, solanaceous weeds, and infested seed",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "wind",
+      "rain_splash",
+      "human_movement"
+    ],
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The fungus survives on infected tomato debris left in the field, on volunteer plants, on solanaceous weeds and in or on the seed.",
+        "duration_hint": "Between seasons, up to a year in residue",
+        "requires": {
+          "temp_c": [
+            -5,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "spores_dormant_in_litter"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Conidia form on the old residue as soon as conditions turn warm and humid.",
+        "duration_hint": "Early season",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            80,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "conidiophores_forming"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Wind and rain splash carry conidia up onto the lowest leaves first. This is why early blight always starts at the bottom of the plant.",
+        "duration_hint": "During rain, irrigation or wind",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            80,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "splash_to_lower_leaves"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "The conidium germinates on a wet leaf. Two hours of wetness is enough to start; longer wetness gives heavier infection.",
+        "duration_hint": "2 or more hours of wetness",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": [
+            2,
+            48
+          ],
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "germ_tube_growth"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "The germ tube enters directly through the cuticle, or through stomata and small wounds.",
+        "duration_hint": "Hours",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "cuticle_breach"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The fungus colonises the tissue and releases toxins that kill cells ahead of it. Older and stressed leaves succumb faster than young ones.",
+        "duration_hint": "2 to 3 days",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_hyphae"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Dark brown lesions appear with concentric rings, the classic target pattern, surrounded by a yellow halo. Lower leaves yellow and drop.",
+        "duration_hint": "3 to 7 days after infection",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "target_ring_lesion"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "The lesion sporulates freely, especially in humid nights, producing the next generation of conidia.",
+        "duration_hint": "Continuous while humid",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "conidia_sporulation"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Conidia move upward through the canopy on wind, splash and workers' clothing. Each round climbs the plant, and defoliation exposes fruit to sunscald.",
+        "duration_hint": "Every wet period",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            80,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "wind_splash_dispersal"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 15,
+        "optimal": 27,
+        "max": 32
+      },
+      "leaf_wetness_hr": {
+        "min": 2,
+        "optimal": 12
+      },
+      "rh_pct": {
+        "min": 80,
+        "optimal": 95
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "survival",
+        "action": "Rotate out of tomato, potato, pepper and aubergine for two to three years and plough down or remove crop residue",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "deposition",
+        "action": "Mulch the soil surface and stake or cage plants so the lowest leaves are lifted away from splashing soil",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Apply chlorothalonil or mancozeb on a protective schedule once the first lesions appear on lower leaves",
+        "effect": "blocks",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "reproduction",
+        "action": "Prune lower leaves and space plants for airflow so the canopy dries before nightfall",
+        "effect": "slows",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "infection",
+        "action": "Maintain adequate nitrogen; nutrient-stressed plants lose leaves to early blight much faster",
+        "effect": "slows",
+        "kind": "cultural"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 449-451.",
+      "Rotem, J. (1994). The Genus Alternaria: Biology, Epidemiology and Pathogenicity. APS Press.",
+      "CABI Compendium: Alternaria solani. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.4568"
+    ]
+  },
+  "Potato___Early_blight": {
+    "pathogen": {
+      "name": "Alternaria solani",
+      "type": "fungus"
+    },
+    "primary_inoculum": "Conidia from infected potato residue, volunteer plants and infested soil",
+    "overseasoning": "Infected potato and tomato debris in soil, volunteer tubers, and solanaceous weeds",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "wind",
+      "rain_splash",
+      "human_movement"
+    ],
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The fungus survives on infected potato debris left in the field, on volunteer plants, on solanaceous weeds and in or on the seed.",
+        "duration_hint": "Between seasons, up to a year in residue",
+        "requires": {
+          "temp_c": [
+            -5,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "spores_dormant_in_litter"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Conidia form on the old residue as soon as conditions turn warm and humid.",
+        "duration_hint": "Early season",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            80,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "conidiophores_forming"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Wind and rain splash carry conidia up onto the lowest leaves first. This is why early blight always starts at the bottom of the plant.",
+        "duration_hint": "During rain, irrigation or wind",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            80,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "splash_to_lower_leaves"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "The conidium germinates on a wet leaf. Two hours of wetness is enough to start; longer wetness gives heavier infection.",
+        "duration_hint": "2 or more hours of wetness",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": [
+            2,
+            48
+          ],
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "germ_tube_growth"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "The germ tube enters directly through the cuticle, or through stomata and small wounds.",
+        "duration_hint": "Hours",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "cuticle_breach"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The fungus colonises the tissue and releases toxins that kill cells ahead of it. Older and stressed leaves succumb faster than young ones.",
+        "duration_hint": "2 to 3 days",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_hyphae"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Dark brown lesions appear with concentric rings, the classic target pattern, surrounded by a yellow halo. Lower leaves yellow and drop.",
+        "duration_hint": "3 to 7 days after infection",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "target_ring_lesion"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "The lesion sporulates freely, especially in humid nights, producing the next generation of conidia.",
+        "duration_hint": "Continuous while humid",
+        "requires": {
+          "temp_c": [
+            15,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "conidia_sporulation"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Conidia move upward through the canopy on wind, splash and workers' clothing. Each round climbs the plant, and defoliation exposes fruit to sunscald.",
+        "duration_hint": "Every wet period",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            80,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "wind_splash_dispersal"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 15,
+        "optimal": 27,
+        "max": 32
+      },
+      "leaf_wetness_hr": {
+        "min": 2,
+        "optimal": 12
+      },
+      "rh_pct": {
+        "min": 80,
+        "optimal": 95
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "survival",
+        "action": "Rotate out of solanaceous crops for two to three years and destroy volunteer potatoes",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "infection",
+        "action": "Keep nitrogen and potassium adequate through tuber bulking; early blight attacks senescing tissue first, so a plant that stays vigorous stays cleaner",
+        "effect": "slows",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Apply chlorothalonil, mancozeb or azoxystrobin on a protective schedule from row closure",
+        "effect": "blocks",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "dispersal",
+        "action": "Avoid overhead irrigation late in the day so foliage does not stay wet overnight",
+        "effect": "slows",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "survival",
+        "action": "Choose later-maturing cultivars where possible; they carry more field resistance than early ones",
+        "effect": "reduces_inoculum",
+        "kind": "resistant_variety"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 449-451.",
+      "Rotem, J. (1994). The Genus Alternaria: Biology, Epidemiology and Pathogenicity. APS Press.",
+      "CABI Compendium: Alternaria solani. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.4568"
+    ]
+  },
+  "Tomato___Late_blight": {
+    "pathogen": {
+      "name": "Phytophthora infestans",
+      "type": "oomycete"
+    },
+    "primary_inoculum": "Sporangia from infected potato cull piles, volunteer potatoes, or infected tomato transplants",
+    "overseasoning": "Living infected potato tubers in cull piles and volunteers, and infected transplants moved between regions. It does not survive well on dead residue.",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "wind",
+      "rain_splash"
+    ],
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The pathogen needs living tissue. It survives mainly in infected potato tubers in cull piles and volunteers, and travels into tomato crops on infected transplants.",
+        "duration_hint": "Between seasons",
+        "requires": {
+          "temp_c": [
+            2,
+            25
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "mycelium_in_tuber"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Sporangia form on infected sprouts, cull piles or transplants as soon as the weather turns cool and wet.",
+        "duration_hint": "Days once conditions arrive",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "sporangiophores_white"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Sporangia are carried by wind, sometimes for tens of kilometres, and land on wet leaves.",
+        "duration_hint": "Hours",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "sporangia_wind_drift"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "This is the step that decides everything. Below about 15 C the sporangium releases swimming zoospores; above it, it germinates directly. Either way it needs the leaf to stay wet. Break the wetness and the whole epidemic stops here.",
+        "duration_hint": "6 to 10 hours of continuous wetness",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": [
+            6,
+            48
+          ],
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "zoospore_release_swim"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "A germ tube forms an appressorium and pushes directly through the leaf surface.",
+        "duration_hint": "2 to 4 hours",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "appressorium_penetration"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The pathogen spreads between cells and feeds through haustoria. The latent period is extremely short, which is what makes this disease move so fast.",
+        "duration_hint": "3 to 5 days",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_hyphae"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Water-soaked greasy grey-green patches appear, turning brown-black. In humid weather a white downy fringe shows on the underside at the lesion edge.",
+        "duration_hint": "Within a day of the latent period ending",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "water_soaked_lesion"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "Each lesion produces hundreds of thousands of sporangia overnight in humid conditions. A field can go from a few spots to total collapse in under a week.",
+        "duration_hint": "Overnight, repeatedly",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "white_sporulation_fringe"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Wind and rain carry sporangia to new plants and wash them down into the soil, where they can reach tubers and start the next season's survival stage.",
+        "duration_hint": "Every humid night and every rain",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "wind_rain_dispersal"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 10,
+        "optimal": 18,
+        "max": 24
+      },
+      "leaf_wetness_hr": {
+        "min": 6,
+        "optimal": 12
+      },
+      "rh_pct": {
+        "min": 90,
+        "optimal": 100
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "survival",
+        "action": "Destroy potato cull piles and volunteer potatoes before the season, and buy transplants from a supplier that inspects for late blight",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Apply a protectant fungicide (chlorothalonil or mancozeb) before a forecast wet period, and switch to a targeted oomycete product such as cymoxanil or mandipropamid once blight is confirmed in the region",
+        "effect": "blocks",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "deposition",
+        "action": "Grow late-blight-resistant cultivars such as Mountain Magic, Iron Lady or Defiant",
+        "effect": "blocks",
+        "kind": "resistant_variety"
+      },
+      {
+        "stage_id": "reproduction",
+        "action": "Pull out and bag infected plants immediately rather than leaving them in the row; one sporulating plant reinfects the whole field",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "dispersal",
+        "action": "Water at the base and early in the day, never overhead in the evening",
+        "effect": "slows",
+        "kind": "cultural"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 422-429.",
+      "Fry, W.E. (2008). Phytophthora infestans: the plant (and R gene) destroyer. Molecular Plant Pathology 9(3):385-402. https://doi.org/10.1111/j.1364-3703.2007.00465.x",
+      "Wallin, J.R. (1962). Summary of recent progress in predicting late blight epidemics (the basis of Blitecast severity values).",
+      "CABI Compendium: Phytophthora infestans. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.40970"
+    ]
+  },
+  "Potato___Late_blight": {
+    "pathogen": {
+      "name": "Phytophthora infestans",
+      "type": "oomycete"
+    },
+    "primary_inoculum": "Sporangia produced on sprouts from infected seed tubers, cull piles and volunteer plants",
+    "overseasoning": "Living infected tubers: in storage, in cull piles, and as volunteers left in the ground over winter. This is the disease that caused the Irish potato famine.",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "wind",
+      "rain_splash"
+    ],
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The pathogen overwinters inside living infected tubers, in cull piles, in storage and as volunteers. Every epidemic starts from a tuber somebody did not destroy.",
+        "duration_hint": "Between seasons",
+        "requires": {
+          "temp_c": [
+            2,
+            25
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "mycelium_in_tuber"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Sporangia form on infected sprouts, cull piles or transplants as soon as the weather turns cool and wet.",
+        "duration_hint": "Days once conditions arrive",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "sporangiophores_white"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Sporangia are carried by wind, sometimes for tens of kilometres, and land on wet leaves.",
+        "duration_hint": "Hours",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "sporangia_wind_drift"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "This is the step that decides everything. Below about 15 C the sporangium releases swimming zoospores; above it, it germinates directly. Either way it needs the leaf to stay wet. Break the wetness and the whole epidemic stops here.",
+        "duration_hint": "6 to 10 hours of continuous wetness",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": [
+            6,
+            48
+          ],
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "zoospore_release_swim"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "A germ tube forms an appressorium and pushes directly through the leaf surface.",
+        "duration_hint": "2 to 4 hours",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "appressorium_penetration"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The pathogen spreads between cells and feeds through haustoria. The latent period is extremely short, which is what makes this disease move so fast.",
+        "duration_hint": "3 to 5 days",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_hyphae"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Water-soaked greasy grey-green patches appear, turning brown-black. In humid weather a white downy fringe shows on the underside at the lesion edge.",
+        "duration_hint": "Within a day of the latent period ending",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "water_soaked_lesion"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "Each lesion produces hundreds of thousands of sporangia overnight in humid conditions. A field can go from a few spots to total collapse in under a week.",
+        "duration_hint": "Overnight, repeatedly",
+        "requires": {
+          "temp_c": [
+            10,
+            24
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "white_sporulation_fringe"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Wind and rain carry sporangia to new plants and wash them down into the soil, where they can reach tubers and start the next season's survival stage.",
+        "duration_hint": "Every humid night and every rain",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "wind_rain_dispersal"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 10,
+        "optimal": 18,
+        "max": 24
+      },
+      "leaf_wetness_hr": {
+        "min": 6,
+        "optimal": 12
+      },
+      "rh_pct": {
+        "min": 90,
+        "optimal": 100
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "survival",
+        "action": "Use certified disease-free seed potatoes, destroy cull piles before spring, and kill volunteer plants",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Spray on a forecast schedule (Blitecast or a similar disease-severity model) rather than on the calendar; the model counts exactly the temperature and wetness hours in this stage",
+        "effect": "blocks",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "dispersal",
+        "action": "Hill soil well over the tubers so sporangia washing down cannot reach them",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "reproduction",
+        "action": "Kill the haulm (vine) two to three weeks before harvest so foliage inoculum is gone before tubers are lifted",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "deposition",
+        "action": "Grow cultivars with field resistance such as Sarpo Mira or Defender",
+        "effect": "blocks",
+        "kind": "resistant_variety"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 422-429.",
+      "Fry, W.E. (2008). Phytophthora infestans: the plant (and R gene) destroyer. Molecular Plant Pathology 9(3):385-402. https://doi.org/10.1111/j.1364-3703.2007.00465.x",
+      "Wallin, J.R. (1962). Summary of recent progress in predicting late blight epidemics (the basis of Blitecast severity values).",
+      "CABI Compendium: Phytophthora infestans. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.40970"
+    ]
+  },
+  "Tomato___Septoria_leaf_spot": {
+    "pathogen": {
+      "name": "Septoria lycopersici",
+      "type": "fungus"
+    },
+    "primary_inoculum": "Conidia oozing from pycnidia on infected tomato residue and solanaceous weeds",
+    "overseasoning": "Infected tomato debris in the soil and on nearby solanaceous weeds such as nightshade, horsenettle and jimsonweed",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "rain_splash",
+      "human_movement",
+      "tools"
+    ],
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The fungus survives in old tomato debris and on solanaceous weeds around the field edge. Weeds matter here more than in most tomato diseases.",
+        "duration_hint": "Between seasons",
+        "requires": {
+          "temp_c": [
+            -5,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "spores_dormant_in_litter"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Pycnidia on the residue exude conidia in a sticky mass whenever they are wetted.",
+        "duration_hint": "Early season",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "pycnidia_ooze"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Rain splash and overhead irrigation throw the sticky spores onto the lowest leaves. Hands and tools moving through a wet crop carry them too.",
+        "duration_hint": "During rain or irrigation",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "splash_to_lower_leaves"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "Conidia germinate on a wet leaf. Infection is heaviest when leaves stay wet for a long stretch, which is why an evening irrigation is so costly.",
+        "duration_hint": "6 to 48 hours of wetness",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": [
+            6,
+            48
+          ],
+          "rh_pct": [
+            95,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "germ_tube_growth"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "The germ tube enters through stomata on the leaf underside.",
+        "duration_hint": "Hours",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "stomatal_entry"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The fungus grows in the leaf tissue with no outward sign for around a week.",
+        "duration_hint": "5 to 7 days",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_hyphae"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Many small circular spots appear, grey-white in the centre with a dark brown margin. There are far more of them, and they are far smaller and more uniform, than early blight lesions.",
+        "duration_hint": "Around 7 days after infection",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "septoria_speckle_lesion"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "Tiny black pycnidia form in the pale centre of each spot. Seeing those black dots inside a grey centre is the field diagnosis.",
+        "duration_hint": "Continuous while humid",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "pycnidia_black_dots"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Splash carries the spores up the plant. Severe defoliation from the bottom up follows, exposing fruit to sunscald.",
+        "duration_hint": "Every wet period",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "rain_splash_dispersal"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 15,
+        "optimal": 22,
+        "max": 27
+      },
+      "leaf_wetness_hr": {
+        "min": 6,
+        "optimal": 24
+      },
+      "rh_pct": {
+        "min": 90,
+        "optimal": 100
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "survival",
+        "action": "Remove tomato debris at the end of the season and control solanaceous weeds around the field",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "deposition",
+        "action": "Mulch heavily and stake plants; the splash from bare soil to the lowest leaf is the entire start of the epidemic",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Apply chlorothalonil or mancozeb at first sign, repeating every 7 to 10 days in wet weather",
+        "effect": "blocks",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "dispersal",
+        "action": "Do not work in the crop while foliage is wet, and disinfect tools between rows",
+        "effect": "slows",
+        "kind": "cultural"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 470-471.",
+      "Cornell University Vegetable MD Online: Septoria Leaf Spot of Tomato. http://vegetablemdonline.ppath.cornell.edu/factsheets/Tomato_Septoria.htm",
+      "CABI Compendium: Septoria lycopersici. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.49258"
+    ]
+  },
+  "Tomato___Leaf_Mold": {
+    "pathogen": {
+      "name": "Passalora fulva (syn. Cladosporium fulvum, Fulvia fulva)",
+      "type": "fungus"
+    },
+    "primary_inoculum": "Conidia surviving on greenhouse structures, crop debris and seed",
+    "overseasoning": "Conidia and sclerotia on crop debris, on greenhouse framework and stakes, and on the seed coat. Conidia can stay viable for around a year.",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "wind",
+      "tools",
+      "human_movement"
+    ],
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "Conidia and small sclerotia survive on old plant debris, on the greenhouse structure itself, on stakes and on seed. A greenhouse that grew a diseased crop stays infested.",
+        "duration_hint": "Up to a year",
+        "requires": {
+          "temp_c": [
+            0,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "conidia_on_structure"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Surviving conidia germinate and produce more as soon as humidity rises. Very little inoculum is needed to start.",
+        "duration_hint": "Days",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "conidiophores_forming"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Air movement inside the house, workers' clothing and tools carry conidia onto the leaves.",
+        "duration_hint": "Continuous",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "airborne_conidia_drift"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "This is the whole disease in one number. Conidia germinate only above about 85 percent relative humidity. Below that they simply do not, no matter how warm it is. Ventilate and the disease stops.",
+        "duration_hint": "Hours at high humidity",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "germ_tube_growth"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "The germ tube enters through stomata on the leaf underside. It cannot breach an intact cuticle.",
+        "duration_hint": "Hours",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "stomatal_entry"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The fungus grows in the air spaces between the leaf cells without killing them at first.",
+        "duration_hint": "10 to 14 days",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_hyphae"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Pale green to yellow blotches appear on the upper leaf surface with no sharp edge, while the corresponding patch underneath turns olive-green and velvety.",
+        "duration_hint": "10 to 14 days after infection",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "chlorotic_blotch_upper"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "The velvety olive growth on the underside is the sporulation itself. Brushing the leaf raises a visible cloud.",
+        "duration_hint": "Continuous above 85 percent humidity",
+        "requires": {
+          "temp_c": [
+            15,
+            27
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "olive_velvet_underside"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Conidia move on air currents, on hands and on clothing to the next plant. In a closed humid house this takes days.",
+        "duration_hint": "Continuous",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "airborne_conidia_drift"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 15,
+        "optimal": 23,
+        "max": 27
+      },
+      "leaf_wetness_hr": {
+        "min": 0,
+        "optimal": 0
+      },
+      "rh_pct": {
+        "min": 85,
+        "optimal": 95
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "prepenetration",
+        "action": "Keep relative humidity below 85 percent by venting and heating, especially at night. This single control stops the disease outright and is the reason leaf mould is rare in open fields",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "survival",
+        "action": "Disinfect the greenhouse structure, stakes and trays between crops, and remove all debris",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "deposition",
+        "action": "Grow resistant cultivars carrying Cf resistance genes, while noting that the pathogen overcomes single Cf genes over time",
+        "effect": "blocks",
+        "kind": "resistant_variety"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Apply chlorothalonil or mancozeb where permitted for protected tomato if humidity cannot be controlled",
+        "effect": "blocks",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "reproduction",
+        "action": "Space plants and prune lower leaves so air moves through the canopy",
+        "effect": "slows",
+        "kind": "cultural"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., p. 468.",
+      "Thomma, B.P.H.J. et al. (2005). Cladosporium fulvum (syn. Passalora fulva), a highly specialized plant pathogen. Molecular Plant Pathology 6(4):379-393. https://doi.org/10.1111/j.1364-3703.2005.00292.x",
+      "CABI Compendium: Passalora fulva. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.24124"
+    ]
+  },
+  "Tomato___Target_Spot": {
+    "pathogen": {
+      "name": "Corynespora cassiicola",
+      "type": "fungus"
+    },
+    "primary_inoculum": "Conidia from infected crop debris and from a wide range of alternative hosts",
+    "overseasoning": "Infected tomato debris and soil, plus many other host species including cucurbits, soybean, papaya and numerous weeds",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "wind",
+      "rain_splash"
+    ],
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The fungus survives on tomato debris and in soil, and on an unusually wide range of other hosts, which makes rotation less effective than for most tomato diseases.",
+        "duration_hint": "Between seasons",
+        "requires": {
+          "temp_c": [
+            5,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "spores_dormant_in_litter"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Conidia form on the residue in warm humid weather.",
+        "duration_hint": "Early season",
+        "requires": {
+          "temp_c": [
+            20,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            80,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "conidiophores_forming"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Wind and splash carry conidia into the canopy. Unlike early blight, target spot readily attacks the middle and upper canopy as well as the base.",
+        "duration_hint": "During rain or wind",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            80,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "wind_splash_dispersal"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "Conidia germinate on a wet leaf surface in warm conditions.",
+        "duration_hint": "Around 6 hours or more of wetness",
+        "requires": {
+          "temp_c": [
+            20,
+            32
+          ],
+          "leaf_wetness_hr": [
+            6,
+            48
+          ],
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "germ_tube_growth"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "Entry is direct through the cuticle and through stomata.",
+        "duration_hint": "Hours",
+        "requires": {
+          "temp_c": [
+            20,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "cuticle_breach"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The fungus colonises leaf, stem and fruit tissue.",
+        "duration_hint": "3 to 7 days",
+        "requires": {
+          "temp_c": [
+            20,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_hyphae"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Small dark pinpoint spots enlarge into brown lesions with concentric rings and a light centre. On fruit they become sunken brown pits, which is where the yield loss comes from.",
+        "duration_hint": "About a week after infection",
+        "requires": {
+          "temp_c": [
+            20,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "target_ring_lesion"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "Lesions sporulate abundantly in humid weather, and the fungus builds up fast in a dense canopy.",
+        "duration_hint": "Continuous while humid",
+        "requires": {
+          "temp_c": [
+            20,
+            32
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "conidia_sporulation"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Wind and rain move conidia through the canopy and to neighbouring plants.",
+        "duration_hint": "Every wet period",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            80,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "wind_splash_dispersal"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 20,
+        "optimal": 28,
+        "max": 32
+      },
+      "leaf_wetness_hr": {
+        "min": 6,
+        "optimal": 16
+      },
+      "rh_pct": {
+        "min": 80,
+        "optimal": 95
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "survival",
+        "action": "Remove and destroy crop residue; note that rotation alone is weak here because the fungus has a very wide host range",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "reproduction",
+        "action": "Prune and space plants to open the canopy; target spot thrives in dense wet foliage",
+        "effect": "slows",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Apply chlorothalonil or mancozeb protectively, and rotate fungicide groups; Corynespora develops resistance to single-site products quickly",
+        "effect": "blocks",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "dispersal",
+        "action": "Avoid overhead irrigation and do not work the crop while wet",
+        "effect": "slows",
+        "kind": "cultural"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 471-472.",
+      "University of Florida IFAS: Target Spot of Tomato (PP352). https://edis.ifas.ufl.edu/publication/PP352",
+      "CABI Compendium: Corynespora cassiicola. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.16800"
+    ]
+  },
+  "Tomato___Bacterial_spot": {
+    "pathogen": {
+      "name": "Xanthomonas vesicatoria, X. euvesicatoria, X. gardneri and X. perforans",
+      "type": "bacterium"
+    },
+    "primary_inoculum": "Bacteria carried on and in the seed, and surviving on infected crop debris and volunteer plants",
+    "overseasoning": "Contaminated seed is the main route between regions. Locally the bacteria survive on infected debris, volunteers and solanaceous weeds.",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "rain_splash",
+      "wind_driven_rain",
+      "tools",
+      "human_movement"
+    ],
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The bacteria survive on and inside the seed, and on crop debris and volunteers. A single contaminated seed lot can start an outbreak in a new district.",
+        "duration_hint": "Between seasons; years on seed",
+        "requires": {
+          "temp_c": [
+            0,
+            40
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "bacteria_on_seed"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Inoculum production",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Bacteria multiply rapidly on wet leaf surfaces and in the transplant house, long before any symptom shows.",
+        "duration_hint": "Hours to days",
+        "requires": {
+          "temp_c": [
+            20,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "bacterial_multiplication"
+      },
+      {
+        "id": "deposition",
+        "label": "Deposition on the leaf",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Wind-driven rain is the key. Splash both carries the bacteria and drives them hard against the leaf, and overhead irrigation does the same thing.",
+        "duration_hint": "During storms and overhead irrigation",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "wind_driven_rain_splash"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Germination",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "Bacteria need free water on the leaf to swim. There is no germination step as such; they simply have to reach an opening while the surface is wet.",
+        "duration_hint": "Minutes to hours of leaf wetness",
+        "requires": {
+          "temp_c": [
+            20,
+            35
+          ],
+          "leaf_wetness_hr": [
+            2,
+            48
+          ],
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "bacteria_swimming_film"
+      },
+      {
+        "id": "penetration",
+        "label": "Penetration",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "They enter through stomata, hydathodes and wounds. Wind-blown sand and handling wet plants create exactly the wounds they need, which is why the disease follows storms and follows workers.",
+        "duration_hint": "Minutes",
+        "requires": {
+          "temp_c": [
+            20,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            90,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "stomatal_entry"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "Bacteria multiply in the spaces between leaf cells. Warm weather makes this very fast.",
+        "duration_hint": "3 to 5 days",
+        "requires": {
+          "temp_c": [
+            20,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "latent_bacteria"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Small dark water-soaked spots appear, becoming brown and angular with a yellow halo. On fruit they are raised and scabby, which makes it unsellable.",
+        "duration_hint": "5 to 7 days after infection",
+        "requires": {
+          "temp_c": [
+            20,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "angular_watersoaked_spot"
+      },
+      {
+        "id": "reproduction",
+        "label": "Sporulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "Bacteria ooze from the lesion in wet conditions, ready to be splashed onward.",
+        "duration_hint": "Continuous in wet weather",
+        "requires": {
+          "temp_c": [
+            20,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": true,
+        "vfx": "bacterial_ooze"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Splash, wind-driven rain, hands, clothing and tools. Working down a row of wet plants inoculates every one of them.",
+        "duration_hint": "Every storm and every pass through the crop",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            85,
+            100
+          ]
+        },
+        "visible": false,
+        "vfx": "rain_splash_dispersal"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 20,
+        "optimal": 28,
+        "max": 35
+      },
+      "leaf_wetness_hr": {
+        "min": 2,
+        "optimal": 8
+      },
+      "rh_pct": {
+        "min": 85,
+        "optimal": 98
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "survival",
+        "action": "Use certified pathogen-free seed, or treat seed with hot water at 50 C for 25 minutes",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "deposition",
+        "action": "Switch from overhead to drip irrigation; wind-driven water is the main delivery mechanism",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "penetration",
+        "action": "Never handle, prune or harvest while the crop is wet, and disinfect tools and hands between rows",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "prepenetration",
+        "action": "Apply copper, usually tank-mixed with mancozeb, on a protective schedule. Note that copper-tolerant strains are widespread, so copper suppresses but does not cure",
+        "effect": "slows",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "survival",
+        "action": "Rotate away from tomato and pepper for at least two years and destroy volunteers and solanaceous weeds",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 656-659.",
+      "Potnis, N. et al. (2015). Bacterial spot of tomato and pepper: diverse Xanthomonas species with a wide variety of virulence factors. Molecular Plant Pathology 16(9):907-920. https://doi.org/10.1111/mpp.12244",
+      "CABI Compendium: Xanthomonas vesicatoria. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.56884"
+    ]
+  },
+  "Tomato___Spider_mites Two-spotted_spider_mite": {
+    "pathogen": {
+      "name": "Tetranychus urticae",
+      "type": "arthropod"
+    },
+    "primary_inoculum": "Overwintering adult females moving in from weeds, field margins and previous crops",
+    "overseasoning": "Mated adult females overwinter in a resting state under bark, in soil litter and on weeds around the field",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "wind",
+      "human_movement",
+      "tools"
+    ],
+    "note": "This is a mite, not a pathogen. The nine stages below are its life cycle rather than an infection cycle, and the environment leg of the disease triangle is inverted: hot and DRY favours it, where every fungal disease in this dataset needs moisture. Turning the humidity dial up is a control here, not a risk.",
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "Mated females overwinter in a dormant state under bark, in leaf litter and on weeds at the field edge. They are orange rather than the usual green.",
+        "duration_hint": "Winter",
+        "requires": {
+          "temp_c": [
+            -5,
+            15
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "mite_overwinter_litter"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Spring emergence",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Warmth brings the females out of dormancy and they begin laying. Populations start on weeds and move into the crop.",
+        "duration_hint": "Spring",
+        "requires": {
+          "temp_c": [
+            12,
+            40
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "mite_emergence"
+      },
+      {
+        "id": "deposition",
+        "label": "Arrival on the plant",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Mites walk in from the field edge, are blown in on silk threads, or are carried in on clothing, tools and transplants.",
+        "duration_hint": "Continuous",
+        "requires": {
+          "temp_c": [
+            12,
+            40
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "mite_ballooning"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Settling and feeding",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "Mites settle on the leaf underside. Hot dry air is what they need. Above about 60 percent humidity their reproduction slows sharply and fungal diseases of the mites themselves take hold.",
+        "duration_hint": "Hours",
+        "requires": {
+          "temp_c": [
+            24,
+            40
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            0,
+            60
+          ]
+        },
+        "visible": false,
+        "vfx": "mite_settling_underside"
+      },
+      {
+        "id": "penetration",
+        "label": "Cell piercing",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "The mite pushes its stylet into individual leaf cells and sucks out the contents. Each puncture kills one cell.",
+        "duration_hint": "Continuous",
+        "requires": {
+          "temp_c": [
+            12,
+            40
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "stylet_piercing"
+      },
+      {
+        "id": "infection",
+        "label": "Early damage",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "Thousands of emptied cells produce a fine pale stippling on the leaf. At this stage it is easy to mistake for nutrient deficiency.",
+        "duration_hint": "Days",
+        "requires": {
+          "temp_c": [
+            12,
+            40
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "stippling_fine"
+      },
+      {
+        "id": "colonization",
+        "label": "Population build-up",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "At 30 C a generation takes about 5 days, so numbers explode. Leaves go bronze, then dry and drop. Fine webbing appears on the growing tips.",
+        "duration_hint": "5 to 20 days per generation depending on temperature",
+        "requires": {
+          "temp_c": [
+            24,
+            40
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            0,
+            60
+          ]
+        },
+        "visible": true,
+        "vfx": "bronzing_and_webbing"
+      },
+      {
+        "id": "reproduction",
+        "label": "Egg laying",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "Each female lays around 100 eggs over her life. Unfertilised eggs become males, fertilised ones females, so a single female can found a colony.",
+        "duration_hint": "Continuous",
+        "requires": {
+          "temp_c": [
+            12,
+            40
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": [
+            0,
+            60
+          ]
+        },
+        "visible": true,
+        "vfx": "mite_eggs_underside"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Mites spin silk and balloon on the wind to new plants, and ride on clothing and equipment. Crowding on a dying leaf triggers the dispersal behaviour.",
+        "duration_hint": "Continuous once crowded",
+        "requires": {
+          "temp_c": [
+            12,
+            40
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "silk_ballooning"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 12,
+        "optimal": 30,
+        "max": 40
+      },
+      "leaf_wetness_hr": {
+        "min": 0,
+        "optimal": 0
+      },
+      "rh_pct": {
+        "min": 0,
+        "optimal": 35
+      }
+    },
+    "interventions": [
+      {
+        "stage_id": "prepenetration",
+        "action": "Raise humidity and wash the leaf undersides with a forceful water spray; this is the cheapest control and it works because the mite needs dry air",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "colonization",
+        "action": "Release predatory mites such as Phytoseiulus persimilis or Neoseiulus californicus early, before webbing appears",
+        "effect": "blocks",
+        "kind": "biological"
+      },
+      {
+        "stage_id": "reproduction",
+        "action": "Apply a selective miticide with ovicidal activity such as spiromesifen or abamectin, rotating modes of action; Tetranychus urticae develops resistance notoriously fast",
+        "effect": "reduces_inoculum",
+        "kind": "chemical"
+      },
+      {
+        "stage_id": "survival",
+        "action": "Control weeds around the field and remove crop residue where the overwintering females shelter",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "colonization",
+        "action": "Avoid broad-spectrum pyrethroids, which kill the predatory mites and reliably trigger a worse outbreak than the one being treated",
+        "effect": "slows",
+        "kind": "cultural"
+      }
+    ],
+    "sources": [
+      "Migeon, A. & Dorkeld, F. Spider Mites Web: Tetranychus urticae. https://www1.montpellier.inra.fr/CBGP/spmweb/",
+      "University of California IPM: Spider Mites Pest Notes 7405. https://ipm.ucanr.edu/PMG/PESTNOTES/pn7405.html",
+      "CABI Compendium: Tetranychus urticae. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.53366"
+    ]
+  },
+  "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+    "pathogen": {
+      "name": "Tomato yellow leaf curl virus (TYLCV, Begomovirus)",
+      "type": "virus"
+    },
+    "primary_inoculum": "Viruliferous whitefly adults (Bemisia tabaci) arriving from infected crops and weed hosts",
+    "overseasoning": "The virus survives in living hosts only: infected tomato, weeds and volunteers, plus the whitefly population itself. There is no soil or residue stage and it is not seed-transmitted.",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "insect_vector"
+    ],
+    "vector": {
+      "name": "Bemisia tabaci (silverleaf whitefly)",
+      "transmission": "persistent, circulative"
+    },
+    "note": "No spore, no leaf wetness, no rain. The environment leg of the triangle acts on the whitefly, not on the pathogen: warm dry weather that builds whitefly numbers is what drives this epidemic.",
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The virus persists only inside living plants and inside its whitefly vector. Infected volunteer tomatoes and weed hosts bridge the gap between crops.",
+        "duration_hint": "Between crops, in living hosts",
+        "requires": {
+          "temp_c": [
+            10,
+            40
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "virus_in_weed_host"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Vector acquisition",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "A whitefly feeding on an infected plant for 15 to 30 minutes picks up the virus. The virus then circulates through the insect and reaches its salivary glands.",
+        "duration_hint": "15 to 30 minutes of feeding",
+        "requires": {
+          "temp_c": [
+            20,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "whitefly_acquisition"
+      },
+      {
+        "id": "deposition",
+        "label": "Vector arrival",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Viruliferous whiteflies fly or are blown into the crop and settle on the youngest leaves.",
+        "duration_hint": "Continuous during whitefly flight",
+        "requires": {
+          "temp_c": [
+            18,
+            38
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "whitefly_arrival"
+      },
+      {
+        "id": "prepenetration",
+        "label": "Latent period in the vector",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "The whitefly cannot transmit immediately. The virus takes around 8 to 24 hours to move through its gut and into the saliva, after which the insect stays infectious for life.",
+        "duration_hint": "8 to 24 hours inside the insect",
+        "requires": {
+          "temp_c": [
+            20,
+            35
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "virus_circulating_vector"
+      },
+      {
+        "id": "penetration",
+        "label": "Inoculation",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "The whitefly inserts its stylet into the phloem and injects virus with its saliva. A feed of 15 to 30 minutes is enough to infect the plant.",
+        "duration_hint": "15 to 30 minutes",
+        "requires": {
+          "temp_c": [
+            18,
+            38
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "stylet_phloem_injection"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The virus replicates in the phloem and moves systemically through the plant. Nothing shows for two to three weeks.",
+        "duration_hint": "14 to 21 days",
+        "requires": {
+          "temp_c": [
+            18,
+            38
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "systemic_spread"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "New leaves come out small, cupped upward and yellow at the margins. The plant becomes stunted and bushy. Flowers drop, and a plant infected while young produces almost nothing.",
+        "duration_hint": "From 2 to 3 weeks after inoculation",
+        "requires": {
+          "temp_c": [
+            18,
+            38
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "leaf_curl_yellowing"
+      },
+      {
+        "id": "reproduction",
+        "label": "Virus titre rises",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "Virus concentration builds in the phloem, so the infected plant becomes a better source for the next whitefly that feeds on it.",
+        "duration_hint": "Continuous",
+        "requires": {
+          "temp_c": [
+            18,
+            38
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "virus_titre_rise"
+      },
+      {
+        "id": "dispersal",
+        "label": "Onward transmission",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "Whiteflies acquire from this plant and carry the virus to the next. Because the insect stays infectious for life, controlling the vector is the only way to control the disease.",
+        "duration_hint": "Continuous while whiteflies are active",
+        "requires": {
+          "temp_c": [
+            18,
+            38
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "whitefly_dispersal"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 18,
+        "optimal": 30,
+        "max": 38
+      },
+      "leaf_wetness_hr": null,
+      "rh_pct": null
+    },
+    "interventions": [
+      {
+        "stage_id": "deposition",
+        "action": "Raise seedlings under 50-mesh insect-proof netting and plant only whitefly-free transplants; most field infections trace back to the nursery",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "survival",
+        "action": "Destroy infected plants and volunteers, and control weed hosts; a rogued plant cannot be cured and remains a source",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "penetration",
+        "action": "Grow TYLCV-resistant cultivars carrying Ty-1, Ty-2 or Ty-3 genes; they still get infected but stay productive",
+        "effect": "slows",
+        "kind": "resistant_variety"
+      },
+      {
+        "stage_id": "deposition",
+        "action": "Use UV-reflective silver mulch to disorient arriving whiteflies, and yellow sticky traps to monitor pressure",
+        "effect": "slows",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "dispersal",
+        "action": "Apply insecticides against the vector with rotated modes of action, and observe a crop-free period between tomato plantings",
+        "effect": "reduces_inoculum",
+        "kind": "chemical"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 745-748.",
+      "Czosnek, H. & Laterrot, H. (1997). A worldwide survey of tomato yellow leaf curl viruses. Archives of Virology 142:1391-1406.",
+      "Rojas, M.R. et al. (2018). World management of geminiviruses. Annual Review of Phytopathology 56:637-677. https://doi.org/10.1146/annurev-phyto-080615-100327",
+      "CABI Compendium: Tomato yellow leaf curl virus. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.55402"
+    ]
+  },
+  "Tomato___Tomato_mosaic_virus": {
+    "pathogen": {
+      "name": "Tomato mosaic virus (ToMV, Tobamovirus)",
+      "type": "virus"
+    },
+    "primary_inoculum": "Virus on contaminated hands, tools, clothing, stakes and seed coats, and in crop debris",
+    "overseasoning": "The virus is exceptionally stable. It survives for years in dry debris, on greenhouse structures, on stakes and twine, on the seed coat, and even in cured tobacco products.",
+    "cycle_type": "polycyclic",
+    "dispersal": [
+      "human_movement",
+      "tools",
+      "seed"
+    ],
+    "note": "There is no insect vector and no weather requirement. The environment leg of the triangle is effectively always satisfied, so the only lever is sanitation. This is the clearest case in the dataset of a disease that a fungicide cannot touch and a habit change can stop.",
+    "stages": [
+      {
+        "id": "survival",
+        "label": "Overwintering",
+        "label_te": "శీతాకాలపు మనుగడ",
+        "what_happens": "The virus survives for years in dry plant debris, on greenhouse framework, stakes, twine and trays, and on the seed coat. It is one of the most stable plant viruses known.",
+        "duration_hint": "Years",
+        "requires": {
+          "temp_c": [
+            -20,
+            50
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "virus_on_surfaces"
+      },
+      {
+        "id": "inoculum_production",
+        "label": "Contamination",
+        "label_te": "సంక్రమణ కణాల ఉత్పత్తి",
+        "what_happens": "Handling an infected plant loads virus onto hands, gloves, clothing and tools in seconds.",
+        "duration_hint": "Instant",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "contaminated_hands"
+      },
+      {
+        "id": "deposition",
+        "label": "Contact",
+        "label_te": "ఆకుపై చేరడం",
+        "what_happens": "Virus is transferred to a healthy plant by touch during pruning, tying, transplanting or harvesting. No spore, no splash, no insect.",
+        "duration_hint": "Instant",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "contact_transfer"
+      },
+      {
+        "id": "prepenetration",
+        "label": "No germination step",
+        "label_te": "మొలకెత్తడం",
+        "what_happens": "Unlike a fungus, the virus does nothing on the leaf surface. It needs no water, no warmth and no waiting. This stage cannot be blocked by weather, which is why humidity and wetness dials do nothing to this disease.",
+        "duration_hint": "None",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "no_surface_stage"
+      },
+      {
+        "id": "penetration",
+        "label": "Entry through a micro-wound",
+        "label_te": "ఆకులోకి ప్రవేశం",
+        "what_happens": "The virus enters through tiny wounds made by handling: a broken leaf hair is enough. It cannot enter intact tissue on its own.",
+        "duration_hint": "Instant",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "microwound_entry"
+      },
+      {
+        "id": "infection",
+        "label": "Infection and incubation",
+        "label_te": "సంక్రమణ మరియు గుప్త కాలం",
+        "what_happens": "The virus replicates in the first cells and moves cell to cell, then systemically through the phloem.",
+        "duration_hint": "7 to 14 days",
+        "requires": {
+          "temp_c": [
+            15,
+            30
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "systemic_spread"
+      },
+      {
+        "id": "colonization",
+        "label": "Colonization",
+        "label_te": "కణజాలంలో వ్యాప్తి",
+        "what_happens": "Light and dark green mottling appears on the leaves, sometimes with fern-like narrowing of the leaflets. Fruit may show internal browning. Symptoms fade in hot weather, which makes the plant look recovered when it is not.",
+        "duration_hint": "7 to 14 days after entry",
+        "requires": {
+          "temp_c": [
+            15,
+            30
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "mosaic_mottle"
+      },
+      {
+        "id": "reproduction",
+        "label": "Virus accumulation",
+        "label_te": "బీజాంశ ఉత్పత్తి",
+        "what_happens": "Virus titre becomes very high in every part of the plant, so any contact with it is infectious.",
+        "duration_hint": "Continuous",
+        "requires": {
+          "temp_c": [
+            15,
+            30
+          ],
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": true,
+        "vfx": "virus_titre_rise"
+      },
+      {
+        "id": "dispersal",
+        "label": "Dispersal",
+        "label_te": "గాలి/వర్షం ద్వారా వ్యాప్తి",
+        "what_happens": "The next person who touches the plant carries it onward. One infected plant plus one uninterrupted pruning pass equals an infected row.",
+        "duration_hint": "Every pass through the crop",
+        "requires": {
+          "temp_c": null,
+          "leaf_wetness_hr": null,
+          "rh_pct": null
+        },
+        "visible": false,
+        "vfx": "row_by_row_spread"
+      }
+    ],
+    "environment": {
+      "temp_c": {
+        "min": 15,
+        "optimal": 22,
+        "max": 30
+      },
+      "leaf_wetness_hr": null,
+      "rh_pct": null
+    },
+    "interventions": [
+      {
+        "stage_id": "deposition",
+        "action": "Wash hands with soap and disinfect tools in 10 percent skimmed milk or 1 percent sodium hypochlorite between plants, and never use tobacco in the crop",
+        "effect": "blocks",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "survival",
+        "action": "Use seed treated by acid extraction or trisodium phosphate, and disinfect stakes, twine and greenhouse structures between crops",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      },
+      {
+        "stage_id": "penetration",
+        "action": "Grow cultivars carrying the Tm-2a resistance gene, which is the single most effective control available",
+        "effect": "blocks",
+        "kind": "resistant_variety"
+      },
+      {
+        "stage_id": "dispersal",
+        "action": "Rogue infected plants immediately and work from clean rows toward known infected ones, never the reverse",
+        "effect": "reduces_inoculum",
+        "kind": "cultural"
+      }
+    ],
+    "sources": [
+      "Agrios, G.N. (2005). Plant Pathology, 5th ed., pp. 741-744.",
+      "Broadbent, L. (1976). Epidemiology and control of tomato mosaic virus. Annual Review of Phytopathology 14:75-96. https://doi.org/10.1146/annurev.py.14.090176.000451",
+      "CABI Compendium: Tomato mosaic virus. https://www.cabidigitallibrary.org/doi/10.1079/cabicompendium.53638"
+    ]
+  }
+}
