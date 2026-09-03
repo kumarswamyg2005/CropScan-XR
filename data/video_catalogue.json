@@ -1,0 +1,162 @@
+{
+  "_readme": [
+    "Curated field/lab footage, with the licence obligations attached to the media.",
+    "",
+    "Every entry here was verified against the Wikimedia Commons API: the file",
+    "exists, the direct URL resolves, and the licence and author are as recorded.",
+    "CC BY and CC BY-SA REQUIRE attribution, so `attribution` and `source_url` are",
+    "not decoration -- the app renders them next to the player, and the ingest",
+    "script refuses to register a clip that is missing either.",
+    "",
+    "On 360 footage: genuine 360-degree capture of crop disease is not available",
+    "under a reusable licence. It essentially does not exist yet -- the closest",
+    "published work is the TNAU downy-mildew VR module, which is not distributed.",
+    "So the real clips below are flat, and in the headset they play on a WebXR",
+    "quad layer, which is the correct way to show flat video in VR. One synthetic",
+    "equirect clip is kept so the 360 code path stays exercised until real",
+    "orchard capture replaces it.",
+    "",
+    "Transcoding to HLS creates a derivative. For CC BY-SA that means the",
+    "derivative carries the same licence -- fine here, worth knowing before this",
+    "footage goes into anything commercial."
+  ],
+  "videos": [
+    {
+      "id": "phytophthora-zoospores",
+      "disease_ids": [
+        "Tomato___Late_blight",
+        "Potato___Late_blight"
+      ],
+      "kind": "symptom_closeup",
+      "title": "Phytophthora zoospores swimming",
+      "caption": "Motile zoospores released from a sporangium. This is stage 4 of the cycle: below about 15 °C the sporangium releases these instead of germinating directly, and they need free water on the leaf to swim. Take the water away and the epidemic stops here.",
+      "stage_id": "prepenetration",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Phytophthora_capsici_zoospores.webm",
+      "download": "https://commons.wikimedia.org/wiki/Special:FilePath/Phytophthora capsici zoospores.webm",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Shaikhul Islam Shaokin, via Wikimedia Commons",
+      "projection": "flat",
+      "stereo": "none",
+      "note": "P. capsici, a close relative of P. infestans; the zoospore behaviour is the same."
+    },
+    {
+      "id": "spider-mites-leaf",
+      "disease_ids": [
+        "Tomato___Spider_mites Two-spotted_spider_mite"
+      ],
+      "kind": "symptom_closeup",
+      "title": "Two-spotted spider mites on a leaf",
+      "caption": "Adults and eggs on the leaf underside. Each puncture empties one cell, which is what produces the fine pale stippling. Note that these thrive in hot dry air — the opposite of every fungus in this dataset.",
+      "stage_id": "colonization",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Spider_mites_moving_on_a_leaf.webm",
+      "download": "https://commons.wikimedia.org/wiki/Special:FilePath/Spider mites moving on a leaf.webm",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Jstay, via Wikimedia Commons",
+      "projection": "flat",
+      "stereo": "none"
+    },
+    {
+      "id": "whitefly-vector-behaviour",
+      "disease_ids": [
+        "Tomato___Tomato_Yellow_Leaf_Curl_Virus"
+      ],
+      "kind": "symptom_closeup",
+      "title": "The virus changes how its whitefly feeds",
+      "caption": "Bemisia tabaci feeding on an infected plant. TYLCV alters the insect's feeding behaviour in ways that increase transmission — the pathogen manipulating its own vector, which is why controlling the whitefly is the only control for the disease.",
+      "stage_id": "inoculum_production",
+      "source_url": "https://commons.wikimedia.org/wiki/File:A-Plant-Virus-Manipulates-the-Behavior-of-Its-Whitefly-Vector-to-Enhance-Its-Transmission-pone.0061543.s001.ogv",
+      "download": "https://commons.wikimedia.org/wiki/Special:FilePath/A-Plant-Virus-Manipulates-the-Behavior-of-Its-Whitefly-Vector-to-Enhance-Its-Transmission-pone.0061543.s001.ogv",
+      "license": "CC BY 2.5",
+      "attribution": "Moreno-Delafuente A, Garzo E, Moreno A, Fereres A (2013), PLoS ONE, via Wikimedia Commons",
+      "projection": "flat",
+      "stereo": "none"
+    },
+    {
+      "id": "whiteflies-oscillating",
+      "disease_ids": [
+        "Tomato___Tomato_Yellow_Leaf_Curl_Virus"
+      ],
+      "kind": "symptom_closeup",
+      "title": "Whiteflies on the leaf underside",
+      "caption": "The vector at rest and disturbed. A whitefly that has fed on an infected plant for 15-30 minutes stays infectious for the rest of its life, which is why a crop-free period between plantings matters more than spraying.",
+      "stage_id": "dispersal",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Oscillating_whiteflies.ogv",
+      "download": "https://commons.wikimedia.org/wiki/Special:FilePath/Oscillating whiteflies.ogv",
+      "license": "Public domain",
+      "attribution": "Littleinfo, via Wikimedia Commons",
+      "projection": "flat",
+      "stereo": "none"
+    },
+    {
+      "id": "fungal-effector-penetration",
+      "disease_ids": [
+        "Apple___Apple_scab",
+        "Tomato___Early_blight",
+        "Potato___Early_blight",
+        "Tomato___Septoria_leaf_spot",
+        "Apple___Black_rot",
+        "Tomato___Target_Spot"
+      ],
+      "kind": "symptom_closeup",
+      "title": "A fungus delivering effectors into a host cell",
+      "caption": "Live imaging of effector trafficking inside a fungal hypha during infection. This is stage 6 — the fungus is inside the tissue suppressing the plant's defences, and nothing is visible on the leaf yet. That invisible window is why a protectant spray has to go on before the wetting event, not after symptoms appear.",
+      "stage_id": "infection",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Long-distance-endosome-trafficking-drives-fungal-effector-production-during-plant-infection-ncomms6097-s2.ogv",
+      "download": "https://commons.wikimedia.org/wiki/Special:FilePath/Long-distance-endosome-trafficking-drives-fungal-effector-production-during-plant-infection-ncomms6097-s2.ogv",
+      "license": "CC BY 4.0",
+      "attribution": "Bielska E, Higuchi Y, Schuster M, Steinberg N, Kilaru S, Talbot NJ, Steinberg G (2014), Nature Communications, via Wikimedia Commons",
+      "projection": "flat",
+      "stereo": "none"
+    },
+    {
+      "id": "powdery-mildew-susceptibility",
+      "disease_ids": [
+        "Squash___Powdery_mildew",
+        "Cherry_(including_sour)___Powdery_mildew"
+      ],
+      "kind": "symptom_closeup",
+      "title": "Powdery mildew colonising a leaf surface",
+      "caption": "Mildew growth on a susceptible host compared with a resistant one. Unlike most fungi here, powdery mildew does not need free water to germinate — high humidity is enough, which is why it appears in dry weather when other diseases do not.",
+      "stage_id": "colonization",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Loss-of-Function-in-Mlo-Orthologs-Reduces-Susceptibility-of-Pepper-and-Tomato-to-Powdery-Mildew-pone.0070723.s004.ogv",
+      "download": "https://commons.wikimedia.org/wiki/Special:FilePath/Loss-of-Function-in-Mlo-Orthologs-Reduces-Susceptibility-of-Pepper-and-Tomato-to-Powdery-Mildew-pone.0070723.s004.ogv",
+      "license": "CC BY 2.5",
+      "attribution": "Zheng Z, Nonomura T, Appiano M, Pavan S, Matsuda Y, Toyoda H, et al. (2013), PLoS ONE, via Wikimedia Commons",
+      "projection": "flat",
+      "stereo": "none"
+    },
+    {
+      "id": "powdery-mildew-biocontrol",
+      "disease_ids": [
+        "Squash___Powdery_mildew"
+      ],
+      "kind": "treatment",
+      "title": "Biological control of powdery mildew",
+      "caption": "A biocontrol agent applied against Podosphaera xanthii. An intervention acting on the colonisation stage rather than on the spore, which is why timing it is different from timing a protectant fungicide.",
+      "stage_id": "colonization",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Biological-control-of-the-cucurbit-powdery-mildew-pathogen-Podosphaera-xanthii-by-means-of-the-Video1.ogv",
+      "download": "https://commons.wikimedia.org/wiki/Special:FilePath/Biological-control-of-the-cucurbit-powdery-mildew-pathogen-Podosphaera-xanthii-by-means-of-the-Video1.ogv",
+      "license": "CC BY 4.0",
+      "attribution": "Gafni A, Calderon C, Harris R, Buxdorf K, Dafa-Berger A, Zeilinger-Reichert E, Levy M (2015), via Wikimedia Commons",
+      "projection": "flat",
+      "stereo": "none"
+    },
+    {
+      "id": "orchard-360-placeholder",
+      "disease_ids": [
+        "Apple___Apple_scab"
+      ],
+      "kind": "field360",
+      "title": "Orchard walk-through (placeholder)",
+      "caption": "A synthetic equirectangular pattern standing in for real orchard capture. It exists so the 360 code path — equirect layer, sphere fallback, look-around — stays exercised. Replace it with real footage shot on a 360 camera; the pipeline does not change.",
+      "stage_id": null,
+      "source_url": null,
+      "download": null,
+      "generated": true,
+      "license": "Generated placeholder",
+      "attribution": "Generated by tools/transcode.sh from an ffmpeg test pattern",
+      "projection": "equirect",
+      "stereo": "none"
+    }
+  ]
+}

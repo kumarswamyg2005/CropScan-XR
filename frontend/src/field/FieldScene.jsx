@@ -33,7 +33,7 @@ const MUTED = 0x7a6f5e
  * (flat). Playback goes through SingleVideoPlayback so a second clip cannot
  * start while one is running.
  */
-function VideoStage({ video, playing, onReady, onStrategy }) {
+function VideoStage({ video, onElement, onStrategy }) {
   const gl = useThree((state) => state.gl)
   const playback = useMemo(() => new SingleVideoPlayback(), [])
   const [strategy, setStrategy] = useState('video-texture')
@@ -69,19 +69,18 @@ function VideoStage({ video, playing, onReady, onStrategy }) {
       })
     }
 
-    const ready = () => onReady?.(element)
-    element.addEventListener('loadeddata', ready)
     return () => {
-      element.removeEventListener('loadeddata', ready)
       hls?.destroy()
       playback.release()
     }
-  }, [element, playback, video?.hls_url, onReady])
+  }, [element, playback, video?.hls_url])
 
+  // The page drives play/pause/seek; playback still goes through the
+  // one-video-at-a-time manager so a clip switch cannot leave two decoding.
   useEffect(() => {
-    if (playing) playback.play(element).catch(() => {})
-    else playback.pause()
-  }, [playing, playback, element])
+    onElement?.(element, playback)
+    return () => onElement?.(null, playback)
+  }, [element, playback, onElement])
 
   useEffect(() => {
     const session = gl.xr.getSession()
@@ -245,7 +244,7 @@ function StageTimeline({ run, position }) {
   )
 }
 
-export default function FieldScene({ video, run, playing, onReady, onStrategy }) {
+export default function FieldScene({ video, run, onElement, onStrategy }) {
   const controls = useRef(null)
 
   return (
@@ -255,7 +254,7 @@ export default function FieldScene({ video, run, playing, onReady, onStrategy })
 
       <XR store={xrStore}>
         <Suspense fallback={null}>
-          <VideoStage video={video} playing={playing} onReady={onReady} onStrategy={onStrategy} />
+          <VideoStage video={video} onElement={onElement} onStrategy={onStrategy} />
           {run && (
             <>
               <StagePanel run={run} position={[0, 1.95, -1.5]} />
@@ -266,8 +265,16 @@ export default function FieldScene({ video, run, playing, onReady, onStrategy })
         </Suspense>
       </XR>
 
-      {/* Look around from the centre of the sphere; no panning out of it. */}
-      <OrbitControls ref={controls} enableZoom={false} enablePan={false} rotateSpeed={-0.3} target={[0, 1.6, 0]} />
+      {/* 360: look around from the centre of the sphere, inverted drag so it
+          feels like turning your head. Flat: the panel is in front of you, so
+          normal orbiting is right. */}
+      <OrbitControls
+        ref={controls}
+        enableZoom={video?.projection !== 'flat'}
+        enablePan={false}
+        rotateSpeed={video?.projection === 'flat' ? 0.4 : -0.3}
+        target={video?.projection === 'flat' ? [0, 1.5, -2.2] : [0, 1.6, 0]}
+      />
     </Canvas>
   )
 }

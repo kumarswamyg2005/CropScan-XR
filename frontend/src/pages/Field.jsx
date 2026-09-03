@@ -1,7 +1,8 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
 import { api } from '../lib/api'
+import VideoOptions from '../components/VideoOptions'
 import { useLang } from '../context/LanguageContext'
 import { dialRanges, optimalDials, runCycle, suggestBreak } from '../field/cycleMachine'
 
@@ -12,8 +13,8 @@ const FieldScene = lazy(() => import('../field/FieldScene'))
 const T = {
   title: { en: 'Field module', te: 'క్షేత్ర మాడ్యూల్' },
   intro: {
-    en: 'Watch the disease in a real field, in 360°. The infection cycle runs alongside the footage — change one condition and watch it stall.',
-    te: '360° లో నిజమైన పొలంలో వ్యాధిని చూడండి. ఫుటేజ్‌తో పాటు సంక్రమణ చక్రం నడుస్తుంది — ఒక పరిస్థితిని మార్చి అది ఆగిపోవడం చూడండి.',
+    en: 'Watch the pathogen itself — zoospores, vectors, infection — with the disease cycle running alongside. Change one condition and watch the cycle stall. Put a headset on and the footage plays in VR.',
+    te: 'వ్యాధికారకాన్ని నేరుగా చూడండి — బీజాంశాలు, వాహకాలు, సంక్రమణ — పక్కనే వ్యాధి చక్రం నడుస్తుంది. ఒక పరిస్థితిని మార్చి చక్రం ఆగిపోవడం చూడండి. హెడ్‌సెట్ పెట్టుకుంటే ఫుటేజ్ VRలో ప్లే అవుతుంది.',
   },
   enterVR: { en: 'Enter in VR', te: 'VRలో ప్రవేశించండి' },
   noHeadset: { en: 'No headset detected — the 360° view still works here, drag to look around.', te: 'హెడ్‌సెట్ కనిపించలేదు — 360° వీక్షణ ఇక్కడ పనిచేస్తుంది, చుట్టూ చూడటానికి లాగండి.' },
@@ -66,8 +67,9 @@ export default function Field() {
   const [videoIndex, setVideoIndex] = useState(0)
   const [choices, setChoices] = useState([])
   const [dials, setDials] = useState(null)
-  const [playing, setPlaying] = useState(true)
+  const [media, setMedia] = useState({ element: null, playback: null })
   const [strategy, setStrategy] = useState('video-texture')
+  const [highlightStage, setHighlightStage] = useState(null)
   const [blocked, setBlocked] = useState(null)
   const t = (k) => T[k][lang]
 
@@ -141,7 +143,7 @@ export default function Field() {
                 <FieldScene
                   video={video}
                   run={run}
-                  playing={playing}
+                  onElement={useCallback((element, playback) => setMedia({ element, playback }), [])}
                   onStrategy={setStrategy}
                 />
               </Suspense>
@@ -156,10 +158,10 @@ export default function Field() {
               >
                 {t('enterVR')}
               </button>
-              <button className="btn-secondary" onClick={() => setPlaying((p) => !p)} disabled={!video}>
-                {playing ? t('pause') : t('play')}
-              </button>
-              <span style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>
+              <span style={{
+                fontFamily: "'DM Mono', monospace", fontSize: 12,
+                color: 'var(--color-text-muted)',
+              }}>
                 {video ? `${video.projection} · ${strategy}` : t('noVideo')}
               </span>
             </div>
@@ -168,23 +170,15 @@ export default function Field() {
               <p style={{ fontSize: 13, color: 'var(--color-text-muted)', marginTop: 8 }}>{t('noHeadset')}</p>
             )}
 
-            {videos.length > 1 && (
-              <div style={{ marginTop: 18 }}>
-                <div className="label-caps" style={{ marginBottom: 8 }}>{t('clips')}</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {videos.map((v, i) => (
-                    <button
-                      key={v.id}
-                      onClick={() => setVideoIndex(i)}
-                      className={i === videoIndex ? 'btn-primary' : 'btn-secondary'}
-                      style={{ fontSize: 13 }}
-                    >
-                      {v.title}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            <VideoOptions
+              videos={videos}
+              index={videoIndex}
+              onPick={setVideoIndex}
+              element={media.element}
+              playback={media.playback}
+              lang={lang}
+              onJumpToStage={setHighlightStage}
+            />
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
@@ -230,6 +224,11 @@ export default function Field() {
                     <li key={s.id} style={{
                       display: 'flex', gap: 10, alignItems: 'baseline', fontSize: 13,
                       padding: '5px 0', borderTop: i ? '1px solid var(--color-border)' : 'none',
+                      background: s.id === highlightStage ? 'var(--color-accent-subtle)' : 'transparent',
+                      margin: s.id === highlightStage ? '0 -8px' : 0,
+                      paddingLeft: s.id === highlightStage ? 8 : 0,
+                      paddingRight: s.id === highlightStage ? 8 : 0,
+                      borderRadius: s.id === highlightStage ? 6 : 0,
                     }}>
                       <span style={{ color: 'var(--color-text-disabled)', fontVariantNumeric: 'tabular-nums' }}>
                         {String(i + 1).padStart(2, '0')}

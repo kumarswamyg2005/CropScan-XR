@@ -5,10 +5,22 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 REPO = Path(__file__).resolve().parents[3]
-os.environ.setdefault("DATA_DIR", str(REPO / "data"))
-os.environ.setdefault("RAZORPAY_KEY_ID", "rzp_test_fake")
-os.environ.setdefault("RAZORPAY_KEY_SECRET", "test_secret")
-os.environ.setdefault("RAZORPAY_WEBHOOK_SECRET", "webhook_secret")
+
+# Set, not setdefault. These MUST override whatever is already in the
+# environment: a developer who has sourced .env, or CI with real secrets
+# configured, would otherwise run the signature tests against one key while the
+# app verifies with another, and the six payment cases fail for a reason that
+# has nothing to do with the code.
+#
+# Explicit environment variables also outrank Settings' .env file in
+# pydantic-settings' precedence order, which is what keeps a real .env out.
+os.environ["DATA_DIR"] = str(REPO / "data")
+os.environ["RAZORPAY_KEY_ID"] = "rzp_test_fake"
+os.environ["RAZORPAY_KEY_SECRET"] = "test_secret"
+os.environ["RAZORPAY_WEBHOOK_SECRET"] = "webhook_secret"
+os.environ["DATABASE_URL"] = "sqlite://"
+os.environ.pop("S3_ACCESS_KEY_ID", None)
+os.environ.pop("S3_SECRET_ACCESS_KEY", None)
 
 import pytest
 from fastapi.testclient import TestClient
@@ -16,8 +28,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from app.config import get_settings
 from app.db import Base, get_db
 from app.models import Product, Scan
+
+# The settings object is cached; drop anything built while the real
+# environment was still visible.
+get_settings.cache_clear()
 
 
 @pytest.fixture

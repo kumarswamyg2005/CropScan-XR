@@ -111,7 +111,15 @@ nine hours and the cycle **visibly halts** at germination, in the headset and on
 the page, with the same sentence. That number comes from the Mills table via the
 JSON, not from a shader.
 
-**The XR module is 360° footage, not a 3D diorama.** A headset is excellent at
+**The footage is the real pathogen, tied to the stage it illustrates.**
+`data/video_catalogue.json` maps CC-licensed research footage to diseases and to
+cycle stages: *Phytophthora* zoospores swimming for the stage where late blight
+needs free water, whiteflies being manipulated by the virus they carry for
+TYLCV's vector stages, a fungus trafficking effectors into a host cell for the
+invisible incubation window that makes protectant timing matter. Licence and
+attribution are columns on the row, and the player renders them.
+
+**The XR module is video, not a 3D diorama.** A headset is excellent at
 putting you in a real orchard and poor at procedural greenery, so the footage is
 the experience and the cycle rides over it on flat panels. Video goes through
 WebXR Media Layers so the compositor samples it once at source resolution, and
@@ -148,9 +156,10 @@ pnpm install
 API_URL=http://127.0.0.1:8000 pnpm --filter crop-disease-detector dev
 ```
 
-Video: `tools/transcode.sh clip.mp4 out/name --projection equirect` builds the
-HLS ladder, then upload it under `videos/` and register the row with
-`services/api/register_video.py`.
+Video: `python tools/ingest_catalogue.py` downloads everything in
+`data/video_catalogue.json`, builds the HLS ladder, uploads it and registers the
+rows. It refuses any entry without attribution, because most of the footage is
+CC BY or CC BY-SA and attribution is a licence condition, not a nicety.
 
 `/healthz` reports whether the model, database and object storage are reachable.
 The API runs without a model — `/api/scans` returns 503 and everything else
@@ -219,9 +228,14 @@ Quest 3 for the frame-rate gate.
 - **The homepage still advertises 99.3% accuracy and EfficientNet-B0.** Both
   describe the deleted model. They must be replaced with the field number before
   this is published — see the note at the end of ADR 0005.
-- **Field footage is a generated placeholder.** `tools/transcode.sh` and the
-  registry work end to end; the clip itself is a synthetic equirect pattern
-  until real orchard capture replaces it.
+- **There is no real 360° crop-disease footage in the catalogue.** It does not
+  appear to exist under a reusable licence — the closest published work, the
+  TNAU downy-mildew VR module, is not distributed. The seven real clips are
+  CC-licensed pathogen footage (flat), which plays on a WebXR quad layer in the
+  headset. One synthetic equirect clip keeps the 360 code path exercised until
+  real orchard capture replaces it.
+- **CC BY-SA footage makes HLS renditions share-alike derivatives.** Fine for a
+  portfolio build; check before anything commercial.
 
 ## Documentation
 

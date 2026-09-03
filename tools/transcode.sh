@@ -37,19 +37,34 @@ mkdir -p "$OUTDIR"
 HEIGHT=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$INPUT")
 DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$INPUT" | cut -d. -f1)
 
-echo "source ${HEIGHT}p, ${DURATION}s, projection=$PROJECTION stereo=$STEREO"
+# Plenty of scientific footage is silent -- microscopy clips usually have no
+# audio track at all. Mapping a:0 unconditionally kills the whole job on those,
+# so the audio arguments are built from what the source actually has.
+HAS_AUDIO=$(ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 "$INPUT" | head -1)
+
+# The ${arr[@]+"${arr[@]}"} form below is not decoration: macOS ships bash 3.2,
+# where expanding an EMPTY array under `set -u` is an unbound-variable error.
+if [[ -n "$HAS_AUDIO" ]]; then
+  AUDIO_MAP=(-map a:0 -map a:0 -c:a aac -b:a 128k -ac 2)
+  STREAM_MAP="v:0,a:0,name:720p v:1,a:1,name:1080p"
+else
+  AUDIO_MAP=()
+  STREAM_MAP="v:0,name:720p v:1,name:1080p"
+fi
+
+echo "source ${HEIGHT}p, ${DURATION}s, audio=${HAS_AUDIO:-none}, projection=$PROJECTION stereo=$STEREO"
 
 # ---- h.264 ladder: 720p and 1080p. Universal playback, capped at 1080p. ----
 ffmpeg -hide_banner -loglevel warning -y -i "$INPUT" \
   -filter_complex "[0:v]split=2[v1][v2];[v1]scale=-2:720[v1out];[v2]scale=-2:1080[v2out]" \
   -map "[v1out]" -c:v:0 libx264 -b:v:0 2800k -preset veryfast -profile:v main \
   -map "[v2out]" -c:v:1 libx264 -b:v:1 5500k -preset veryfast -profile:v main \
-  -map a:0 -map a:0 -c:a aac -b:a 128k -ac 2 \
+  ${AUDIO_MAP[@]+"${AUDIO_MAP[@]}"} \
   -f hls -hls_time 6 -hls_playlist_type vod -hls_flags independent_segments \
   -hls_segment_type mpegts \
   -hls_segment_filename "$OUTDIR/h264_%v_%03d.ts" \
   -master_pl_name index.m3u8 \
-  -var_stream_map "v:0,a:0,name:720p v:1,a:1,name:1080p" \
+  -var_stream_map "$STREAM_MAP" \
   "$OUTDIR/h264_%v.m3u8"
 
 # ---- h.265 for anything above 4K, which is every 360 clip worth having ----
@@ -57,7 +72,7 @@ if [[ "$HEIGHT" -gt 2160 ]]; then
   echo "adding h.265 rendition (source is above 4K)"
   ffmpeg -hide_banner -loglevel warning -y -i "$INPUT" \
     -c:v libx265 -tag:v hvc1 -b:v 24000k -preset medium \
-    -c:a aac -b:a 128k \
+    ${HAS_AUDIO:+-c:a aac -b:a 128k} \
     -f hls -hls_time 6 -hls_playlist_type vod \
     -hls_segment_filename "$OUTDIR/h265_%03d.mp4" -hls_segment_type fmp4 \
     "$OUTDIR/h265.m3u8"

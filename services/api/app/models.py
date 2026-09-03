@@ -152,6 +152,17 @@ class Video(Base):
     stereo: Mapped[str] = mapped_column(String(16), default="none")
     language: Mapped[str] = mapped_column(String(8), default="en")
 
+    # Licence obligations travel with the media. Most of this footage is CC BY
+    # or CC BY-SA, which REQUIRE attribution -- so it is a column the UI reads,
+    # not a note in a README that nobody renders.
+    caption: Mapped[str | None] = mapped_column(String(2048))
+    license: Mapped[str | None] = mapped_column(String(64))
+    attribution: Mapped[str | None] = mapped_column(String(512))
+    source_url: Mapped[str | None] = mapped_column(String(1024))
+    # Which cycle stage this clip illustrates, so the player can follow the
+    # timeline instead of being a separate gallery.
+    stage_id: Mapped[str | None] = mapped_column(String(32), index=True)
+
     __table_args__ = (
         CheckConstraint("kind in ('treatment','field360','symptom_closeup')",
                         name="video_kind_valid"),

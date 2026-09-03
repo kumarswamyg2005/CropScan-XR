@@ -54,6 +54,11 @@ class VideoOut(BaseModel):
     disease_id: str
     kind: str
     title: str
+    caption: str | None = None
+    stage_id: str | None = None
+    license: str | None = None
+    attribution: str | None = None
+    source_url: str | None = None
     hls_url: str | None
     poster_url: str | None
     duration_s: int | None

@@ -17,6 +17,8 @@ router = APIRouter(prefix="/api/diseases", tags=["diseases"])
 def _video_out(v: Video) -> VideoOut:
     return VideoOut(
         id=v.id, disease_id=v.disease_id, kind=v.kind, title=v.title,
+        caption=v.caption, stage_id=v.stage_id,
+        license=v.license, attribution=v.attribution, source_url=v.source_url,
         hls_url=storage.signed_url(v.hls_key),
         poster_url=storage.signed_url(v.poster_key),
         duration_s=v.duration_s, projection=v.projection,
