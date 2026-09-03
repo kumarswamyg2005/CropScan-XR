@@ -17,7 +17,11 @@ export function LanguageProvider({ children }) {
   const toggle = useCallback(() => {
     setLang(prev => {
       const next = prev === 'en' ? 'te' : 'en'
-      try { localStorage.setItem(STORAGE_KEY, next) } catch {}
+      try {
+        localStorage.setItem(STORAGE_KEY, next)
+      } catch {
+        // Private browsing. The choice just does not persist; nothing breaks.
+      }
       return next
     })
   }, [])

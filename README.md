@@ -233,6 +233,11 @@ Quest 3 for the frame-rate gate.
 - **The homepage still advertises 99.3% accuracy and EfficientNet-B0.** Both
   describe the deleted model. They must be replaced with the field number before
   this is published — see the note at the end of ADR 0005.
+- **Two diseases still have no footage**: tomato bacterial spot and tomato
+  mosaic virus. A bacterium and a mechanically transmitted virus are both hard
+  to film, and nothing reusable exists. The fungal-infection clip is
+  deliberately not mapped to them — it would be showing the wrong kind of
+  pathogen. Those two fall back to the cycle board.
 - **There is no real 360° crop-disease footage in the catalogue.** It does not
   appear to exist under a reusable licence — the closest published work, the
   TNAU downy-mildew VR module, is not distributed. The seven real clips are

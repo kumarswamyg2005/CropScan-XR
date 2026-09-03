@@ -164,7 +164,10 @@ class Video(Base):
     stage_id: Mapped[str | None] = mapped_column(String(32), index=True)
 
     __table_args__ = (
-        CheckConstraint("kind in ('treatment','field360','symptom_closeup')",
+        # 'field' is flat field/orchard footage; 'field360' is specifically
+        # equirectangular. Folding them together would make the UI label lie
+        # about what the viewer is getting.
+        CheckConstraint("kind in ('treatment','field','field360','symptom_closeup')",
                         name="video_kind_valid"),
         CheckConstraint("projection in ('flat','equirect','equirect180')",
                         name="video_projection_valid"),

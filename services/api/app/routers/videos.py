@@ -15,7 +15,7 @@ router = APIRouter(prefix="/api/videos", tags=["videos"])
 @router.get("", response_model=list[VideoOut])
 def list_videos(
     disease_id: str | None = Query(None),
-    kind: str | None = Query(None, pattern="^(treatment|field360|symptom_closeup)$"),
+    kind: str | None = Query(None, pattern="^(treatment|field|field360|symptom_closeup)$"),
     lang: str = Query("en", pattern="^(en|te)$"),
     db: Session = Depends(get_db),
 ) -> list[VideoOut]:

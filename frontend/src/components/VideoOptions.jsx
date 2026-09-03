@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 const KIND_LABEL = {
   field360: { en: '360° field', te: '360° క్షేత్రం' },
+  field: { en: 'In the field', te: 'పొలంలో' },
   symptom_closeup: { en: 'Close-up', te: 'దగ్గరి దృశ్యం' },
   treatment: { en: 'Treatment', te: 'చికిత్స' },
 }

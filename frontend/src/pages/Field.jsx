@@ -107,8 +107,30 @@ export default function Field() {
       setCycle(r.cycle)
       if (r.cycle) setDials(optimalDials(r.cycle))
     }).catch(() => {})
-    api.listVideos(diseaseId, lang).then((v) => { setVideos(v); setVideoIndex(0) }).catch(() => {})
+    api.listVideos(diseaseId, lang)
+      .then((v) => {
+        // Real footage first. The synthetic 360 clip exists to keep the
+        // equirect code path exercised, not to be the first thing anyone sees.
+        const ordered = [...v].sort(
+          (a, b) =>
+            Number((a.license ?? '').startsWith('Generated')) -
+            Number((b.license ?? '').startsWith('Generated')),
+        )
+        setVideos(ordered)
+        setVideoIndex(0)
+      })
+      .catch(() => {})
   }, [diseaseId, lang])
+
+  // Hooks must run in the same order on every render. This was previously
+  // written inline in the JSX below, inside the `diseaseId && (...)` branch and
+  // after two early returns, so selecting a disease added a hook that had not
+  // existed on the previous render: "Rendered more hooks than during the
+  // previous render". Every hook in this component belongs above the returns.
+  const handleMedia = useCallback(
+    (element, playback) => setMedia({ element, playback }),
+    [],
+  )
 
   const run = useMemo(() => (cycle && dials ? runCycle(cycle, dials) : null), [cycle, dials])
   const hint = useMemo(() => (cycle && dials ? suggestBreak(cycle, dials) : null), [cycle, dials])
@@ -229,7 +251,7 @@ export default function Field() {
                   video={video}
                   run={run}
                   pathogen={cycle?.pathogen?.name}
-                  onElement={useCallback((element, playback) => setMedia({ element, playback }), [])}
+                  onElement={handleMedia}
                   onStrategy={setStrategy}
                 />
               </Suspense>
