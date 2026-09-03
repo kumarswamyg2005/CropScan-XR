@@ -1,12 +1,9 @@
-import io
 import json
 import os
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from PIL import Image
 
-from model import CLASS_NAMES, predict
 
 app = FastAPI(title="Crop Disease Detector API", version="1.0.0")
 
@@ -29,33 +26,16 @@ with open(_translations_path) as f:
 
 @app.get("/")
 def root():
-    return {"status": "ok", "message": "Crop Disease Detector API", "classes": len(CLASS_NAMES)}
+    return {"status": "ok", "message": "Crop Disease Detector API", "classes": len(DISEASE_INFO)}
 
 
 @app.post("/predict")
 async def predict_disease(file: UploadFile = File(...)):
-    if not file.content_type or not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="Uploaded file must be an image.")
-
-    contents = await file.read()
-    try:
-        image = Image.open(io.BytesIO(contents))
-    except Exception:
-        raise HTTPException(status_code=400, detail="Could not decode image.")
-
-    predictions = predict(image, top_k=3)
-
-    top = predictions[0]
-    class_name = top["class_name"]
-    disease_info = DISEASE_INFO.get(class_name, {})
-
-    return {
-        "class_name": class_name,
-        "confidence": top["confidence"],
-        "top3": predictions,
-        "disease_info": disease_info,
-        "disease_info_te": TRANSLATIONS_TE.get(class_name, {}),
-    }
+    raise HTTPException(
+        status_code=503,
+        detail="Inference is offline. The PlantVillage model was removed; the "
+        "field-trained ONNX model is not deployed yet.",
+    )
 
 
 @app.get("/diseases")
