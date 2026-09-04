@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Text } from '@react-three/drei'
 import { IfInSessionMode, XR, XRLayer, createXRStore } from '@react-three/xr'
 
-import { SingleVideoPlayback, sphereArc } from './videoLayer'
+import { SingleVideoPlayback, sphereArc, stereoLayout } from './videoLayer'
 import VrControls from './VrControls'
 
 /**
@@ -36,7 +36,7 @@ const MUTED = 0x7a6f5e
  * This replaces a hand-rolled XRMediaBinding path that did the same job with
  * more code and no fallback for the polyfill case.
  */
-function VideoStage({ video, onElement, onSize }) {
+function VideoStage({ video, onElement, onLayout }) {
   const playback = useMemo(() => new SingleVideoPlayback(), [])
   const [size, setSize] = useState(null)
 
@@ -53,6 +53,11 @@ function VideoStage({ video, onElement, onSize }) {
   useEffect(() => {
     if (!video?.hls_url) return
     let hls = null
+    // Switching clips before the dynamic import resolves used to leave
+    // hls?.destroy() a no-op on a null, and the late instance would then attach
+    // to the same element as its successor -- two Hls objects fighting over one
+    // MediaSource, with the first leaking.
+    let cancelled = false
     setSize(null)
 
     if (element.canPlayType('application/vnd.apple.mpegurl')) {
@@ -60,6 +65,7 @@ function VideoStage({ video, onElement, onSize }) {
     } else {
       // Imported here so hls.js stays out of the chunk until a clip is opened.
       import('hls.js').then(({ default: Hls }) => {
+        if (cancelled) return
         if (!Hls.isSupported()) {
           element.src = video.hls_url
           return
@@ -74,21 +80,22 @@ function VideoStage({ video, onElement, onSize }) {
     // The panel is sized from the clip's real pixels. A 320x240 microscopy clip
     // stretched across a 3 m panel is a wall of blur; shown at its own aspect
     // and a sane angular size it is sharp.
+    // Only ever on loadedmetadata for THIS source. Calling it synchronously
+    // read the outgoing clip's videoWidth and immediately undid setSize(null),
+    // so a clip that then failed to load kept the previous aspect forever.
     const measure = () => {
       if (!element.videoWidth) return
-      const s = { w: element.videoWidth, h: element.videoHeight }
-      setSize(s)
-      onSize?.(s)
+      setSize({ w: element.videoWidth, h: element.videoHeight })
     }
     element.addEventListener('loadedmetadata', measure)
-    measure()
 
     return () => {
+      cancelled = true
       element.removeEventListener('loadedmetadata', measure)
       hls?.destroy()
       playback.release()
     }
-  }, [element, playback, video?.hls_url, onSize])
+  }, [element, playback, video?.hls_url])
 
   useEffect(() => {
     onElement?.(element, playback)
@@ -107,31 +114,43 @@ function VideoStage({ video, onElement, onSize }) {
 
   if (video.projection !== 'flat') {
     return (
+      // No negative scale. A native equirect layer's pose is an XRRigidTransform,
+      // which cannot carry a mirror, so a -X scale would flip only the
+      // non-session fallback mesh and leave the two paths showing mirror images
+      // of each other. XRLayer orients the projection itself.
       <XRLayer
         src={element}
         shape="equirect"
-        layout={video.stereo === 'top_bottom' ? 'stereo-top-bottom'
-              : video.stereo === 'left_right' ? 'stereo-left-right' : 'mono'}
+        layout={stereoLayout(video.stereo)}
         centralHorizontalAngle={sphereArc(video.projection)}
         upperVerticalAngle={Math.PI / 2}
         lowerVerticalAngle={-Math.PI / 2}
-        scale={[-14, 14, 14]}
+        scale={14}
       />
     )
   }
 
-  // Cap the panel by ANGULAR size, not pixels: about 1.5 m wide at 2.2 m is
-  // roughly a 38 degree arc, which sits inside the comfortable forward cone.
-  const aspect = size ? size.w / size.h : 16 / 9
+  // Aspect is per EYE, not of the packed frame. A 1920x2160 top_bottom clip is
+  // two 16:9 eyes stacked; using the packed 0.89:1 would squash each eye to
+  // half its height.
+  const packed = size ?? { w: video.width ?? 16, h: video.height ?? 9 }
+  const eye =
+    video.stereo === 'top_bottom' ? { w: packed.w, h: packed.h / 2 }
+    : video.stereo === 'left_right' ? { w: packed.w / 2, h: packed.h }
+    : packed
+  const aspect = eye.w / eye.h
+
+  // Capped by ANGULAR size, not pixels: 1.5 m wide at 2.2 m is about a 38
+  // degree arc, inside the comfortable forward cone.
   const height = 1.5 / Math.max(aspect, 1)
   const width = height * aspect
 
   return (
     <XRLayer
+      onUpdate={() => onLayout?.({ width, height })}
       src={element}
       shape="quad"
-      layout={video.stereo === 'top_bottom' ? 'stereo-top-bottom'
-            : video.stereo === 'left_right' ? 'stereo-left-right' : 'mono'}
+      layout={stereoLayout(video.stereo)}
       position={[0, 1.62, -2.2]}
       scale={[width, height, 1]}
     />
@@ -273,15 +292,23 @@ export default function FieldScene({
   videos = [], videoIndex = 0, onPickVideo, playing, onTogglePlay,
 }) {
   const controls = useRef(null)
-  const [size, setSize] = useState(null)
+  const [layout, setLayout] = useState(null)
   const flat = !video || video.projection === 'flat'
 
   useEffect(() => { onStrategy?.(video ? 'xr-layer' : 'none') }, [video, onStrategy])
 
+  // Placed against the quad's ACTUAL edges. These were previously constants
+  // tuned for a 2.9 x 1.63 plane; the quad is now sized from the clip, and a
+  // tall narrow clip (the 228x578 microscopy) is nearly twice the height of a
+  // 16:9 one, so fixed offsets either collided with it or left a 0.7 m gap.
+  const quadW = layout?.width ?? 1.5
+  const quadH = layout?.height ?? 0.85
+  const VIDEO_Y = 1.62
+
   const depth = video ? -1.95 : -2.4
-  const stageY = flat && video ? 2.72 : video ? 2.25 : 1.98
-  const timelineY = flat && video ? 0.44 : video ? 0.9 : 1.16
-  const triangleX = flat && video ? -1.82 : video ? -1.5 : -1.55
+  const stageY = flat && video ? VIDEO_Y + quadH / 2 + 0.36 : video ? 2.25 : 1.98
+  const timelineY = flat && video ? VIDEO_Y - quadH / 2 - 0.22 : video ? 0.9 : 1.16
+  const triangleX = flat && video ? -(quadW / 2 + 0.52) : video ? -1.5 : -1.55
 
   return (
     <Canvas camera={{ position: [0, 1.6, 0.01], fov: 72 }} dpr={[1, 1.5]}>
@@ -290,7 +317,7 @@ export default function FieldScene({
 
       <XR store={xrStore}>
         <Suspense fallback={null}>
-          <VideoStage video={video} onElement={onElement} onSize={setSize} />
+          <VideoStage video={video} onElement={onElement} onLayout={setLayout} />
           {!video && run && <CycleBoard pathogen={pathogen} />}
 
           {/* Flat overlay panels are for the 2D canvas. In a headset they are

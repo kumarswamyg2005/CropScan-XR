@@ -169,17 +169,20 @@ export default function VrControls({
           <Container flexDirection="column">
             <Dial
               label="Temperature" value={dials.temp_c} unit="°C"
-              min={ranges.temp_c.min} max={ranges.temp_c.max} step={1}
+              min={ranges.temp_c.min} max={ranges.temp_c.max} step={ranges.temp_c.step}
               onChange={(v) => onDial('temp_c', v)}
             />
             <Dial
               label="Leaf wetness" value={dials.leaf_wetness_hr} unit="h"
-              min={ranges.leaf_wetness_hr.min} max={ranges.leaf_wetness_hr.max} step={1}
+              min={ranges.leaf_wetness_hr.min} max={ranges.leaf_wetness_hr.max} step={ranges.leaf_wetness_hr.step}
               onChange={(v) => onDial('leaf_wetness_hr', v)}
             />
+            {/* Step comes from the range, not a local guess. Hardcoding 5 meant
+                the VR dial stepped off a lattice the DOM slider was not on: from
+                an optimal of 93 it could reach 98 or 88 but never 93 again. */}
             <Dial
               label="Humidity" value={dials.rh_pct} unit="%"
-              min={ranges.rh_pct.min} max={ranges.rh_pct.max} step={5}
+              min={ranges.rh_pct.min} max={ranges.rh_pct.max} step={ranges.rh_pct.step}
               onChange={(v) => onDial('rh_pct', v)}
             />
           </Container>

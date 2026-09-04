@@ -46,13 +46,23 @@ DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$INPUT" |
 HAS_AUDIO=$(ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 "$INPUT" | head -1)
 
 # ---- build the ladder from the source, capped at its height ----------------
+#
+# The top rung is the source height, so the best rendition is a 1:1 copy rather
+# than a downscale-then-upscale round trip -- but clamped to 2160. Quest cannot
+# decode h.264 above 4K (see preferredCodec() in the web app), and index.m3u8 is
+# the only playlist anything registers, so an h.264 2880p rung inside it would
+# be an unplayable top variant. Above 4K the h.265 pass below is the answer.
+#
+# Rounded down to even: h.264 requires even dimensions, and scale=-2:$H only
+# forces the WIDTH even, so an odd source height fails the whole job.
+TOP=$(( HEIGHT < 2160 ? HEIGHT : 2160 ))
+TOP=$(( TOP - TOP % 2 ))
+
 LADDER=()
 for h in 360 720 1080; do
-  if [[ "$h" -lt "$HEIGHT" ]]; then LADDER+=("$h"); fi
+  if [[ "$h" -lt "$TOP" ]]; then LADDER+=("$h"); fi
 done
-# Always include the source height itself, so the best rendition is a 1:1 copy
-# rather than a downscale-then-upscale round trip.
-LADDER+=("$HEIGHT")
+LADDER+=("$TOP")
 
 echo "source ${WIDTH}x${HEIGHT}, ${DURATION}s, audio=${HAS_AUDIO:-none}, projection=$PROJECTION stereo=$STEREO"
 echo "ladder: ${LADDER[*]}"
@@ -134,5 +144,10 @@ JSON
 echo
 # ${arr[-1]} is a bash 4 feature; macOS ships bash 3.2, where it is a
 # "bad array subscript" error.
-TOP=${LADDER[$(( ${#LADDER[@]} - 1 ))]}
-echo "wrote $OUTDIR (max rendition ${TOP}p, never upscaled)"
+BEST=${LADDER[$(( ${#LADDER[@]} - 1 ))]}
+echo
+echo "wrote $OUTDIR (top rendition ${BEST}p, never upscaled)"
+echo "upload it, then register the row:"
+echo "  aws s3 sync $OUTDIR s3://\$S3_BUCKET/videos/$(basename "$OUTDIR")/ --endpoint-url \$S3_ENDPOINT_URL"
+echo "  python services/api/register_video.py $OUTDIR/video.json --disease-id <id> --kind field360 --title '...'"
+echo "or let tools/ingest_catalogue.py do all of it from data/video_catalogue.json"

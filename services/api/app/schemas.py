@@ -62,6 +62,8 @@ class VideoOut(BaseModel):
     hls_url: str | None
     poster_url: str | None
     duration_s: int | None
+    width: int | None = None
+    height: int | None = None
     projection: str
     stereo: str
     language: str

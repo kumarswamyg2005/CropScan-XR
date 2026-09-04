@@ -120,6 +120,8 @@ def register(entry: dict, meta: dict) -> int:
             hls_key=meta["hls_key"],
             poster_key=meta.get("poster_key"),
             duration_s=meta.get("duration_s"),
+            width=meta.get("width"),
+            height=meta.get("height"),
             projection=entry["projection"],
             stereo=entry["stereo"],
             language="en",

@@ -148,6 +148,10 @@ class Video(Base):
     hls_key: Mapped[str] = mapped_column(String(512))
     poster_key: Mapped[str | None] = mapped_column(String(512))
     duration_s: Mapped[int | None] = mapped_column(Integer)
+    # Source pixels. The player sizes its panel from these before the video
+    # has loaded, so the panel does not jump when metadata arrives.
+    width: Mapped[int | None] = mapped_column(Integer)
+    height: Mapped[int | None] = mapped_column(Integer)
     projection: Mapped[str] = mapped_column(String(16), default="flat")
     stereo: Mapped[str] = mapped_column(String(16), default="none")
     language: Mapped[str] = mapped_column(String(8), default="en")

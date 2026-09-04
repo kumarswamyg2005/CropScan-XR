@@ -21,7 +21,8 @@ def _video_out(v: Video) -> VideoOut:
         license=v.license, attribution=v.attribution, source_url=v.source_url,
         hls_url=storage.signed_url(v.hls_key),
         poster_url=storage.signed_url(v.poster_key),
-        duration_s=v.duration_s, projection=v.projection,
+        duration_s=v.duration_s, width=v.width, height=v.height,
+        projection=v.projection,
         stereo=v.stereo, language=v.language,
     )
 
