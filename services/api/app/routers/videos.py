@@ -24,5 +24,11 @@ def list_videos(
         stmt = stmt.where(Video.disease_id == disease_id)
     if kind:
         stmt = stmt.where(Video.kind == kind)
-    stmt = stmt.where(Video.language == lang)
-    return [_video_out(v) for v in db.execute(stmt).scalars()]
+    # Fall back to English rather than filtering to nothing. Every ingested row
+    # is 'en', so an unconditional language filter meant a Telugu user got an
+    # empty list here while the disease-detail endpoint, which does not filter,
+    # still showed them the same clips.
+    rows = list(db.execute(stmt.where(Video.language == lang)).scalars())
+    if not rows and lang != "en":
+        rows = list(db.execute(stmt.where(Video.language == "en")).scalars())
+    return [_video_out(v) for v in rows]

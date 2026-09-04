@@ -3,6 +3,7 @@ from __future__ import annotations
 import uuid
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.orm import Session
 
 from app import inference, ledger, storage
@@ -52,22 +53,29 @@ async def create_scan(
 ) -> ScanOut:
     settings = get_settings()
 
-    raw = await file.read()
+    # Read one byte past the limit, not the whole body. Reading everything and
+    # then measuring it means the limit protects nothing -- a 2 GB upload is
+    # already resident by the time it is rejected.
+    limit = settings.max_upload_bytes
+    raw = await file.read(limit + 1)
     if not raw:
         raise HTTPException(400, "Empty upload.")
-    if len(raw) > settings.max_upload_bytes:
-        raise HTTPException(
-            413, f"Image is larger than {settings.max_upload_bytes // (1024 * 1024)} MB."
-        )
+    if len(raw) > limit:
+        raise HTTPException(413, f"Image is larger than {limit // (1024 * 1024)} MB.")
 
-    # Content-type is a client claim. The decode is the actual check.
-    try:
+    # ONNX inference, image encoding and the S3 puts are all blocking. Run on
+    # the endpoint's own thread and every other request -- including /healthz --
+    # waits for the whole scan. FastAPI hands sync work to a threadpool, so the
+    # blocking part is isolated in one.
+    def analyse():
+        # Content-type is a client claim. The decode is the actual check.
         image = inference.decode_image(raw)
+        return image, inference.predict(image)
+
+    try:
+        image, prediction = await run_in_threadpool(analyse)
     except ValueError as exc:
         raise HTTPException(400, str(exc)) from exc
-
-    try:
-        prediction = inference.predict(image)
     except inference.ModelUnavailable as exc:
         raise HTTPException(503, f"Inference is unavailable: {exc}") from exc
 
@@ -76,19 +84,23 @@ async def create_scan(
 
     # Store the EXIF-stripped image, never the original bytes. The original may
     # carry GPS coordinates of someone's farm.
-    import io
+    def store():
+        import io
 
-    buf = io.BytesIO()
-    image.save(buf, format="JPEG", quality=90)
-    image_key = storage.put(f"scans/{scan_id}/image.jpg", buf.getvalue(), "image/jpeg")
+        buf = io.BytesIO()
+        image.save(buf, format="JPEG", quality=90)
+        key = storage.put(f"scans/{scan_id}/image.jpg", buf.getvalue(), "image/jpeg")
 
-    gradcam_key = None
-    if prediction.cam is not None:
-        gradcam_key = storage.put(
-            f"scans/{scan_id}/gradcam.png",
-            inference.cam_overlay(image, prediction.cam),
-            "image/png",
-        )
+        cam_key = None
+        if prediction.cam is not None:
+            cam_key = storage.put(
+                f"scans/{scan_id}/gradcam.png",
+                inference.cam_overlay(image, prediction.cam),
+                "image/png",
+            )
+        return key, cam_key
+
+    image_key, gradcam_key = await run_in_threadpool(store)
 
     scan = Scan(
         id=scan_id,

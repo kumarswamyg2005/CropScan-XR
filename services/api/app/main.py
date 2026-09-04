@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.cycle import load_cycles
-from app.inference import ModelUnavailable, load_model
+from app.inference import load_model
 from app.routers import diseases, health, ledger, legacy, orders, scans, videos, webhooks
 
 log = logging.getLogger("cropscan")
@@ -32,8 +32,13 @@ async def lifespan(app: FastAPI):
     try:
         model = load_model()
         log.info("model %s ready, %d classes", model.version, len(model.labels))
-    except ModelUnavailable as exc:
-        log.warning("inference unavailable: %s", exc)
+    except Exception as exc:
+        # Deliberately broad. The design is that a missing model degrades to a
+        # 503 on /api/scans while the rest of the API stays up -- but catching
+        # only ModelUnavailable meant a corrupt .onnx, a meta.json missing
+        # num_classes, or onnxruntime not installed killed startup outright,
+        # which is the opposite of degrading.
+        log.warning("inference unavailable: %s: %s", type(exc).__name__, exc)
 
     yield
 

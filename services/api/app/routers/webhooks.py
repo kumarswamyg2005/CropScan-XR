@@ -76,7 +76,24 @@ def _handle(db: Session, event_type: str, body: dict) -> dict:
             # belong to another environment sharing the test account. Recorded,
             # not fatal -- a 500 here makes Razorpay retry forever.
             return {"matched": False, "reason": "no local order for that rzp_order_id"}
-        changed = payments.mark_paid(db, order, payment.get("id", ""), source="webhook")
+
+        payment_id = payment.get("id")
+        if not payment_id:
+            # An order.paid event can arrive with no payment entity. Storing ""
+            # as rzp_payment_id used to poison the row permanently: a later
+            # refund matches on that id and could never find this order again,
+            # and the ledger payload recorded a payment that has no identifier.
+            return {"matched": True, "order_id": order.id, "transitioned": False,
+                    "reason": "event carried no payment id"}
+
+        try:
+            changed = payments.mark_paid(db, order, payment_id, source="webhook")
+        except ValueError as exc:
+            # Refunded already. Raising here 500s the handler, which rolls back
+            # the webhook_event row that IS the idempotency key -- so Razorpay
+            # retries the same event forever, and each retry 500s again.
+            return {"matched": True, "order_id": order.id, "transitioned": False,
+                    "reason": str(exc)}
         return {"matched": True, "order_id": order.id, "transitioned": changed}
 
     if event_type in {"payment.failed"}:

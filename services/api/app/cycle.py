@@ -13,7 +13,6 @@ but it may not invent one.
 from __future__ import annotations
 
 import json
-import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -177,7 +176,16 @@ class DiseaseCycle(BaseModel):
 
 
 def _data_dir() -> Path:
-    return Path(os.environ.get("DATA_DIR", Path(__file__).resolve().parents[3] / "data"))
+    """Via settings, not os.environ.
+
+    The previous version evaluated parents[3] as a DEFAULT ARGUMENT, so it ran
+    even when DATA_DIR was set and blew up in the container regardless. Reading
+    os.environ directly also diverged from content.py whenever DATA_DIR lived
+    only in .env, which pydantic-settings loads but os.environ does not.
+    """
+    from app.config import get_settings
+
+    return Path(get_settings().data_dir)
 
 
 @lru_cache(maxsize=1)

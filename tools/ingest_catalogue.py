@@ -31,9 +31,13 @@ UA = "CropScanXR/1.0 (educational project; contact via repository)"
 
 
 def download(url: str, target: Path) -> Path:
+    # A partial file left by an interrupted run used to count as a cache hit,
+    # and the truncated clip would then be transcoded and published. Download to
+    # a temp name and rename only on success, so a cached file is a complete one.
     if target.exists() and target.stat().st_size > 0:
         print(f"    cached {target.name}")
         return target
+    partial = target.with_suffix(target.suffix + ".part")
     target.parent.mkdir(parents=True, exist_ok=True)
 
     # Commons filenames contain spaces, and http.client rejects a raw space in
@@ -46,8 +50,21 @@ def download(url: str, target: Path) -> Path:
 
     # Wikimedia rejects the default urllib agent.
     request = urllib.request.Request(safe, headers={"User-Agent": UA})
-    with urllib.request.urlopen(request, timeout=120) as response, target.open("wb") as fh:
-        fh.write(response.read())
+    with urllib.request.urlopen(request, timeout=180) as response, partial.open("wb") as fh:
+        expected = response.headers.get("Content-Length")
+        written = 0
+        while chunk := response.read(1 << 20):
+            fh.write(chunk)
+            written += len(chunk)
+
+    if expected is not None and written != int(expected):
+        partial.unlink(missing_ok=True)
+        raise SystemExit(
+            f"{target.name}: got {written} bytes, expected {expected}. Refusing to "
+            f"publish a truncated clip."
+        )
+
+    partial.replace(target)
     print(f"    downloaded {target.name} ({target.stat().st_size // 1024} KB)")
     return target
 
@@ -71,15 +88,22 @@ def upload(out_dir: Path, prefix: str) -> None:
     import boto3
     from botocore.config import Config
 
+    # Via the app's settings, not raw os.environ. Reading the environment
+    # directly missed anything that lives only in .env, so uploads went to real
+    # AWS (or failed) while register() happily wrote rows pointing at objects
+    # that were never in MinIO.
+    from app.config import get_settings
+
+    settings = get_settings()
     s3 = boto3.client(
         "s3",
-        endpoint_url=os.environ.get("S3_ENDPOINT_URL"),
-        aws_access_key_id=os.environ.get("S3_ACCESS_KEY_ID"),
-        aws_secret_access_key=os.environ.get("S3_SECRET_ACCESS_KEY"),
-        region_name=os.environ.get("S3_REGION", "us-east-1"),
+        endpoint_url=settings.s3_endpoint_url or None,
+        aws_access_key_id=settings.s3_access_key_id or None,
+        aws_secret_access_key=settings.s3_secret_access_key or None,
+        region_name=settings.s3_region,
         config=Config(signature_version="s3v4"),
     )
-    bucket = os.environ.get("S3_BUCKET", "cropscan-media")
+    bucket = settings.s3_bucket
     types = {".m3u8": "application/vnd.apple.mpegurl", ".ts": "video/mp2t",
              ".mp4": "video/mp4", ".jpg": "image/jpeg"}
 

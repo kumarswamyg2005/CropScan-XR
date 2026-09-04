@@ -259,3 +259,51 @@ def test_webhook_without_an_event_id_is_rejected():
     """No event id means no idempotency key, so a retry would double-process."""
     from app.payments import verify_webhook_signature as v
     assert v(b"{}", sign_webhook(b"{}"), WEBHOOK_SECRET)
+
+
+# --- webhook robustness -----------------------------------------------------
+
+def test_a_late_capture_after_a_refund_does_not_500(client, db_session, product):
+    """Razorpay retries on a 5xx. A 500 here also rolls back the webhook_event
+    row that IS the idempotency key, so the same event retries forever and
+    fails identically every time."""
+    order = make_order(client, product)
+    payment_id = "pay_late"
+
+    client.post("/api/orders/verify", json={
+        "razorpay_order_id": order["rzp_order_id"],
+        "razorpay_payment_id": payment_id,
+        "razorpay_signature": sign_payment(order["rzp_order_id"], payment_id),
+    })
+    row = db_session.get(Order, order["id"])
+    row.status = "refunded"
+    db_session.commit()
+
+    body = captured_webhook(order["rzp_order_id"], payment_id)
+    r = client.post("/api/webhooks/razorpay", content=body,
+                    headers={"x-razorpay-signature": sign_webhook(body),
+                             "x-razorpay-event-id": "evt_late_capture"})
+
+    assert r.status_code == 200
+    assert r.json()["transitioned"] is False
+    assert db_session.get(Order, order["id"]).status == "refunded"
+
+
+def test_paid_event_without_a_payment_id_is_not_recorded(client, db_session, product):
+    """An empty rzp_payment_id poisons the row: a later refund matches on that
+    id and can never find the order again."""
+    order = make_order(client, product)
+    body = json.dumps({
+        "event": "order.paid",
+        "payload": {"order": {"entity": {"id": order["rzp_order_id"]}}},
+    }).encode()
+
+    r = client.post("/api/webhooks/razorpay", content=body,
+                    headers={"x-razorpay-signature": sign_webhook(body),
+                             "x-razorpay-event-id": "evt_no_payment_id"})
+
+    assert r.status_code == 200
+    assert r.json()["transitioned"] is False
+    row = db_session.get(Order, order["id"])
+    assert row.status == "created"
+    assert not row.rzp_payment_id

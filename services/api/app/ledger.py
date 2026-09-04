@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any, Iterable, Sequence
 
 from sqlalchemy import func, select, text
@@ -277,6 +277,11 @@ def verify_whole_chain(db: Session) -> dict:
         result = _verify_batch(rows, prev, expected_seq)
         checked += result["checked"]
         if not result["ok"]:
+            # _verify_batch reports 0 checked on failure, so add the entries it
+            # walked before the break -- otherwise a break at seq 900 of the
+            # first batch claimed "0 entries checked" and understated the
+            # evidence behind the failure.
+            checked += result.get("checked_before_break", 0)
             result["checked"] = checked
             return result
         prev = result["head_hash"]
@@ -287,42 +292,59 @@ def verify_whole_chain(db: Session) -> dict:
 
 
 def _verify_batch(rows: Sequence[LedgerEntry], prev: str, expected_seq: int | None) -> dict:
+    walked = 0
     for entry in rows:
         if expected_seq is not None and entry.seq != expected_seq:
             out = _break(entry, "sequence_gap",
                          f"expected seq {expected_seq}, found {entry.seq}. "
                          f"An entry was deleted or the chain was reordered.")
             out["checked"] = 0
+            out["checked_before_break"] = walked
             return out
         if payload_hash(entry.payload) != entry.payload_sha256:
             out = _break(entry, "payload_modified",
                          "The stored payload no longer hashes to payload_sha256. "
                          "This row's contents were edited after it was written.")
             out["checked"] = 0
+            out["checked_before_break"] = walked
             return out
         if entry.prev_hash != prev:
             out = _break(entry, "broken_link",
                          f"prev_hash points at {entry.prev_hash[:12]}... but the "
                          f"preceding entry hashes to {prev[:12]}...")
             out["checked"] = 0
+            out["checked_before_break"] = walked
             return out
         if entry_hash_of(entry) != entry.entry_hash:
             out = _break(entry, "hash_mismatch",
                          "entry_hash does not match the recomputed hash of this "
                          "row's own fields.")
             out["checked"] = 0
+            out["checked_before_break"] = walked
             return out
         prev = entry.entry_hash
         expected_seq = entry.seq + 1
+        walked += 1
 
     return {"ok": True, "checked": len(rows), "head_hash": prev,
             "next_seq": expected_seq, "first_break": None}
 
 
 def _day_leaves(db: Session, day: str) -> list[LedgerEntry]:
+    """Entries belonging to one UTC day.
+
+    A half-open range on the timestamp, not func.date(). On a timestamptz
+    Postgres converts in the SESSION TimeZone, so func.date() would bucket by
+    the server's local day while utc_day() bucketed by UTC -- entries landing in
+    the wrong daily root, and a root rebuilt later under a different TimeZone
+    changing hash, which reads as tampering. The range is also portable to
+    SQLite and can use the created_at index.
+    """
+    start = datetime.fromisoformat(day).replace(tzinfo=timezone.utc)
+    end = start + timedelta(days=1)
     return list(db.execute(
         select(LedgerEntry)
-        .where(func.date(LedgerEntry.created_at) == day)
+        .where(LedgerEntry.created_at >= start, LedgerEntry.created_at < end)
         .order_by(LedgerEntry.seq)
     ).scalars())
 
@@ -373,7 +395,12 @@ def inclusion_proof(db: Session, entry_id: str) -> dict | None:
                   else entry.created_at.replace(tzinfo=timezone.utc))
     entries = _day_leaves(db, day)
     leaves = [e.entry_hash for e in entries]
-    index = next(i for i, e in enumerate(entries) if e.id == entry.id)
+    index = next((i for i, e in enumerate(entries) if e.id == entry.id), None)
+    if index is None:
+        # The entry exists but is not among its own day's leaves. A bare next()
+        # raised StopIteration here, which FastAPI surfaces as a 500 with no
+        # explanation; the timezone bug above was one way to reach it.
+        return None
 
     record = db.execute(select(MerkleRoot).where(MerkleRoot.day == day)).scalar_one_or_none()
     return {

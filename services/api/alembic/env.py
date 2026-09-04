@@ -14,7 +14,10 @@ from app.db import Base               # noqa: E402
 from app import models                # noqa: E402,F401  (registers the tables)
 
 config = context.config
-config.set_main_option("sqlalchemy.url", get_settings().database_url)
+# Escaped: ConfigParser %-interpolates this value, so a percent-encoded
+# password (a "%" in a password becomes "%25") breaks every migration run with
+# an InterpolationSyntaxError.
+config.set_main_option("sqlalchemy.url", get_settings().database_url.replace("%", "%%"))
 
 if config.config_file_name:
     fileConfig(config.config_file_name)

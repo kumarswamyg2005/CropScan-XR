@@ -5,7 +5,15 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+# Paths are derived from where this file actually sits, not from an assumed
+# checkout depth. In the container the app is copied to /app/app, so
+# parents[3] does not exist and raised IndexError at import -- which every
+# entrypoint hits, so neither uvicorn nor `alembic upgrade head` could start.
+_APP_DIR = Path(__file__).resolve().parent          # .../app
+SERVICE_DIR = _APP_DIR.parent                       # .../services/api, or /app
+_REPO_ROOT = (
+    SERVICE_DIR.parents[1] if len(SERVICE_DIR.parents) >= 2 else SERVICE_DIR
+)
 
 
 class Settings(BaseSettings):
@@ -13,8 +21,8 @@ class Settings(BaseSettings):
 
     database_url: str = "postgresql+psycopg://cropscan:cropscan@localhost:5432/cropscan"
 
-    model_dir: Path = REPO_ROOT / "services" / "api" / "model"
-    data_dir: Path = REPO_ROOT / "data"
+    model_dir: Path = SERVICE_DIR / "model"
+    data_dir: Path = _REPO_ROOT / "data"
 
     s3_endpoint_url: str = "http://localhost:9000"
     s3_access_key_id: str = ""
