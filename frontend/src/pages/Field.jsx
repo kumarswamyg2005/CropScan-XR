@@ -115,6 +115,7 @@ export default function Field() {
   const [media, setMedia] = useState({ element: null, playback: null })
   const [strategy, setStrategy] = useState('video-texture')
   const [highlightStage, setHighlightStage] = useState(null)
+  const [playing, setPlaying] = useState(false)
   // `blocked` is the server refusing this scan entry -- a real gate, and a
   // full-page stop is right for it. `loadError` is a fetch that failed, which
   // must NOT hide the picker: the disease is component state with no history
@@ -184,6 +185,27 @@ export default function Field() {
     (element, playback) => setMedia({ element, playback }),
     [],
   )
+
+  // Mirrored to the in-VR panel, which has no DOM to read state from.
+  useEffect(() => {
+    const el = media.element
+    if (!el) return
+    const sync = () => setPlaying(!el.paused)
+    el.addEventListener('play', sync)
+    el.addEventListener('pause', sync)
+    sync()
+    return () => {
+      el.removeEventListener('play', sync)
+      el.removeEventListener('pause', sync)
+    }
+  }, [media.element])
+
+  const togglePlay = useCallback(() => {
+    const { element, playback } = media
+    if (!element || !playback) return
+    if (element.paused) playback.play(element).catch(() => {})
+    else playback.pause()
+  }, [media])
 
   const run = useMemo(() => (cycle && dials ? runCycle(cycle, dials) : null), [cycle, dials])
   const hint = useMemo(() => (cycle && dials ? suggestBreak(cycle, dials) : null), [cycle, dials])
@@ -338,6 +360,15 @@ export default function Field() {
                   pathogen={cycle?.pathogen?.name}
                   onElement={handleMedia}
                   onStrategy={setStrategy}
+                  dials={dials}
+                  ranges={cycle ? dialRanges(cycle) : null}
+                  onDial={(key, value) => setDials((d) => ({ ...d, [key]: value }))}
+                  onReset={() => cycle && setDials(optimalDials(cycle))}
+                  videos={videos}
+                  videoIndex={videoIndex}
+                  onPickVideo={setVideoIndex}
+                  playing={playing}
+                  onTogglePlay={togglePlay}
                 />
               </Suspense>
               </ErrorBoundary>
