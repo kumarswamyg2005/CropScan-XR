@@ -1,0 +1,25 @@
+{
+  "model": "efficientnet_b0 (torchvision), backend/model.pt",
+  "lab_acc": 0.9706900530810062,
+  "field_acc": 0.14674970805760998,
+  "macro_f1_field": 0.1470786759157023,
+  "ece": 0.00525159849433846,
+  "domain_gap": 0.8239403450233962,
+  "background_probe_ratio": null,
+  "thresholds": {
+    "msp_threshold": 0.2141609489917755,
+    "entropy_threshold": 0.0003236767264569059,
+    "ood_rejection_rate": 0.9928662420382166,
+    "in_dist_abstain_rate": 0.4998846065081929,
+    "meets_targets": false,
+    "note": "Could not reach 90% OOD rejection while keeping in-distribution abstain under 10%. Rejection was prioritised. Either the model is poorly calibrated or the rejection set is too close to the training distribution."
+  },
+  "field_abstain_rate": 0.9754768392370572,
+  "field_acc_on_kept": 0.2857142857142857,
+  "n": {
+    "lab": 4333,
+    "field": 2569,
+    "ood": 3925
+  },
+  "preprocessing": "resize 224x224, ImageNet normalisation"
+}

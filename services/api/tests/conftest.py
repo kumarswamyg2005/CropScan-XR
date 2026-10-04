@@ -1,5 +1,6 @@
 import os
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -15,6 +16,10 @@ REPO = Path(__file__).resolve().parents[3]
 # Explicit environment variables also outrank Settings' .env file in
 # pydantic-settings' precedence order, which is what keeps a real .env out.
 os.environ["DATA_DIR"] = str(REPO / "data")
+# An empty model directory, not services/api/model: whether a developer has run
+# ml/export.py must not change what the suite tests. The no-model path is the
+# one under test here.
+os.environ["MODEL_DIR"] = tempfile.mkdtemp(prefix="cropscan-no-model-")
 os.environ["RAZORPAY_KEY_ID"] = "rzp_test_fake"
 os.environ["RAZORPAY_KEY_SECRET"] = "test_secret"
 os.environ["RAZORPAY_WEBHOOK_SECRET"] = "webhook_secret"

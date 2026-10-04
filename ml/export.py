@@ -86,12 +86,41 @@ class ExportWrapper(nn.Module):
         return logits, cam
 
 
+class TorchvisionB0(nn.Module):
+    """backend/model.pt: torchvision's EfficientNet-B0 with the Dropout + Linear
+    head ml/train.ipynb gives it. Exposes the three timm methods ExportWrapper
+    calls, so the CAM and the parity check apply unchanged. GAP + linear, so the
+    CAM is exact here too."""
+
+    def __init__(self, num_classes: int):
+        super().__init__()
+        import torchvision
+        self.net = torchvision.models.efficientnet_b0(weights=None)
+        self.net.classifier = nn.Sequential(
+            nn.Dropout(p=0.4, inplace=True), nn.Linear(1280, num_classes))
+
+    def get_classifier(self) -> nn.Module:
+        return self.net.classifier[1]
+
+    def forward_features(self, x: torch.Tensor) -> torch.Tensor:
+        return self.net.features(x)
+
+    def forward_head(self, feats: torch.Tensor) -> torch.Tensor:
+        return self.net.classifier(torch.flatten(self.net.avgpool(feats), 1))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--checkpoint", type=Path, required=True)
     ap.add_argument("--out", type=Path, default=Path("services/api/model"))
     ap.add_argument("--metrics", type=Path, default=Path("docs/eval_metrics.json"),
                     help="Written by ml/eval.py. Export refuses to run without it.")
+    ap.add_argument("--labels", type=Path,
+                    help="Class order, for a bare torchvision state dict such as "
+                         "backend/model.pt (backend/class_names.json).")
+    ap.add_argument("--resize-ratio", type=float, default=1.14,
+                    help="Resize to size*ratio before the centre crop. 1.0 is a plain "
+                         "resize, which is how the baseline was evaluated.")
     ap.add_argument("--size", type=int, default=224)
     ap.add_argument("--opset", type=int, default=17)
     ap.add_argument("--skip-simplify", action="store_true")
@@ -114,9 +143,16 @@ def main() -> int:
         )
 
     ckpt = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
-    labels = ckpt["labels"]
-    model = timm.create_model(ckpt["model_name"], pretrained=False, num_classes=len(labels))
-    model.load_state_dict(ckpt["state_dict"])
+    if "model_name" in ckpt:                      # an ml/train.py checkpoint
+        labels, model_name = ckpt["labels"], ckpt["model_name"]
+        model = timm.create_model(model_name, pretrained=False, num_classes=len(labels))
+        model.load_state_dict(ckpt["state_dict"])
+    else:                                         # the torchvision baseline
+        if not args.labels:
+            raise SystemExit("A bare state dict carries no class order; pass --labels.")
+        labels, model_name = json.loads(args.labels.read_text()), "efficientnet_b0"
+        model = TorchvisionB0(len(labels))
+        model.net.load_state_dict(ckpt.get("model_state_dict", ckpt))
     model.eval()
 
     wrapper = ExportWrapper(model).eval()
@@ -133,6 +169,10 @@ def main() -> int:
         input_names=["input"], output_names=["logits", "cam"],
         dynamic_axes={"input": {0: "batch"}, "logits": {0: "batch"}, "cam": {0: "batch"}},
         opset_version=args.opset, do_constant_folding=True,
+        # The TorchScript exporter. torch>=2.9 defaults to the dynamo one, which
+        # splits the weights into a model.onnx.data sidecar the API does not
+        # load, and whose opset down-conversion fails on this graph.
+        dynamo=False,
     )
 
     if not args.skip_simplify:
@@ -155,15 +195,19 @@ def main() -> int:
     ort_logits, ort_cam = sess.run(None, {"input": dummy.numpy()})
     logit_delta = float(np.abs(ort_logits - ref_logits.numpy()).max())
     cam_delta = float(np.abs(ort_cam - ref_cam.numpy()).max())
-    if logit_delta > 1e-3:
+    # Absolute plus relative, as np.allclose does. The dummy input is noise, and
+    # on noise EfficientNet-B0's logits reach ~220: there, fp32 reordering alone
+    # is ~3e-3 absolute (1e-5 relative), with identical softmax and argmax.
+    if not np.allclose(ort_logits, ref_logits.numpy(), rtol=1e-4, atol=1e-3):
         raise SystemExit(f"ONNX/PyTorch logit mismatch: {logit_delta:.2e}")
     print(f"parity ok  logits {logit_delta:.2e}  cam {cam_delta:.2e}")
 
     (args.out / "labels.json").write_text(json.dumps(labels, indent=2))
 
     meta = {
-        "model_name": ckpt["model_name"],
+        "model_name": model_name,
         "input_size": args.size,
+        "resize_ratio": args.resize_ratio,
         "normalization": {"mean": list(IMAGENET_MEAN), "std": list(IMAGENET_STD)},
         "layout": "NCHW",
         "colour_space": "RGB",

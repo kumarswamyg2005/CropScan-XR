@@ -106,7 +106,10 @@ def decode_image(raw: bytes) -> Image.Image:
 
 def preprocess(image: Image.Image, meta: dict) -> np.ndarray:
     size = meta["input_size"]
-    resized = image.resize((int(size * 1.14),) * 2, Image.Resampling.BILINEAR)
+    # Resize-then-centre-crop by default. A model evaluated with a plain resize
+    # says so with resize_ratio 1.0, and the crop becomes a no-op.
+    ratio = meta.get("resize_ratio", 1.14)
+    resized = image.resize((int(size * ratio),) * 2, Image.Resampling.BILINEAR)
     left = (resized.width - size) // 2
     top = (resized.height - size) // 2
     cropped = resized.crop((left, top, left + size, top + size))
