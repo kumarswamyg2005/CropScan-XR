@@ -12,6 +12,8 @@ from app.models import Scan
 
 FIELDS = {"name", "symptoms", "organic", "chemical", "prevention"}
 INDIAN = [lang for lang in LANGS if lang != "en"]
+# How the disease forms. Every diseased class has it; a healthy one has nothing to form.
+DISEASED = [k for k, v in disease_info().items() if not v["is_healthy"]]
 
 
 @pytest.mark.parametrize("lang", INDIAN)
@@ -22,10 +24,35 @@ def test_every_class_is_translated(lang):
     strings = translations(lang)
     assert set(strings) == set(english), f"{lang}: {set(english) ^ set(strings)}"
     for disease_id, entry in strings.items():
-        assert set(entry) == FIELDS, f"{lang}/{disease_id}"
-        for field in FIELDS:
+        expected = FIELDS | ({"formation"} if disease_id in DISEASED else set())
+        assert set(entry) == expected, f"{lang}/{disease_id}"
+        for field in expected:
             assert entry[field].strip(), f"{lang}/{disease_id}/{field} is empty"
             assert entry[field] != english[disease_id][field], f"{lang}/{disease_id}/{field} is English"
+
+
+def test_every_disease_explains_how_it_forms():
+    for disease_id in DISEASED:
+        assert len(disease_info()[disease_id].get("formation", "")) > 80, disease_id
+
+
+@pytest.mark.parametrize("lang", LANGS)
+def test_formation_is_served_in_each_language(client, lang):
+    detail = client.get("/api/diseases/Tomato___Late_blight", params={"lang": lang}).json()
+    expected = (disease_info() if lang == "en" else translations(lang))["Tomato___Late_blight"]["formation"]
+    assert detail["formation"] == expected
+    healthy = client.get("/api/diseases/Tomato___healthy", params={"lang": lang}).json()
+    assert healthy["formation"] is None
+
+
+def test_scan_info_carries_formation(client, db_session):
+    s = Scan(image_key="scans/z/image.jpg", image_sha256="c" * 64,
+             model_version="efficientnet_b0@abc", disease_id="Potato___Early_blight",
+             confidence=0.99, top3=[], status="ok")
+    db_session.add(s)
+    db_session.commit()
+    body = client.get(f"/api/scans/{s.id}", params={"lang": "kn"}).json()
+    assert body["info"]["formation"] == translations("kn")["Potato___Early_blight"]["formation"]
 
 
 @pytest.mark.parametrize("lang", ["hi", "ta", "kn"])

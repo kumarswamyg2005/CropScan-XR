@@ -374,6 +374,30 @@ export default function Result() {
               </div>
             )}
 
+            {/* How it forms: the cause, how it survives and spreads, and the
+                weather that drives it. Knowing why it happened is what makes
+                the prevention advice below make sense. */}
+            {info?.formation && (
+              <div style={{
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 16,
+                padding: '20px 22px',
+                marginBottom: 16,
+                borderLeft: '3px solid var(--color-alert)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                  <span style={{ fontSize: '1.2rem' }} aria-hidden="true">🦠</span>
+                  <h2 style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: '0.9rem', margin: 0 }}>
+                    {t('result.formation')}
+                  </h2>
+                </div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', lineHeight: 1.65, margin: 0 }}>
+                  {info.formation}
+                </p>
+              </div>
+            )}
+
             {/* Treatment cards */}
             <div className="mb-3.5 grid grid-cols-1 gap-3.5 sm:grid-cols-2">
               {info?.organic && (

@@ -109,6 +109,7 @@ export default {
   'result.healthyTitle': 'ನಿಮ್ಮ ಸಸ್ಯ ಆರೋಗ್ಯಕರವಾಗಿದೆ!',
   'result.healthyBody': 'ಯಾವುದೇ ರೋಗ ಪತ್ತೆಯಾಗಿಲ್ಲ. ಉತ್ತಮ ಆರೈಕೆಯನ್ನು ಮುಂದುವರಿಸಿ.',
   'result.preventionTip': 'ತಡೆಗಟ್ಟುವ ಸಲಹೆ:',
+  'result.formation': 'ಈ ರೋಗ ಹೇಗೆ ಉಂಟಾಗುತ್ತದೆ',
   'result.symptoms': 'ಲಕ್ಷಣಗಳು',
   'result.organic': 'ಸಾವಯವ ಚಿಕಿತ್ಸೆ',
   'result.chemical': 'ರಾಸಾಯನಿಕ ಚಿಕಿತ್ಸೆ',

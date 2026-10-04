@@ -116,6 +116,7 @@ export default {
   'result.healthyTitle': 'Your plant looks healthy!',
   'result.healthyBody': 'No disease detected. Keep up good care practices.',
   'result.preventionTip': 'Prevention tip:',
+  'result.formation': 'How this disease forms',
   'result.symptoms': 'Symptoms',
   'result.organic': 'Organic Treatment',
   'result.chemical': 'Chemical Treatment',

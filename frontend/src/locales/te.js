@@ -109,6 +109,7 @@ export default {
   'result.healthyTitle': 'మీ మొక్క ఆరోగ్యంగా ఉంది!',
   'result.healthyBody': 'వ్యాధి గుర్తించబడలేదు. మంచి సంరక్షణ పద్ధతులు కొనసాగించండి.',
   'result.preventionTip': 'నివారణ చిట్కా:',
+  'result.formation': 'ఈ వ్యాధి ఎలా ఏర్పడుతుంది',
   'result.symptoms': 'లక్షణాలు',
   'result.organic': 'సేంద్రీయ చికిత్స',
   'result.chemical': 'రసాయన చికిత్స',

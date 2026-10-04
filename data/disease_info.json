@@ -5,6 +5,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Dark, scaly lesions on leaves and fruit. Olive-green to black spots that turn corky over time. Premature leaf drop and misshapen, cracked fruits.",
+    "formation": "Caused by the fungus Venturia inaequalis, which survives the winter in fallen infected leaves. In spring, rain releases its spores onto young leaves and fruit; they infect only when the leaf stays wet for about 9 hours or more, so cool, rainy springs bring outbreaks. Each new spot makes more spores that rain splashes onward all season.",
     "organic": "Apply neem oil spray every 7–10 days. Use sulfur-based fungicide. Remove and destroy fallen leaves promptly.",
     "chemical": "Apply captan or mancozeb fungicide at 7–10 day intervals. Use myclobutanil during early season for systemic protection.",
     "prevention": "Plant resistant apple varieties. Prune trees for good air circulation. Avoid overhead irrigation. Rake and destroy fallen leaves each autumn."
@@ -15,6 +16,7 @@
     "is_healthy": false,
     "severity": "high",
     "symptoms": "Circular brown lesions with purple margins on leaves. Black, mummified fruit with concentric rings. Cankers with reddish-brown discoloration on bark.",
+    "formation": "Caused by the fungus Diplodia seriata (Botryosphaeria obtusa), which survives in shrivelled fruit left on the tree, dead wood and bark cankers. In warm, wet weather, rain splashes its spores onto leaves, fruit and fresh wounds, where it enters and causes leaf spots, fruit rot and new cankers.",
     "organic": "Remove and burn mummified fruits and infected branches. Apply copper-based fungicide. Maintain proper sanitation around the tree.",
     "chemical": "Apply thiophanate-methyl or captan at pink bud through second cover. Remove all mummified fruits before applying sprays.",
     "prevention": "Prune infected branches at least 15 cm below visible symptoms. Avoid wounding trees. Dispose of all pruning debris away from the orchard."
@@ -25,6 +27,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Bright orange-yellow spots on upper leaf surface, with tube-like structures on the underside. Infected fruit may be deformed and drop early.",
+    "formation": "Caused by the fungus Gymnosporangium juniperi-virginianae, which needs two hosts: juniper (red cedar) and apple. In wet spring weather, galls on junipers swell into orange, jelly-like horns whose spores blow onto apple leaves; the apple spots later send spores back to junipers. It cannot spread from apple to apple.",
     "organic": "Remove nearby cedar/juniper host trees if possible. Apply sulfur or neem oil during wet spring weather.",
     "chemical": "Apply myclobutanil or propiconazole fungicides from pink bud stage through petal fall. Repeat every 7–10 days during wet weather.",
     "prevention": "Plant rust-resistant apple varieties. Remove cedar/juniper trees within 300 meters. Apply fungicides preventively before wet weather periods."
@@ -53,6 +56,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "White powdery coating on young leaves, shoots, and fruit. Infected leaves curl and distort. Severe infections stunt growth and reduce fruit quality.",
+    "formation": "Caused by the fungus Podosphaera clandestina, which survives the winter in buds and on bark. Unlike most leaf diseases it does not need wet leaves: wind carries its spores, and it infects in warm, humid weather, especially inside dense, shaded canopies. New white growth produces more spores within days.",
     "organic": "Spray diluted baking soda solution (1 tbsp per liter). Apply neem oil or potassium bicarbonate. Improve air circulation through pruning.",
     "chemical": "Apply sulfur-based fungicides or trifloxystrobin. Avoid using sulfur when temperatures exceed 32°C.",
     "prevention": "Plant resistant varieties. Prune for open canopy structure. Avoid excess nitrogen fertilization. Water at the base, not overhead."
@@ -72,6 +76,7 @@
     "is_healthy": false,
     "severity": "high",
     "symptoms": "Rectangular tan-to-gray lesions with yellow borders, running parallel to leaf veins. Lesions merge and kill large areas of leaf tissue in severe cases.",
+    "formation": "Caused by the fungus Cercospora zeae-maydis, which survives in corn residue left on the soil surface. Wind and rain splash carry its spores to the lower leaves; long spells of high humidity (above 90%) and warm temperatures (25–30°C) let it infect. Planting corn after corn builds up the source.",
     "organic": "Rotate crops — avoid planting corn in the same field two years in a row. Till infected residue to reduce fungal spores.",
     "chemical": "Apply strobilurin or triazole fungicides at early tasseling stage. Products containing azoxystrobin or pyraclostrobin are effective.",
     "prevention": "Use resistant hybrids. Practice 2-year crop rotation. Manage crop residue by plowing it under after harvest."
@@ -82,6 +87,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Small, oval to elongated, brick-red pustules scattered on both leaf surfaces. Pustules rupture and release powdery reddish-brown spores. Severe infections cause premature leaf death.",
+    "formation": "Caused by the fungus Puccinia sorghi, whose spores are blown in by wind, often from warmer regions. They infect leaves when dew lasts about 6 hours in mild weather (16–23°C), and each pustule releases new spores within 1–2 weeks that the wind carries further.",
     "organic": "Plant resistant hybrid varieties. Remove and destroy severely infected plants early.",
     "chemical": "Apply fungicides containing triazole or strobilurin (e.g., propiconazole, azoxystrobin) when pustules first appear. One application is usually sufficient.",
     "prevention": "Use rust-resistant corn hybrids. Scout fields early and act quickly. Avoid late planting dates that expose plants during vulnerable growth stages."
@@ -92,6 +98,7 @@
     "is_healthy": false,
     "severity": "high",
     "symptoms": "Large, cigar-shaped gray-green or tan lesions 2–15 cm long on leaves. Lesions may cover entire leaves and lead to premature death of the plant.",
+    "formation": "Caused by the fungus Exserohilum turcicum, which survives in infected corn residue. In mild weather (18–27°C) with long dew periods, wind and rain carry its spores onto the lower leaves first; the lesions then produce more spores that spread up the plant and into nearby fields.",
     "organic": "Rotate with non-host crops for at least 1 year. Incorporate infected residue to reduce inoculum.",
     "chemical": "Apply strobilurin-based fungicides (azoxystrobin, picoxystrobin) at silking stage. Triazole fungicides also provide good control.",
     "prevention": "Plant resistant or tolerant hybrids. Practice 2-year crop rotation. Manage surface residue after harvest."
@@ -111,6 +118,7 @@
     "is_healthy": false,
     "severity": "high",
     "symptoms": "Small, circular tan spots with dark borders on leaves. Infected berries turn brown, then black and wrinkle into hard mummified fruit.",
+    "formation": "Caused by the fungus Guignardia bidwellii, which survives the winter in shrivelled berries and infected canes. Spring rains release its spores, and warm, wet spells of just a few hours let them infect young leaves, shoots and berries; berries are most at risk from bloom until about a month after.",
     "organic": "Remove and destroy all mummified fruit and infected shoots. Apply copper-based fungicides early in the season.",
     "chemical": "Apply myclobutanil, mancozeb, or captan fungicides from bud break through veraison. Protect new growth every 7–14 days.",
     "prevention": "Remove all mummified fruit before budbreak. Ensure good air circulation in the canopy. Avoid overhead irrigation."
@@ -121,6 +129,7 @@
     "is_healthy": false,
     "severity": "high",
     "symptoms": "Tiger-stripe pattern on leaves (yellow/red margins with green veins). Berries develop dark spots (measles). Severe cases cause sudden vine collapse called apoplexy.",
+    "formation": "Caused by several wood-rotting fungi (such as Phaeomoniella chlamydospora) whose spores enter through pruning wounds, especially when vines are pruned in wet weather. The fungi grow slowly through the trunk wood over years and block its water-carrying vessels; leaf symptoms show up in hot summers when the vine is short of water.",
     "organic": "Prune infected wood and seal wounds immediately with pruning paste. Remove and burn severely infected vines.",
     "chemical": "No fully effective chemical cure exists. Trunk injections with sodium arsenite (restricted) were used historically. Focus on prevention.",
     "prevention": "Protect pruning wounds with fungicidal paste containing trichoderma. Prune during dry weather. Minimize large pruning cuts."
@@ -131,6 +140,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Irregular dark brown spots with yellow halos on older leaves. Spots enlarge and leaves turn yellow and drop. Reduces photosynthesis and fruit quality.",
+    "formation": "Caused by the fungus Pseudocercospora vitis (Isariopsis), which survives on infected fallen leaves. Wind and rain splash carry its spores to the vine, and warm, humid, rainy weather lets it infect, usually the older leaves later in the season.",
     "organic": "Apply copper-based sprays. Remove infected leaves from the ground. Improve vine canopy airflow.",
     "chemical": "Apply mancozeb or copper oxychloride fungicides. Begin sprays when symptoms first appear and repeat every 14 days.",
     "prevention": "Maintain open vine canopy. Avoid waterlogging. Practice balanced nutrition. Remove fallen infected leaves."
@@ -150,6 +160,7 @@
     "is_healthy": false,
     "severity": "critical",
     "symptoms": "Asymmetric yellowing (blotchy mottle) of leaves. Small, lopsided, bitter fruit that remains green at maturity. Twig dieback and progressive tree decline.",
+    "formation": "Caused by a bacterium (Candidatus Liberibacter asiaticus) that lives in the tree's sap-carrying tissue. The Asian citrus psyllid, a tiny insect, picks it up while feeding on an infected tree and carries it to healthy ones; infected budwood also spreads it. Symptoms can take months or years to show, so trees spread it before they look sick.",
     "organic": "No cure exists. Remove infected trees to prevent spread. Manage the Asian citrus psyllid vector using insecticidal soap.",
     "chemical": "Control the psyllid vector with systemic insecticides (imidacloprid, thiamethoxam). No chemical can cure HLB once a tree is infected.",
     "prevention": "Use certified disease-free planting material. Control psyllid populations aggressively. Remove and destroy infected trees immediately to protect neighbors."
@@ -160,6 +171,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Small, water-soaked angular spots on leaves that turn purple or brown with yellow halos. Spots may drop out leaving 'shot-hole' appearance. Fruit develops sunken, dark lesions.",
+    "formation": "Caused by the bacterium Xanthomonas arboricola pv. pruni, which survives the winter in twig cankers and buds. In spring, wind-driven rain splashes the bacteria onto leaves and young fruit, where they enter through natural pores and small wounds. Warm, wet, windy weather causes outbreaks.",
     "organic": "Apply copper-based bactericides in spring. Avoid overhead irrigation. Remove severely infected plant material.",
     "chemical": "Apply copper hydroxide or oxytetracycline antibiotics starting at bud break. Repeat every 5–7 days during wet weather.",
     "prevention": "Plant resistant peach varieties. Prune to improve air circulation. Avoid excessive nitrogen. Do not work with wet plants."
@@ -179,6 +191,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Small, water-soaked spots on leaves and fruit that enlarge and turn brown with yellow halos. Leaves may drop, exposing fruit to sunscald. Fruit develops raised, scabby lesions.",
+    "formation": "Caused by Xanthomonas bacteria that arrive on infected seed or transplants and survive in crop debris and volunteer plants. Rain splash, overhead watering and handling wet plants spread them, and they enter through leaf pores and wounds. Warm (24–30°C), wet weather spreads it fast.",
     "organic": "Apply copper-based bactericides. Avoid working in fields when plants are wet. Remove and destroy infected plant debris.",
     "chemical": "Apply copper hydroxide plus mancozeb mixture. Begin at first symptom and repeat every 5–7 days during rainy weather.",
     "prevention": "Use certified disease-free seed. Practice 2-year crop rotation. Avoid overhead irrigation. Stake plants for better air circulation."
@@ -198,6 +211,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Dark brown to black concentric ring spots (target board pattern) on older leaves. Yellow halo around lesions. Lesions enlarge and leaves die from the bottom up.",
+    "formation": "Caused by the fungus Alternaria solani, which survives in infected crop debris and soil. Wind and rain carry its spores to the older, lower leaves first; warm weather (24–29°C) with alternating dewy nights and dry days favours it, and plants that are stressed or short of nutrients get it worst.",
     "organic": "Apply neem oil or copper-based fungicide. Remove infected lower leaves. Ensure proper plant nutrition — stressed plants are more susceptible.",
     "chemical": "Apply chlorothalonil, mancozeb, or azoxystrobin. Begin when lesions first appear and repeat every 7–10 days.",
     "prevention": "Plant certified disease-free seed potatoes. Maintain adequate nitrogen and potassium. Avoid waterlogged conditions. Practice 3-year crop rotation."
@@ -208,6 +222,7 @@
     "is_healthy": false,
     "severity": "critical",
     "symptoms": "Large, irregular, water-soaked dark-green to brown lesions on leaves and stems. White fuzzy sporulation on leaf undersides in humid conditions. Tubers show reddish-brown dry rot.",
+    "formation": "Caused by Phytophthora infestans, a water mould (not a true fungus) that survives in infected tubers, cull piles and volunteer potatoes. In cool (10–25°C), very humid weather it produces spores that wind and rain carry far; in water they release swimming zoospores that infect leaves. It can destroy a field within days and washes into the soil to rot tubers.",
     "organic": "Apply copper-based fungicides preventively. Destroy volunteer potato plants. Remove infected plants immediately to prevent spread.",
     "chemical": "Apply systemic fungicides: metalaxyl, mefenoxam, or dimethomorph. Begin before symptoms appear during high-risk weather. Alternate chemistries to prevent resistance.",
     "prevention": "Use resistant varieties. Plant certified seed. Destroy crop debris after harvest. Avoid excessive irrigation. Monitor closely during cool, humid weather."
@@ -245,6 +260,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "White powdery patches on upper and lower leaf surfaces. Infected leaves yellow, dry out, and die. Reduces fruit set and causes early plant senescence.",
+    "formation": "Caused by fungi such as Podosphaera xanthii, whose spores blow in on the wind from other squash, pumpkin and melon crops. It does not need rain: warm (20–27°C), humid weather with dry leaves, shade and crowded plants suits it best, and the white growth makes new spores in under a week.",
     "organic": "Spray diluted milk (40% milk, 60% water) or baking soda solution. Apply neem oil or potassium bicarbonate every 7 days.",
     "chemical": "Apply sulfur, trifloxystrobin, or tebuconazole fungicides at first sign. Avoid sulfur sprays in temperatures above 32°C.",
     "prevention": "Plant resistant squash varieties. Space plants widely for air circulation. Water at the base in the morning. Avoid excessive nitrogen fertilization."
@@ -255,6 +271,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Small, irregular purple to dark brown spots on leaf surfaces. Spots coalesce causing leaves to look 'scorched'. Severely infected leaves turn red-purple and die.",
+    "formation": "Caused by the fungus Diplocarpon earlianum, which survives on old infected leaves through the winter. Splashing water from rain or sprinklers spreads its spores, and they infect when leaves stay wet for long periods in warm weather. It builds up in beds that are kept for several years.",
     "organic": "Remove and destroy infected leaves. Apply copper-based fungicides after harvest. Maintain good air circulation around plants.",
     "chemical": "Apply captan or myclobutanil fungicides. Begin sprays in early spring and continue through the growing season as needed.",
     "prevention": "Plant certified disease-free runners. Avoid overhead irrigation. Remove old leaves after harvest. Renovate beds every 2–3 years."
@@ -274,6 +291,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Small, water-soaked spots on leaves that turn dark brown with yellow halos. Spots may drop out creating 'shot-holes'. Fruit develops raised, scabby spots reducing marketability.",
+    "formation": "Caused by Xanthomonas bacteria that arrive on infected seed or transplants and survive in crop debris. Rain splash, overhead watering and handling wet plants spread them, and they enter through leaf pores and wounds. Warm, wet weather spreads it quickly through the crop.",
     "organic": "Apply copper-based bactericides every 7 days. Remove infected leaves. Avoid handling plants when wet.",
     "chemical": "Apply copper hydroxide plus mancozeb mixture. Start sprays at transplanting and continue through season during wet weather.",
     "prevention": "Use disease-free certified seeds. Rotate tomato fields every 3 years. Stake plants and prune for airflow. Avoid overhead irrigation."
@@ -284,6 +302,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Dark concentric ring (bullseye) spots on older, lower leaves first. Yellow tissue surrounds the lesions. Severe infections cause defoliation and sunscald on fruit.",
+    "formation": "Caused by the fungus Alternaria solani, which survives in infected tomato and potato debris in the soil. Rain and watering splash its spores onto the lowest leaves first; warm weather (24–29°C) with dewy nights favours it, and it climbs the plant as each spot produces more spores.",
     "organic": "Remove infected lower leaves promptly. Apply neem oil or copper fungicide weekly. Mulch to prevent soil splash.",
     "chemical": "Apply chlorothalonil, mancozeb, or azoxystrobin. Begin at first sign and repeat every 7–10 days. Alternate fungicides to prevent resistance.",
     "prevention": "Use resistant varieties. Stake plants. Mulch around base. Rotate crops every 3 years. Water at soil level, not overhead."
@@ -294,6 +313,7 @@
     "is_healthy": false,
     "severity": "critical",
     "symptoms": "Large, irregular water-soaked dark-green to gray lesions on leaves and stems. White sporulation on leaf undersides in cool, humid weather. Fruit develops dark, greasy-looking rot.",
+    "formation": "Caused by Phytophthora infestans, a water mould that also attacks potatoes and often starts from infected tubers or nearby potato fields. In cool, wet or very humid weather its spores travel long distances on the wind; in water they release swimming spores that infect leaves, stems and fruit, and a crop can collapse within days.",
     "organic": "Apply copper-based fungicides preventively. Remove infected plants immediately. Do not compost infected material.",
     "chemical": "Apply metalaxyl, mefenoxam, or fluopicolide. Start preventive sprays during cool, humid weather. Alternate chemistries every 5–7 days.",
     "prevention": "Plant resistant varieties. Destroy crop debris. Avoid overhead watering. Increase plant spacing. Monitor closely during cool, wet conditions."
@@ -304,6 +324,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Pale greenish-yellow spots on upper leaf surface with olive-green to grayish-brown velvety mold on the underside. Lower leaves affected first. Severe infections cause leaf curl and drop.",
+    "formation": "Caused by the fungus Passalora fulva, mainly in greenhouses and tunnels. It survives on old crop debris and greenhouse structures, and its spores move with air, water and workers' hands. It needs very humid air (above 85%) and mild temperatures, and enters through pores on the underside of leaves.",
     "organic": "Reduce greenhouse humidity below 85%. Improve ventilation. Apply copper or neem-based fungicides.",
     "chemical": "Apply chlorothalonil, mancozeb, or copper-based fungicides. Applications every 7–14 days are effective when started early.",
     "prevention": "Maintain greenhouse relative humidity below 85%. Stake and prune tomatoes for airflow. Water in the morning. Use resistant varieties for greenhouse production."
@@ -314,6 +335,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Numerous small, circular spots with dark brown borders and gray-white centers on lower leaves. Tiny black dots (pycnidia) visible inside spots. Causes severe defoliation working upward.",
+    "formation": "Caused by the fungus Septoria lycopersici, which survives on infected tomato debris and nightshade weeds. The tiny black dots in each spot ooze spores that rain, watering and hands carry to new leaves. Wet weather and mild temperatures (20–25°C) favour it; it starts on leaves near the soil and moves upward.",
     "organic": "Remove infected lower leaves as soon as spots appear. Mulch soil to prevent splash dispersal. Apply copper-based fungicides.",
     "chemical": "Apply chlorothalonil, mancozeb, or azoxystrobin fungicides. Start at first symptom and repeat every 7–10 days during wet conditions.",
     "prevention": "Rotate crops for 2–3 years. Stake plants. Avoid wetting foliage. Mulch soil. Remove and destroy all crop debris at season end."
@@ -324,6 +346,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Fine stippling or bronzing of leaves, starting on lower leaves. Fine webbing visible on undersides of leaves in heavy infestations. Leaves turn yellow, dry up, and drop.",
+    "formation": "Not an infection: tiny sap-sucking pests (the two-spotted spider mite) that live on weeds and nearby plants and walk or blow onto the crop. Hot, dry, dusty weather makes their numbers explode, with a new generation in about a week. Broad-spectrum sprays that kill their natural enemies make outbreaks worse.",
     "organic": "Spray plants with strong water jet to knock off mites. Apply neem oil or insecticidal soap to leaf undersides every 3–5 days. Introduce predatory mites (Phytoseiulus persimilis).",
     "chemical": "Apply abamectin, bifenazate, or spiromesifen miticides. Rotate chemistries to prevent resistance. Target leaf undersides.",
     "prevention": "Avoid plant stress — keep plants well-watered and fertilized. Avoid dusty conditions. Monitor regularly and act early. Avoid broad-spectrum insecticides that kill natural predators."
@@ -334,6 +357,7 @@
     "is_healthy": false,
     "severity": "moderate",
     "symptoms": "Dark brown lesions with concentric rings (target pattern) on leaves, stems, and fruit. Yellow halos around lesions. Causes premature defoliation and reduces yield.",
+    "formation": "Caused by the fungus Corynespora cassiicola, which survives on crop debris and other host plants. Wind and splashing water carry its spores, and warm (20–28°C), humid weather with long periods of wet leaves lets it infect, especially in dense, crowded plants.",
     "organic": "Remove infected leaves. Improve plant spacing for better air circulation. Apply copper-based fungicides preventively.",
     "chemical": "Apply chlorothalonil, azoxystrobin, or boscalid fungicides at 7–14 day intervals. Start when conditions favor disease development.",
     "prevention": "Plant resistant varieties. Stake plants and prune lower leaves. Rotate crops. Avoid overhead irrigation. Maintain adequate plant nutrition."
@@ -344,6 +368,7 @@
     "is_healthy": false,
     "severity": "critical",
     "symptoms": "Leaves curl upward and inward with yellowing margins. Severe stunting and reduced fruit set. Plants infected early may produce no marketable fruit.",
+    "formation": "Caused by a virus spread only by the whitefly Bemisia tabaci. A whitefly picks up the virus while feeding on an infected tomato or weed and passes it to every healthy plant it feeds on afterwards; it does not spread through seed or touch. Warm weather that boosts whitefly numbers spreads it fastest, and plants infected young suffer most.",
     "organic": "No cure once infected. Remove and destroy infected plants immediately. Control whitefly vector with yellow sticky traps and reflective mulch.",
     "chemical": "Control the whitefly (Bemisia tabaci) vector with imidacloprid or thiamethoxam as soil drench or foliar spray. No chemical cures the virus itself.",
     "prevention": "Use TYLCV-resistant tomato varieties. Manage whitefly populations with systemic insecticides at transplanting. Use insect-proof net houses. Remove infected plants promptly."
@@ -354,6 +379,7 @@
     "is_healthy": false,
     "severity": "high",
     "symptoms": "Mosaic pattern of light and dark green on leaves. Leaves may be mottled, distorted, or fernleaf-like. Fruit may show yellow streaks or brown discoloration internally.",
+    "formation": "Caused by a very stable virus that spreads by contact: on hands, tools, clothing and infected seed. It can survive for years in dried plant debris and tobacco, and it enters plants through the tiny wounds made during transplanting, pruning and handling.",
     "organic": "No cure. Remove and destroy infected plants. Wash hands and tools with soap before handling healthy plants. Do not use tobacco products near plants.",
     "chemical": "No effective chemical treatment. Focus on prevention and elimination of infected plant material.",
     "prevention": "Use certified virus-free seeds or resistant varieties. Disinfect tools with 10% bleach solution. Do not touch healthy plants after handling infected ones. Control aphid vectors."

@@ -97,6 +97,7 @@ def get_disease(
         is_healthy=info["is_healthy"],
         severity=info.get("severity"),
         symptoms=info.get("symptoms"),
+        formation=info.get("formation"),
         organic=info.get("organic"),
         chemical=info.get("chemical"),
         prevention=info.get("prevention"),

@@ -109,6 +109,7 @@ export default {
   'result.healthyTitle': 'உங்கள் செடி ஆரோக்கியமாக உள்ளது!',
   'result.healthyBody': 'நோய் எதுவும் கண்டறியப்படவில்லை. நல்ல பராமரிப்பைத் தொடரவும்.',
   'result.preventionTip': 'தடுப்பு குறிப்பு:',
+  'result.formation': 'இந்த நோய் எப்படி உருவாகிறது',
   'result.symptoms': 'அறிகுறிகள்',
   'result.organic': 'இயற்கை சிகிச்சை',
   'result.chemical': 'இரசாயன சிகிச்சை',

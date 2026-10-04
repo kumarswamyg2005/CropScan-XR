@@ -43,6 +43,7 @@ class DiseaseSummary(BaseModel):
 
 class DiseaseDetail(DiseaseSummary):
     symptoms: str | None = None
+    formation: str | None = None    # how the disease forms: cause, spread, weather
     organic: str | None = None
     chemical: str | None = None
     prevention: str | None = None

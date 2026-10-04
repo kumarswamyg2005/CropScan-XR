@@ -109,6 +109,7 @@ export default {
   'result.healthyTitle': 'आपका पौधा स्वस्थ दिखता है!',
   'result.healthyBody': 'कोई रोग नहीं मिला। अच्छी देखभाल जारी रखें।',
   'result.preventionTip': 'रोकथाम सुझाव:',
+  'result.formation': 'यह रोग कैसे बनता है',
   'result.symptoms': 'लक्षण',
   'result.organic': 'जैविक उपचार',
   'result.chemical': 'रासायनिक उपचार',
