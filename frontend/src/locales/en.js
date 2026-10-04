@@ -89,6 +89,7 @@ export default {
   'detect.err.tooBig': 'This image is larger than {mb} MB. Please use a smaller photo.',
   'detect.err.badImage': 'This file could not be read as an image. Try another photo.',
   'detect.err.noModel': 'Diagnosis is not available right now: no model is deployed on the server.',
+  'detect.err.storage': 'The server could not save the photo, so it was not analysed. The image storage settings need fixing.',
   'detect.err.network': 'Could not reach the server. Check your connection and that the backend is running.',
   'detect.err.server': 'The server had a problem. Try again in a moment.',
 

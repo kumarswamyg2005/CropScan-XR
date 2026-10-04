@@ -317,3 +317,24 @@ def test_legacy_predict_shim_preserves_the_post(client):
                     follow_redirects=False)
     assert r.status_code == 308
     assert r.headers["location"] == "/api/scans"
+
+
+def test_storage_failure_is_a_clear_error_with_cors(client, monkeypatch):
+    """Not a bare 500: that reaches the browser without CORS headers and reads
+    as a network failure. The ledger stays untouched."""
+    from app import inference
+
+    monkeypatch.setattr(inference, "predict", lambda image: inference.Prediction(
+        status="ok", disease_id="Apple___Apple_scab", confidence=0.99, top3=[],
+        entropy=0.0, model_version="test@0", cam=None))
+
+    def broken_put(*a, **k):
+        raise ConnectionError("bucket unreachable")
+    monkeypatch.setattr("app.storage.put", broken_put)
+
+    r = client.post("/api/scans", files={"file": ("leaf.png", png_bytes(), "image/png")},
+                    headers={"Origin": "https://example.org"})
+    assert r.status_code == 502
+    assert "storage" in r.json()["detail"].lower()
+    assert r.headers.get("access-control-allow-origin") in ("*", "https://example.org")
+    assert client.get("/api/ledger/stats").json()["entries"] == 0

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import uuid
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
@@ -15,6 +16,7 @@ from app.models import Scan
 from app.schemas import ScanOut
 
 router = APIRouter(prefix="/api/scans", tags=["scans"])
+log = logging.getLogger(__name__)
 
 
 def _to_out(scan: Scan, lang: str) -> ScanOut:
@@ -101,7 +103,17 @@ async def create_scan(
             )
         return key, cam_key
 
-    image_key, gradcam_key = await run_in_threadpool(store)
+    # A storage failure must come back as an HTTP error. Left unhandled it is a
+    # bare 500 without CORS headers, which the browser reports as "could not
+    # reach the server" -- pointing the user at their connection, not at the
+    # misconfigured bucket. Nothing is written to the database before this.
+    try:
+        image_key, gradcam_key = await run_in_threadpool(store)
+    except Exception as exc:
+        log.exception("storing scan %s failed", scan_id)
+        raise HTTPException(
+            502, f"Image storage is unavailable ({type(exc).__name__}). Check the S3_* settings."
+        ) from exc
 
     scan = Scan(
         id=scan_id,

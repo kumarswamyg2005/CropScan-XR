@@ -10,6 +10,7 @@ const MAX_MB = 10
 /** A failed scan, said in words a farmer can act on. */
 function scanError(err, t) {
   if (err.status === 503) return t('detect.err.noModel')
+  if (err.status === 502) return t('detect.err.storage')
   if (err.status === 413) return t('detect.err.tooBig', { mb: MAX_MB })
   if (err.status === 400) return t('detect.err.badImage')
   if (err.status === undefined) return t('detect.err.network')
