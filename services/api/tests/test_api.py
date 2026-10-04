@@ -338,3 +338,8 @@ def test_storage_failure_is_a_clear_error_with_cors(client, monkeypatch):
     assert "storage" in r.json()["detail"].lower()
     assert r.headers.get("access-control-allow-origin") in ("*", "https://example.org")
     assert client.get("/api/ledger/stats").json()["entries"] == 0
+
+
+def test_root_points_to_health_and_docs(client):
+    body = client.get("/").json()
+    assert body == {"service": "CropScan API", "health": "/healthz", "docs": "/docs"}

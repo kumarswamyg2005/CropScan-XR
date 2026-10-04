@@ -13,6 +13,13 @@ from app.schemas import HealthOut
 router = APIRouter()
 
 
+@router.get("/", include_in_schema=False)
+def root() -> dict:
+    """A plain answer for whoever opens the bare API URL, instead of a 404
+    that reads as a broken deploy."""
+    return {"service": "CropScan API", "health": "/healthz", "docs": "/docs"}
+
+
 @router.get("/healthz", response_model=HealthOut)
 def healthz(db: Session = Depends(get_db)) -> HealthOut:
     try:

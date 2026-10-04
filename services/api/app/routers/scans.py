@@ -111,8 +111,11 @@ async def create_scan(
         image_key, gradcam_key = await run_in_threadpool(store)
     except Exception as exc:
         log.exception("storing scan %s failed", scan_id)
+        # The S3 error code (AccessDenied, NoSuchBucket, ...) names the fix;
+        # it carries no secret, unlike the full message.
+        code = getattr(exc, "response", {}).get("Error", {}).get("Code") or type(exc).__name__
         raise HTTPException(
-            502, f"Image storage is unavailable ({type(exc).__name__}). Check the S3_* settings."
+            502, f"Image storage is unavailable ({code}). Check the S3_* settings."
         ) from exc
 
     scan = Scan(
