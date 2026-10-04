@@ -1,4 +1,6 @@
-import { Container, Text } from '@react-three/uikit'
+import { Container, Image } from '@react-three/uikit'
+
+import { useTextTexture } from './textTexture'
 
 /**
  * The in-headset control panel.
@@ -34,6 +36,17 @@ const SURFACE = '#fdfaf5'
 const BORDER = '#ddd6c8'
 const SUBTLE = '#d8ecd5'
 
+/**
+ * uikit's own <Text> has no Indic glyphs, so labels are browser-drawn
+ * textures in an <Image>. Sizes stay in uikit pixels; see textTexture.js.
+ */
+function VrText({ children, fontSize, color = INK, maxWidth = 620 }) {
+  const { texture, width, height } = useTextTexture(String(children ?? ''), {
+    size: fontSize, color, maxWidth,
+  })
+  return <Image src={texture} width={width} height={height} flexShrink={0} />
+}
+
 function Button({ label, onClick, width = 56, disabled, tone = 'default' }) {
   const base = tone === 'primary' ? ACCENT : SURFACE
   return (
@@ -50,9 +63,9 @@ function Button({ label, onClick, width = 56, disabled, tone = 'default' }) {
       cursor={disabled ? undefined : 'pointer'}
       onClick={disabled ? undefined : onClick}
     >
-      <Text fontSize={22} color={disabled ? '#b0a898' : tone === 'primary' ? SURFACE : INK}>
+      <VrText fontSize={22} color={disabled ? '#b0a898' : tone === 'primary' ? SURFACE : INK} maxWidth={width - 12}>
         {label}
-      </Text>
+      </VrText>
     </Container>
   )
 }
@@ -63,8 +76,8 @@ function Dial({ label, value, unit, min, max, step, onChange }) {
   return (
     <Container flexDirection="column" gap={6} marginBottom={12}>
       <Container flexDirection="row" justifyContent="space-between" alignItems="center">
-        <Text fontSize={19} color={MUTED}>{label}</Text>
-        <Text fontSize={21} color={INK}>{`${value} ${unit}`}</Text>
+        <VrText fontSize={19} color={MUTED} maxWidth={420}>{label}</VrText>
+        <VrText fontSize={21}>{`${value} ${unit}`}</VrText>
       </Container>
 
       <Container flexDirection="row" alignItems="center" gap={10}>
@@ -99,9 +112,12 @@ export default function VrControls({
   playing,
   onTogglePlay,
   pathogen,
+  onExit,
+  t,
 }) {
   const halted = run?.haltedAt != null
   const current = videos[videoIndex]
+  const hours = t('unit.hours').trim()
 
   return (
     // 1.1 m out, raised to chest height and tilted up toward the face. Anything
@@ -125,10 +141,10 @@ export default function VrControls({
       >
         {/* ---- what is happening in the cycle ---- */}
         <Container flexDirection="row" justifyContent="space-between" alignItems="center" marginBottom={10}>
-          <Text fontSize={17} color={MUTED}>{pathogen ?? 'Infection cycle'}</Text>
-          <Text fontSize={17} color={halted ? ALERT : ACCENT}>
-            {halted ? 'cycle halted' : 'cycle running'}
-          </Text>
+          <VrText fontSize={17} color={MUTED} maxWidth={440}>{pathogen ?? t('field.cycle')}</VrText>
+          <VrText fontSize={17} color={halted ? ALERT : ACCENT} maxWidth={200}>
+            {halted ? t('vr.halted') : t('vr.running')}
+          </VrText>
         </Container>
 
         {run && (
@@ -141,9 +157,9 @@ export default function VrControls({
             padding={14}
             marginBottom={14}
           >
-            <Text fontSize={20} color={halted ? ALERT : INK}>
+            <VrText fontSize={20} color={halted ? ALERT : INK} maxWidth={600}>
               {run.summary}
-            </Text>
+            </VrText>
 
             {/* Stage dots: green passed, red failed, pale not reached. */}
             <Container flexDirection="row" gap={7} marginTop={12} alignItems="center">
@@ -168,12 +184,12 @@ export default function VrControls({
         {dials && ranges && (
           <Container flexDirection="column">
             <Dial
-              label="Temperature" value={dials.temp_c} unit="°C"
+              label={t('field.temperature')} value={dials.temp_c} unit="°C"
               min={ranges.temp_c.min} max={ranges.temp_c.max} step={ranges.temp_c.step}
               onChange={(v) => onDial('temp_c', v)}
             />
             <Dial
-              label="Leaf wetness" value={dials.leaf_wetness_hr} unit="h"
+              label={t('field.wetness')} value={dials.leaf_wetness_hr} unit={hours}
               min={ranges.leaf_wetness_hr.min} max={ranges.leaf_wetness_hr.max} step={ranges.leaf_wetness_hr.step}
               onChange={(v) => onDial('leaf_wetness_hr', v)}
             />
@@ -181,7 +197,7 @@ export default function VrControls({
                 the VR dial stepped off a lattice the DOM slider was not on: from
                 an optimal of 93 it could reach 98 or 88 but never 93 again. */}
             <Dial
-              label="Humidity" value={dials.rh_pct} unit="%"
+              label={t('field.humidity')} value={dials.rh_pct} unit="%"
               min={ranges.rh_pct.min} max={ranges.rh_pct.max} step={ranges.rh_pct.step}
               onChange={(v) => onDial('rh_pct', v)}
             />
@@ -191,36 +207,38 @@ export default function VrControls({
         {/* ---- playback and clips ---- */}
         <Container flexDirection="row" gap={10} alignItems="center" marginTop={6}>
           <Button
-            label={playing ? 'Pause' : 'Play'}
+            label={playing ? t('video.pause') : t('video.play')}
             width={128}
             tone="primary"
             onClick={onTogglePlay}
             disabled={!current}
           />
-          <Button label="Reset" width={110} onClick={onReset} />
+          <Button label={t('vr.reset')} width={110} onClick={onReset} />
 
           {videos.length > 1 && (
             <>
               <Button
-                label="‹ Prev"
+                label={`‹ ${t('vr.prev')}`}
                 width={104}
                 onClick={() => onPickVideo((videoIndex - 1 + videos.length) % videos.length)}
               />
               <Button
-                label="Next ›"
+                label={`${t('vr.next')} ›`}
                 width={104}
                 onClick={() => onPickVideo((videoIndex + 1) % videos.length)}
               />
             </>
           )}
+          {/* The system button also exits, but nobody should have to know that. */}
+          <Button label={t('vr.exit')} width={120} onClick={onExit} />
         </Container>
 
         {current && (
           <Container marginTop={12} flexDirection="column">
-            <Text fontSize={18} color={INK}>{current.title}</Text>
-            <Text fontSize={15} color={MUTED}>
-              {`${videoIndex + 1} of ${videos.length}${current.attribution ? ` · ${current.attribution}` : ''}`}
-            </Text>
+            <VrText fontSize={18}>{current.title}</VrText>
+            <VrText fontSize={15} color={MUTED}>
+              {`${t('vr.counter', { i: videoIndex + 1, n: videos.length })}${current.attribution ? ` · ${current.attribution}` : ''}`}
+            </VrText>
           </Container>
         )}
       </Container>

@@ -7,7 +7,7 @@ from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.orm import Session
 
 from app import inference, ledger, storage
-from app.content import info_for
+from app.content import LANG_PATTERN, info_for
 from app.cycle import get_cycle
 from app.config import get_settings
 from app.db import get_db
@@ -34,7 +34,8 @@ def _to_out(scan: Scan, lang: str) -> ScanOut:
         status=scan.status,
         disease_id=scan.disease_id,
         confidence=scan.confidence,
-        top3=scan.top3,
+        top3=[{**t, "name": (info_for(t["disease_id"], lang) or {}).get("name")}
+              for t in scan.top3],
         model_version=scan.model_version,
         image_url=storage.signed_url(scan.image_key),
         gradcam_url=storage.signed_url(scan.gradcam_key),
@@ -48,7 +49,7 @@ def _to_out(scan: Scan, lang: str) -> ScanOut:
 @router.post("", response_model=ScanOut, status_code=201)
 async def create_scan(
     file: UploadFile = File(...),
-    lang: str = Query("en", pattern="^(en|te)$"),
+    lang: str = Query("en", pattern=LANG_PATTERN),
     db: Session = Depends(get_db),
 ) -> ScanOut:
     settings = get_settings()
@@ -139,7 +140,7 @@ async def create_scan(
 @router.get("/{scan_id}", response_model=ScanOut)
 def get_scan(
     scan_id: str,
-    lang: str = Query("en", pattern="^(en|te)$"),
+    lang: str = Query("en", pattern=LANG_PATTERN),
     db: Session = Depends(get_db),
 ) -> ScanOut:
     scan = db.get(Scan, scan_id)

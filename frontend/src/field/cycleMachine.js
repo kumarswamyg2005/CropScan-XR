@@ -9,11 +9,16 @@
  * Pure: no three.js, no React, no clock. Everything it decides comes from
  * data/disease_cycle.json plus three dial values, so it is testable and no
  * claim shown over the video can drift from the knowledge base.
+ *
+ * Sentences come from the locale files; `lang` defaults to English.
  */
 
-const UNIT = { temp_c: ' °C', leaf_wetness_hr: ' h', rh_pct: '%' }
-const LABEL = { temp_c: 'temperature', leaf_wetness_hr: 'leaf wetness', rh_pct: 'humidity' }
+import { translate } from '../i18n'
+
 const KEYS = ['temp_c', 'leaf_wetness_hr', 'rh_pct']
+const unit = (key, lang) =>
+  key === 'temp_c' ? ' °C' : key === 'rh_pct' ? '%' : translate(lang, 'unit.hours')
+const label = (key, lang) => translate(lang, `dial.${key}`)
 
 /**
  * Which requirements this stage fails at these dial settings.
@@ -22,17 +27,18 @@ const KEYS = ['temp_c', 'leaf_wetness_hr', 'rh_pct']
  * JSON, and keeping the wording identical means the headset and the web page
  * say the same sentence about the same failure.
  */
-export function unmetRequirements(requires, dials) {
+export function unmetRequirements(requires, dials, lang = 'en') {
   const failures = []
   for (const key of KEYS) {
     const bounds = requires[key]
     if (!bounds) continue
     const value = dials[key]
     const [lo, hi] = bounds
+    const vars = { label: label(key, lang), value, unit: unit(key, lang) }
     if (value < lo) {
-      failures.push(`${LABEL[key]} is ${value}${UNIT[key]}, below the ${lo}${UNIT[key]} this stage needs`)
+      failures.push(translate(lang, 'cycle.below', { ...vars, bound: lo }))
     } else if (value > hi) {
-      failures.push(`${LABEL[key]} is ${value}${UNIT[key]}, above the ${hi}${UNIT[key]} this stage tolerates`)
+      failures.push(translate(lang, 'cycle.above', { ...vars, bound: hi }))
     }
   }
   return failures
@@ -69,7 +75,7 @@ export function optimalDials(cycle) {
  * partial controls, which matters, because telling someone that raking leaves
  * eradicates apple scab would be wrong.
  */
-export function runCycle(cycle, dials, appliedInterventions = []) {
+export function runCycle(cycle, dials, appliedInterventions = [], lang = 'en') {
   const blocking = new Map()
   for (const iv of appliedInterventions) {
     if (iv.effect === 'blocks') blocking.set(iv.stage_id, iv)
@@ -94,7 +100,7 @@ export function runCycle(cycle, dials, appliedInterventions = []) {
       return
     }
 
-    const reasons = unmetRequirements(stage.requires, dials)
+    const reasons = unmetRequirements(stage.requires, dials, lang)
     if (reasons.length > 0) {
       haltedAt = index
       stages.push({ id: stage.id, label: stage.label, outcome: 'failed', reasons })
@@ -121,15 +127,16 @@ export function runCycle(cycle, dials, appliedInterventions = []) {
       environment: completed,
     },
     summary: completed
-      ? 'The cycle completed. New infectious units were produced and dispersed.'
-      : halted.outcome === 'blocked'
-        ? `Stopped at ${halted.label}: ${halted.reasons[0] ?? ''}`
-        : `Stopped at ${halted.label}: ${halted.reasons.join('; ')}`,
+      ? translate(lang, 'cycle.completed')
+      : translate(lang, 'cycle.stopped', {
+          stage: halted.label,
+          reasons: halted.outcome === 'blocked' ? (halted.reasons[0] ?? '') : halted.reasons.join('; '),
+        }),
   }
 }
 
 /** The smallest single change that would halt the cycle, or null if it already does. */
-export function suggestBreak(cycle, dials) {
+export function suggestBreak(cycle, dials, lang = 'en') {
   if (!runCycle(cycle, dials).completed) return null
 
   for (const key of ['leaf_wetness_hr', 'rh_pct', 'temp_c']) {
@@ -140,7 +147,9 @@ export function suggestBreak(cycle, dials) {
       if (dials[key] >= lo) {
         const probe = { ...dials, [key]: Math.max(0, lo - 1) }
         if (!runCycle(cycle, probe).completed) {
-          return `Drop ${LABEL[key]} below ${lo}${UNIT[key]} and the cycle stalls at ${stage.label.toLowerCase()}.`
+          return translate(lang, 'cycle.suggest', {
+            label: label(key, lang), bound: lo, unit: unit(key, lang), stage: stage.label.toLowerCase(),
+          })
         }
       }
     }

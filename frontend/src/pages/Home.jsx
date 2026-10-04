@@ -1,41 +1,31 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
 
+import { useLang } from '../context/LanguageContext'
+
 const stats = [
-  { value: '38',    label: 'Disease Classes', sub: 'Across 14 crops' },
-  { value: '14',    label: 'Disease Cycles',  sub: 'Sourced, apple · tomato · potato' },
-  { value: '360°',  label: 'Field Footage',   sub: 'In the browser or a headset' },
-  { value: 'EN·TE', label: 'Languages',       sub: 'English and Telugu' },
+  { value: '38', label: 'home.stat.classes', sub: 'home.stat.classesSub' },
+  { value: '14', label: 'home.stat.cycles', sub: 'home.stat.cyclesSub' },
+  { value: 'VR', label: 'home.stat.field', sub: 'home.stat.fieldSub' },
+  { value: '5', label: 'home.stat.langs', sub: 'home.stat.langsSub' },
 ]
 
 const steps = [
-  {
-    num: '01',
-    icon: '📷',
-    title: 'Upload a Leaf Photo',
-    desc: 'Drag & drop or click to select. Works with JPG, PNG, or WEBP. Use a well-lit, clear photo of a single leaf.',
-  },
-  {
-    num: '02',
-    icon: '🧠',
-    title: 'AI Analyses Instantly',
-    desc: 'The image is scored against 38 disease classes. When the model is not confident enough, it says so instead of guessing.',
-  },
-  {
-    num: '03',
-    icon: '💊',
-    title: 'Get Treatment Advice',
-    desc: 'Receive a full diagnosis — symptoms, organic & chemical treatments, and prevention tips.',
-  },
+  { num: '01', icon: '📷', title: 'home.step1.title', desc: 'home.step1.desc' },
+  { num: '02', icon: '🧠', title: 'home.step2.title', desc: 'home.step2.desc' },
+  { num: '03', icon: '💊', title: 'home.step3.title', desc: 'home.step3.desc' },
 ]
 
+// Keyed by the plant names in data/disease_info.json, which crop.* translates.
 const crops = [
-  '🍎 Apple', '🍅 Tomato', '🥔 Potato', '🌽 Corn',
-  '🍇 Grape', '🫑 Pepper', '🍑 Peach', '🍊 Orange',
-  '🫐 Blueberry', '🍓 Strawberry', '🌱 Soybean', '🫒 Squash',
+  ['🍎', 'Apple'], ['🍅', 'Tomato'], ['🥔', 'Potato'], ['🌽', 'Corn (Maize)'],
+  ['🍇', 'Grape'], ['🫑', 'Bell Pepper'], ['🍑', 'Peach'], ['🍊', 'Orange'],
+  ['🫐', 'Blueberry'], ['🍓', 'Strawberry'], ['🍒', 'Cherry'], ['🍃', 'Raspberry'],
+  ['🌱', 'Soybean'], ['🎃', 'Squash'],
 ]
 
 export default function Home() {
+  const { t } = useLang()
   const revealRef = useRef([])
 
   useEffect(() => {
@@ -78,7 +68,7 @@ export default function Home() {
           pointerEvents: 'none',
         }} />
 
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '80px 24px', position: 'relative', zIndex: 1 }}>
+        <div className="px-4 py-16 sm:px-6 sm:py-20" style={{ maxWidth: 1100, margin: '0 auto', width: '100%', position: 'relative', zIndex: 1 }}>
           {/* Badge */}
           <div className="anim-fade-up" style={{ marginBottom: 24 }}>
             <span className="badge-ai">
@@ -86,27 +76,26 @@ export default function Home() {
                 display: 'inline-block', width: 6, height: 6, borderRadius: '50%',
                 background: 'var(--color-ai)', animation: 'pulse 2s infinite',
               }} />
-              AI-Powered Diagnosis
+              {t('home.badge')}
             </span>
           </div>
 
-          {/* Heading — asymmetric layout */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr', maxWidth: 680 }}>
+          <div style={{ maxWidth: 680 }}>
             <h1
               className="anim-fade-up anim-delay-1"
               style={{
-                fontFamily: '"Playfair Display", serif',
-                fontSize: 'clamp(2.8rem, 6vw, 5rem)',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(2.4rem, 6vw, 5rem)',
                 fontWeight: 800,
                 color: '#fff',
-                lineHeight: 1.08,
+                lineHeight: 1.12,
                 marginBottom: 24,
                 letterSpacing: '-0.02em',
               }}
             >
-              Detect Crop<br />
-              <em style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.75)' }}>Diseases</em>{' '}
-              Instantly.
+              {t('home.titleA')}<br />
+              <em style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.75)' }}>{t('home.titleEm')}</em>{' '}
+              {t('home.titleB')}
             </h1>
 
             <p
@@ -119,46 +108,40 @@ export default function Home() {
                 maxWidth: 520,
               }}
             >
-              Upload a leaf photo and get a diagnosis across 38 disease classes and
-              14 crops — with treatment advice, and the disease cycle that caused it.
+              {t('home.lead')}
             </p>
 
             <div className="anim-fade-up anim-delay-3" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               <Link to="/detect" className="btn-white">
-                🔍 Detect Disease
+                🔍 {t('home.ctaDetect')}
               </Link>
               <Link to="/about" className="btn-ghost-white">
-                How it works
+                {t('home.ctaHow')}
               </Link>
             </div>
           </div>
-
         </div>
       </section>
 
       {/* ── Stats row ─────────────────────────────────────── */}
       <section style={{ background: 'var(--color-surface)', borderBottom: '1px solid var(--color-border)' }}>
-        <div style={{
-          maxWidth: 1100,
-          margin: '0 auto',
-          padding: '0 24px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-        }}>
+        {/* gap-px over a border-coloured background draws the dividers, so they
+            stay right whether the grid has two columns or four. */}
+        <div
+          className="mx-auto grid max-w-[1100px] grid-cols-2 gap-px md:grid-cols-4"
+          style={{ background: 'var(--color-border)' }}
+        >
           {stats.map(({ value, label, sub }, i) => (
             <div
               key={label}
-              ref={el => addReveal(el, i)}
-              className="reveal"
-              style={{
-                padding: '32px 24px',
-                borderRight: i < stats.length - 1 ? '1px solid var(--color-border)' : 'none',
-                textAlign: 'center',
-                transitionDelay: `${i * 0.08}s`,
-              }}
+              className="px-4 py-6 sm:px-6 sm:py-8"
+              style={{ background: 'var(--color-surface)', textAlign: 'center' }}
             >
+              {/* The reveal is on the content, not the cell: a cell at opacity 0
+                  would expose the border-coloured grid behind it as a solid block. */}
+              <div ref={el => addReveal(el, i)} className="reveal" style={{ transitionDelay: `${i * 0.08}s` }}>
               <div style={{
-                fontFamily: '"DM Mono", monospace',
+                fontFamily: 'var(--font-mono)',
                 fontSize: '2.1rem',
                 fontWeight: 500,
                 color: 'var(--color-accent)',
@@ -166,20 +149,20 @@ export default function Home() {
                 marginBottom: 6,
               }}>{value}</div>
               <div style={{
-                fontFamily: '"DM Sans", sans-serif',
                 fontWeight: 600,
                 fontSize: '0.85rem',
                 color: 'var(--color-text)',
                 marginBottom: 3,
-              }}>{label}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{sub}</div>
+              }}>{t(label)}</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{t(sub)}</div>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
       {/* ── How it works ──────────────────────────────────── */}
-      <section style={{ padding: 'var(--space-3xl) 24px', position: 'relative', overflow: 'hidden' }}>
+      <section className="px-4 sm:px-6" style={{ paddingTop: 'var(--space-3xl)', paddingBottom: 'var(--space-3xl)', position: 'relative', overflow: 'hidden' }}>
         {/* Dot-grid decoration */}
         <div className="dot-grid" style={{
           position: 'absolute', right: -60, top: 40,
@@ -189,15 +172,15 @@ export default function Home() {
 
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div ref={el => addReveal(el, 10)} className="reveal" style={{ marginBottom: 56 }}>
-            <div className="label-caps" style={{ marginBottom: 12 }}>The Process</div>
+            <div className="label-caps" style={{ marginBottom: 12 }}>{t('home.processLabel')}</div>
             <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', marginBottom: 0 }}>
-              Three steps to diagnosis
+              {t('home.processTitle')}
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, position: 'relative' }}>
-            {/* Connector line */}
-            <div style={{
+          <div className="relative grid grid-cols-1 gap-6 md:grid-cols-3">
+            {/* Connector line, only where the cards sit side by side */}
+            <div className="hidden md:block" style={{
               position: 'absolute',
               top: 36,
               left: '16.5%',
@@ -210,12 +193,8 @@ export default function Home() {
               <div
                 key={num}
                 ref={el => addReveal(el, 11 + i)}
-                className="reveal card"
-                style={{
-                  transitionDelay: `${i * 0.12}s`,
-                  position: 'relative',
-                  transform: i === 1 ? 'translateY(20px)' : 'none', // break the grid
-                }}
+                className={`reveal card relative ${i === 1 ? 'md:translate-y-5' : ''}`}
+                style={{ transitionDelay: `${i * 0.12}s` }}
               >
                 {/* Step number */}
                 <div style={{
@@ -225,7 +204,7 @@ export default function Home() {
                   marginBottom: 20,
                 }}>
                   <div style={{
-                    fontFamily: '"DM Mono", monospace',
+                    fontFamily: 'var(--font-mono)',
                     fontSize: '0.7rem',
                     letterSpacing: '0.1em',
                     color: 'var(--color-accent)',
@@ -234,16 +213,16 @@ export default function Home() {
                     borderRadius: 4,
                     fontWeight: 500,
                   }}>{num}</div>
-                  <div style={{ fontSize: '1.6rem' }}>{icon}</div>
+                  <div style={{ fontSize: '1.6rem' }} aria-hidden="true">{icon}</div>
                 </div>
                 <h3 style={{
-                  fontFamily: '"Playfair Display", serif',
+                  fontFamily: 'var(--font-display)',
                   fontSize: '1.15rem',
                   fontWeight: 700,
                   marginBottom: 10,
                   color: 'var(--color-text)',
-                }}>{title}</h3>
-                <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', lineHeight: 1.65 }}>{desc}</p>
+                }}>{t(title)}</h3>
+                <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', lineHeight: 1.65 }}>{t(desc)}</p>
               </div>
             ))}
           </div>
@@ -251,11 +230,12 @@ export default function Home() {
       </section>
 
       {/* ── Supported Crops ───────────────────────────────── */}
-      <section style={{
+      <section className="px-4 sm:px-6" style={{
         background: 'var(--color-surface-raised)',
         borderTop: '1px solid var(--color-border)',
         borderBottom: '1px solid var(--color-border)',
-        padding: 'var(--space-2xl) 24px',
+        paddingTop: 'var(--space-2xl)',
+        paddingBottom: 'var(--space-2xl)',
       }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div
@@ -264,10 +244,10 @@ export default function Home() {
             style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 36, flexWrap: 'wrap', gap: 16 }}
           >
             <div>
-              <div className="label-caps" style={{ marginBottom: 8 }}>Coverage</div>
-              <h2 style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)', margin: 0 }}>Supported Crops</h2>
+              <div className="label-caps" style={{ marginBottom: 8 }}>{t('home.coverage')}</div>
+              <h2 style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)', margin: 0 }}>{t('home.cropsTitle')}</h2>
             </div>
-            <Link to="/detect" className="btn-primary">Start Detecting →</Link>
+            <Link to="/detect" className="btn-primary">{t('home.startDetecting')} →</Link>
           </div>
 
           <div
@@ -275,9 +255,9 @@ export default function Home() {
             className="reveal"
             style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}
           >
-            {crops.map((crop) => (
+            {crops.map(([icon, plant]) => (
               <span
-                key={crop}
+                key={plant}
                 style={{
                   padding: '8px 18px',
                   background: 'var(--color-surface)',
@@ -288,14 +268,14 @@ export default function Home() {
                   color: 'var(--color-text)',
                   boxShadow: '0 1px 4px rgba(30,26,20,0.05)',
                 }}
-              >{crop}</span>
+              ><span aria-hidden="true">{icon}</span> {t(`crop.${plant}`)}</span>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── CTA ───────────────────────────────────────────── */}
-      <section style={{ padding: 'var(--space-3xl) 24px' }}>
+      <section className="px-4 sm:px-6" style={{ paddingTop: 'var(--space-3xl)', paddingBottom: 'var(--space-3xl)' }}>
         <div style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center' }}>
           <div
             ref={el => addReveal(el, 30)}
@@ -310,13 +290,13 @@ export default function Home() {
               margin: '0 auto 28px',
             }} />
             <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', marginBottom: 16 }}>
-              Ready to diagnose your crop?
+              {t('home.ctaTitle')}
             </h2>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '1rem', marginBottom: 32 }}>
-              Upload a leaf photo and get a diagnosis, treatment advice, and the disease cycle behind it — free.
+              {t('home.ctaLead')}
             </p>
             <Link to="/detect" className="btn-primary" style={{ fontSize: '1rem', padding: '14px 36px' }}>
-              🌿 Get Started
+              🌿 {t('home.getStarted')}
             </Link>
           </div>
         </div>

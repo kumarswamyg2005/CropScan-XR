@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.content import LANG_PATTERN
 from app.db import get_db
 from app.models import Video
 from app.routers.diseases import _video_out
@@ -16,7 +17,7 @@ router = APIRouter(prefix="/api/videos", tags=["videos"])
 def list_videos(
     disease_id: str | None = Query(None),
     kind: str | None = Query(None, pattern="^(treatment|field|field360|symptom_closeup)$"),
-    lang: str = Query("en", pattern="^(en|te)$"),
+    lang: str = Query("en", pattern=LANG_PATTERN),
     db: Session = Depends(get_db),
 ) -> list[VideoOut]:
     stmt = select(Video)

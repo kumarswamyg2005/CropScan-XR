@@ -154,3 +154,21 @@ describe('dials and hints', () => {
     expect(suggestBreak(makeCycle(), { temp_c: 17, leaf_wetness_hr: 0, rh_pct: 95 })).toBeNull()
   })
 })
+
+describe('language', () => {
+  it('keeps the English sentences the headset and the e2e test rely on', () => {
+    const halted = runCycle(makeCycle(), { temp_c: 17, leaf_wetness_hr: 2, rh_pct: 95 })
+    expect(halted.summary).toMatch(/^Stopped at /)
+    expect(halted.summary).toContain('below the 9 h this stage needs')
+  })
+
+  it('speaks the requested language, with the stage label the data supplies', () => {
+    const cycle = makeCycle()
+    const halted = runCycle(cycle, { temp_c: 17, leaf_wetness_hr: 2, rh_pct: 95 }, [], 'hi')
+    expect(halted.summary).toContain(cycle.stages[1].label)
+    expect(halted.summary).toContain('पत्ती का गीलापन')
+    expect(halted.summary).not.toMatch(/Stopped at|below the/)
+    expect(runCycle(cycle, optimalDials(cycle), [], 'ta').summary).toBe('சுழற்சி முடிந்தது. புதிய தொற்று அலகுகள் உருவாகிப் பரவின.')
+    expect(suggestBreak(cycle, optimalDials(cycle), 'kn')).toContain('ಚಕ್ರ')
+  })
+})

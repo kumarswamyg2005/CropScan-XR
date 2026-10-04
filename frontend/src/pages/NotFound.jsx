@@ -9,16 +9,16 @@ import { useLang } from '../context/LanguageContext'
  */
 export default function NotFound() {
   const { pathname } = useLocation()
-  const { lang } = useLang()
+  const { t } = useLang()
 
   return (
     <div style={{ maxWidth: 620, margin: '0 auto', padding: 'var(--space-3xl) var(--space-lg)' }}>
       <div className="label-caps" style={{ marginBottom: 8 }}>404</div>
-      <h1 style={{ fontFamily: '"Playfair Display", serif', fontSize: 34, margin: '0 0 12px' }}>
-        {lang === 'te' ? 'ఈ పేజీ కనిపించలేదు' : 'That page does not exist'}
+      <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 34, margin: '0 0 12px' }}>
+        {t('notFound.title')}
       </h1>
       <p style={{ color: 'var(--color-text-muted)', marginBottom: 8 }}>
-        {lang === 'te' ? 'మీరు వెతికిన చిరునామా:' : 'Nothing is routed at'}
+        {t('notFound.body')}
       </p>
       <code style={{
         display: 'inline-block',
@@ -26,7 +26,7 @@ export default function NotFound() {
         border: '1px solid var(--color-border)',
         borderRadius: 6,
         padding: '4px 10px',
-        fontFamily: "'DM Mono', monospace",
+        fontFamily: 'var(--font-mono)',
         fontSize: 13,
         marginBottom: 28,
       }}>
@@ -35,10 +35,10 @@ export default function NotFound() {
 
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         <Link to="/" className="btn-primary">
-          {lang === 'te' ? 'హోమ్‌కి వెళ్ళండి' : 'Back to home'}
+          {t('notFound.home')}
         </Link>
         <Link to="/detect" className="btn-secondary">
-          {lang === 'te' ? 'ఆకును స్కాన్ చేయండి' : 'Scan a leaf'}
+          {t('notFound.scan')}
         </Link>
       </div>
     </div>

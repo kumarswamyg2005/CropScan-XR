@@ -3,6 +3,26 @@ import { useNavigate } from 'react-router-dom'
 import { api } from '../lib/api'
 import { useLang } from '../context/LanguageContext'
 
+// Matches the API's max_upload_bytes. Checked here so a farmer on a slow
+// connection is told before the upload, not after it.
+const MAX_MB = 10
+
+/** A failed scan, said in words a farmer can act on. */
+function scanError(err, t) {
+  if (err.status === 503) return t('detect.err.noModel')
+  if (err.status === 413) return t('detect.err.tooBig', { mb: MAX_MB })
+  if (err.status === 400) return t('detect.err.badImage')
+  if (err.status === undefined) return t('detect.err.network')
+  return t('detect.err.server')
+}
+
+const TIPS = [
+  ['🌞', 'detect.tip.light', 'detect.tip.lightDesc'],
+  ['🎯', 'detect.tip.single', 'detect.tip.singleDesc'],
+  ['📐', 'detect.tip.fill', 'detect.tip.fillDesc'],
+  ['🌿', 'detect.tip.background', 'detect.tip.backgroundDesc'],
+]
+
 export default function Detect() {
   const [image, setImage]     = useState(null)
   const [preview, setPreview] = useState(null)
@@ -11,18 +31,27 @@ export default function Detect() {
   const [error, setError]     = useState('')
   const fileInputRef = useRef(null)
   const navigate = useNavigate()
-  const { lang } = useLang()
+  const { lang, t } = useLang()
 
   const handleFile = useCallback((file) => {
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      setError('Please upload an image file (JPG, PNG, WEBP)')
+      setError(t('detect.err.notImage'))
+      return
+    }
+    if (file.size > MAX_MB * 1024 * 1024) {
+      setError(t('detect.err.tooBig', { mb: MAX_MB }))
       return
     }
     setError('')
     setImage(file)
-    setPreview(URL.createObjectURL(file))
-  }, [])
+    // ponytail: the last preview is not revoked on unmount -- Result still
+    // shows it. One blob per scan; revoked whenever it is replaced here.
+    setPreview((old) => {
+      if (old) URL.revokeObjectURL(old)
+      return URL.createObjectURL(file)
+    })
+  }, [t])
 
   const onDrop = (e) => {
     e.preventDefault()
@@ -36,10 +65,12 @@ export default function Detect() {
     setError('')
     try {
       const result = await api.createScan(image, lang)
-      navigate('/result', { state: { result, imageUrl: preview } })
+      // The id goes in the URL so a reload, a language switch or a shared
+      // link can fetch the scan again; state is only for the instant paint.
+      navigate(`/result?scan=${encodeURIComponent(result.id)}`, { state: { result, imageUrl: preview } })
     } catch (err) {
-      const msg = err.message || 'Something went wrong. Is the backend running?'
-      setError(msg)
+      console.error('[CropScan] scan failed', err)
+      setError(scanError(err, t))
     } finally {
       setLoading(false)
     }
@@ -47,6 +78,7 @@ export default function Detect() {
 
   const reset = () => {
     setImage(null)
+    if (preview) URL.revokeObjectURL(preview)
     setPreview(null)
     setError('')
     if (fileInputRef.current) fileInputRef.current.value = ''
@@ -58,24 +90,23 @@ export default function Detect() {
       <div style={{
         background: 'var(--color-surface)',
         borderBottom: '1px solid var(--color-border)',
-        padding: '28px 24px 24px',
-      }}>
+      }} className="px-4 pb-6 pt-7 sm:px-6">
         <div style={{ maxWidth: 680, margin: '0 auto' }}>
-          <div className="label-caps" style={{ marginBottom: 8 }}>AI Diagnosis</div>
+          <div className="label-caps" style={{ marginBottom: 8 }}>{t('detect.label')}</div>
           <h1 style={{
-            fontFamily: '"Playfair Display", serif',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(1.8rem, 3vw, 2.6rem)',
             fontWeight: 700,
             margin: 0,
-          }}>Detect Crop Disease</h1>
+          }}>{t('detect.title')}</h1>
           <p style={{ color: 'var(--color-text-muted)', marginTop: 8, fontSize: '0.95rem' }}>
-            Upload a clear photo of the affected leaf — our model identifies 38 disease classes instantly.
+            {t('detect.lead')}
           </p>
         </div>
       </div>
 
       {/* Main content */}
-      <div style={{ flex: 1, padding: '40px 24px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+      <div className="px-4 py-8 sm:px-6 sm:py-10" style={{ flex: 1, display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
         <div style={{ width: '100%', maxWidth: 640 }}>
 
           {!preview ? (
@@ -85,11 +116,19 @@ export default function Detect() {
               onDragOver={e => { e.preventDefault(); setDragOver(true) }}
               onDragLeave={() => setDragOver(false)}
               onClick={() => fileInputRef.current?.click()}
-              className="anim-fade-up"
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  fileInputRef.current?.click()
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={t('detect.drop')}
+              className="anim-fade-up px-6 py-14 sm:px-10 sm:py-[72px]"
               style={{
                 border: `2px dashed ${dragOver ? 'var(--color-accent)' : 'var(--color-border)'}`,
                 borderRadius: 24,
-                padding: '72px 40px',
                 textAlign: 'center',
                 cursor: 'pointer',
                 background: dragOver ? 'var(--color-accent-subtle)' : 'var(--color-surface)',
@@ -115,20 +154,20 @@ export default function Detect() {
                   fontSize: '2rem',
                   margin: '0 auto 20px',
                   border: '1px solid rgba(45,106,79,0.15)',
-                }}>🍃</div>
+                }} aria-hidden="true">🍃</div>
 
                 <p style={{
-                  fontFamily: '"Playfair Display", serif',
+                  fontFamily: 'var(--font-display)',
                   fontSize: '1.2rem',
                   fontWeight: 600,
                   color: 'var(--color-text)',
                   marginBottom: 8,
-                }}>Drop your leaf image here</p>
+                }}>{t('detect.drop')}</p>
                 <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: 24 }}>
-                  or click to browse — JPG, PNG, WEBP accepted
+                  {t('detect.browse')}
                 </p>
 
-                <div className="label-caps">Best results with a single leaf, good lighting</div>
+                <div className="label-caps">{t('detect.best')}</div>
               </div>
 
               <input
@@ -154,7 +193,7 @@ export default function Detect() {
                 <div style={{ position: 'relative', background: 'var(--color-surface-raised)', maxHeight: 360, overflow: 'hidden' }}>
                   <img
                     src={preview}
-                    alt="Leaf preview"
+                    alt={t('detect.previewAlt')}
                     style={{ width: '100%', maxHeight: 360, objectFit: 'contain', display: 'block' }}
                   />
                   <button
@@ -177,7 +216,8 @@ export default function Detect() {
                       justifyContent: 'center',
                       transition: 'background 0.15s',
                     }}
-                    title="Remove"
+                    title={t('detect.remove')}
+                    aria-label={t('detect.remove')}
                   >×</button>
                 </div>
 
@@ -193,13 +233,13 @@ export default function Detect() {
                     borderRadius: 10,
                     border: '1px solid var(--color-border)',
                   }}>
-                    <span style={{ fontSize: '1rem' }}>📁</span>
+                    <span style={{ fontSize: '1rem' }} aria-hidden="true">📁</span>
                     <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {image?.name}
                     </span>
                     <span style={{
                       marginLeft: 'auto',
-                      fontFamily: '"DM Mono", monospace',
+                      fontFamily: 'var(--font-mono)',
                       fontSize: '0.75rem',
                       color: 'var(--color-text-muted)',
                       flexShrink: 0,
@@ -225,9 +265,9 @@ export default function Detect() {
                           borderRadius: '50%',
                           animation: 'spin 0.7s linear infinite',
                         }} />
-                        Analysing…
+                        {t('detect.analysing')}
                       </>
-                    ) : '🔍 Analyse Disease'}
+                    ) : `🔍 ${t('detect.analyse')}`}
                   </button>
                 </div>
               </div>
@@ -236,7 +276,7 @@ export default function Detect() {
 
           {/* Error */}
           {error && (
-            <div style={{
+            <div role="alert" style={{
               marginTop: 16,
               padding: '14px 18px',
               borderRadius: 12,
@@ -251,13 +291,8 @@ export default function Detect() {
 
           {/* Tips */}
           {!preview && (
-            <div style={{ marginTop: 28, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              {[
-                ['🌞', 'Good lighting', 'Natural light works best'],
-                ['🎯', 'Single leaf', 'Focus on one affected leaf'],
-                ['📐', 'Fill the frame', 'Leaf should take up most of the image'],
-                ['🌿', 'Clear background', 'Plain or blurred background helps'],
-              ].map(([icon, title, desc]) => (
+            <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {TIPS.map(([icon, title, desc]) => (
                 <div key={title} style={{
                   padding: '14px 16px',
                   background: 'var(--color-surface)',
@@ -267,10 +302,10 @@ export default function Detect() {
                   gap: 10,
                   alignItems: 'flex-start',
                 }}>
-                  <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{icon}</span>
+                  <span style={{ fontSize: '1.1rem', flexShrink: 0 }} aria-hidden="true">{icon}</span>
                   <div>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: 2 }}>{title}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{desc}</div>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: 2 }}>{t(title)}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{t(desc)}</div>
                   </div>
                 </div>
               ))}

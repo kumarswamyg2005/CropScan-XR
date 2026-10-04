@@ -22,19 +22,26 @@ cycle*. The ledger says *this happened, at this time, on this image*.
 
 ## Accuracy: the honest number
 
-> **Not yet trained.** The ML pipeline is written and tested end to end; the run
-> itself needs a GPU (see [Status](#status)). The table below is filled in by
-> `ml/eval.py`, never by hand, and `/about` renders it live from the deployed
-> model's `meta.json`. Until a model exists, the site says so rather than
-> showing a figure it cannot back.
+> **Deployed model: the EfficientNet-B0 baseline** (`backend/model.pt`, trained
+> by `ml/train.ipynb`), until the ConvNeXt pipeline gets its GPU run. The table
+> is measured by `ml/eval_baseline.py` into `docs/eval_metrics.json`, never
+> typed by hand, and `/about` renders it live from the deployed `meta.json`.
 
 | | |
 | --- | ---: |
-| **Field accuracy** (held-out, in-the-wild) | *pending* |
-| Lab accuracy (PlantVillage-style) | *pending* |
-| **Domain gap** | *pending* |
-| Calibration error (ECE) | *pending* |
-| Background-bias probe | *pending* |
+| **Field accuracy** (PlantDoc, 2,569 outdoor photos) | **14.67%** |
+| Lab accuracy (PlantVillage, 4,333 held-out) | 97.07% |
+| **Domain gap** | **82.4 pp** |
+| Field macro-F1 | 0.147 |
+| Calibration error (ECE, lab) | 0.005 |
+| Background-bias probe | not measured |
+
+The abstain thresholds were tuned against Imagenette (no plants). This model is
+confident even on non-plant photos, so reaching 90% junk rejection costs a lot:
+the tuned gate refuses 50% of studio leaf photos and 97.5% of field photos. That
+is the documented policy in `ml/ood.py` (rejection wins), not a bug. Rebuild with
+`python ml/eval_baseline.py`, then
+`python ml/export.py --checkpoint backend/model.pt --labels backend/class_names.json --resize-ratio 1.0`.
 
 **The field number is the headline. The lab number is context.**
 
@@ -90,6 +97,10 @@ data/               taxonomy, manifests, disease_cycle.json, disease_info.json
 docs/               ADRs, model card, design plan, demo script
 infra/              docker-compose (postgres + minio)
 tools/              video transcode pipeline
+eval/               research paper: benchmark suite, results, LaTeX source
+backend/            PlantVillage EfficientNet-B0 baseline (model.pt, class_names.json)
+                    — the paper's deployed baseline; eval/ loads it from here
+ml/train.ipynb      the Kaggle notebook that trained that baseline
 ```
 
 ---
@@ -220,6 +231,12 @@ Quest 3 for the frame-rate gate.
 - **Disease cycles cover apple, tomato and potato only.** Other diagnoses return
   `cycle: null` and cannot enter the field module. A rigorous three beats a
   shallow thirty-eight.
+- **Five languages: English, Telugu, Hindi, Tamil, Kannada.** The UI
+  (`frontend/src/locales/`), disease advice (`data/translations_*.json`) and
+  stage names (`data/stage_labels.json`) are translated. The Hindi, Tamil and
+  Kannada text was drafted with AI assistance and needs a native-speaker
+  agronomist's review before farmers rely on it. Per-stage descriptions,
+  intervention text and video captions are still English only.
 - **Treatment text is guidance, not a prescription.** Local resistance,
   registration and pre-harvest intervals vary, and wrong fungicide timing is a
   real cost.
@@ -228,8 +245,9 @@ Quest 3 for the frame-rate gate.
   time — closing that second gap is what testnet anchoring is for, and it is
   Phase 10.
 - **Payments are Razorpay test mode.** Nothing is charged.
-- **`model.pt` (15.7 MB) is still in git history** from before the deletion
-  commit. Removing it needs a history rewrite, which is opt-in.
+- **`backend/model.pt` (15.7 MB) is committed** because the paper's
+  benchmarks in `eval/` load it. The API does not use it; it serves
+  `services/api/model/model.onnx`.
 - **The homepage still advertises 99.3% accuracy and EfficientNet-B0.** Both
   describe the deleted model. They must be replaced with the field number before
   this is published — see the note at the end of ADR 0005.

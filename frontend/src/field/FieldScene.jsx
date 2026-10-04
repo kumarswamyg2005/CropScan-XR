@@ -1,8 +1,9 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Text } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 import { IfInSessionMode, XR, XRLayer, createXRStore } from '@react-three/xr'
 
+import { useTextTexture } from './textTexture'
 import { SingleVideoPlayback, sphereArc, stereoLayout } from './videoLayer'
 import VrControls from './VrControls'
 
@@ -18,13 +19,48 @@ export const xrStore = createXRStore({
   foveation: 0.6,
 })
 
+// iwer >= 2.3 will not replace a native navigator.xr, and desktop Chrome has
+// one even with no headset attached, so the emulator above never installed and
+// "Enter in VR" stayed disabled in dev. The store only emulates after finding
+// no VR or AR support at all, so forcing it here cannot clobber a real device.
+// devicechange is what Field.jsx listens to for re-checking support.
+if (import.meta.env.DEV) {
+  const unsubscribe = xrStore.subscribe(({ emulator }) => {
+    if (!emulator) return
+    unsubscribe()
+    const native = navigator.xr
+    emulator.installRuntime({ forceInstall: true })
+    native?.dispatchEvent(new Event('devicechange'))
+  })
+}
+
 const CREAM = 0xf6f2eb
 const SURFACE = 0xfdfaf5
 const BORDER = 0xddd6c8
-const INK = 0x1e1a14
+const INK = '#1e1a14'
 const ACCENT = 0x2d6a4f
-const ALERT = 0xb84c30
-const MUTED = 0x7a6f5e
+const ALERT = '#b84c30'
+const MUTED = '#7a6f5e'
+
+// Canvas pixels per metre for scene text. 400 keeps a 1.8 m line under 1500 px.
+const PX_PER_M = 400
+
+/**
+ * Scene text, centred on `position` like drei's <Text anchorX="center">.
+ * Sizes are in metres. Drawn by the browser so every script shapes correctly;
+ * see textTexture.js.
+ */
+function Label({ children, fontSize, maxWidth = 4, color = INK, align = 'center', position }) {
+  const { texture, width, height } = useTextTexture(String(children ?? ''), {
+    size: fontSize * PX_PER_M, maxWidth: maxWidth * PX_PER_M, color, align,
+  })
+  return (
+    <mesh position={position}>
+      <planeGeometry args={[width / PX_PER_M, height / PX_PER_M]} />
+      <meshBasicMaterial map={texture} transparent depthWrite={false} toneMapped={false} />
+    </mesh>
+  )
+}
 
 /**
  * The video.
@@ -174,7 +210,7 @@ function Plate({ width, height, z = -0.006 }) {
 }
 
 /** Disease triangle: three legs that light as each is satisfied. */
-function DiseaseTriangle({ run, position }) {
+function DiseaseTriangle({ run, position, t }) {
   const v = [[0, 0.2, 0], [-0.175, -0.12, 0], [0.175, -0.12, 0]]
   const legs = [
     [0, 1, run.triangle.host && run.triangle.pathogen],
@@ -206,35 +242,34 @@ function DiseaseTriangle({ run, position }) {
           <meshBasicMaterial color={lit[i] ? ACCENT : 0xd0c8b8} />
         </mesh>
       ))}
-      <Text position={[0, 0.265, 0]} fontSize={0.058} color={INK} anchorX="center">
-        Disease triangle
-      </Text>
-      <Text
-        position={[0, -0.21, 0]} fontSize={0.042}
+      <Label position={[0, 0.265, 0.001]} fontSize={0.058} maxWidth={0.66}>
+        {t('vr.triangleTitle')}
+      </Label>
+      <Label
+        position={[0, -0.21, 0.001]} fontSize={0.042} maxWidth={0.56}
         color={run.triangle.environment ? MUTED : ALERT}
-        anchorX="center" maxWidth={0.56} textAlign="center"
       >
-        {run.triangle.environment ? 'all three satisfied' : 'environment leg broken'}
-      </Text>
+        {run.triangle.environment ? t('vr.triangleOk') : t('vr.triangleBroken')}
+      </Label>
     </group>
   )
 }
 
-function StagePanel({ run, position }) {
+function StagePanel({ run, position, t }) {
   const halted = run.haltedAt !== null
   const stage = halted ? run.stages[run.haltedAt] : run.stages[run.stages.length - 1]
   return (
     <group position={position}>
       <Plate width={1.95} height={halted ? 0.68 : 0.46} />
-      <Text position={[0, halted ? 0.19 : 0.07, 0]} fontSize={0.13} color={INK} anchorX="center" maxWidth={1.8}>
+      <Label position={[0, halted ? 0.19 : 0.07, 0.001]} fontSize={0.13} maxWidth={1.8}>
         {stage?.label ?? ''}
-      </Text>
-      <Text
-        position={[0, halted ? -0.06 : -0.07, 0]} fontSize={0.07}
-        color={halted ? ALERT : MUTED} anchorX="center" maxWidth={1.72} textAlign="center"
+      </Label>
+      <Label
+        position={[0, halted ? -0.06 : -0.07, 0.001]} fontSize={0.07} maxWidth={1.72}
+        color={halted ? ALERT : MUTED}
       >
-        {halted ? run.summary : 'The cycle completed.'}
-      </Text>
+        {halted ? run.summary : t('vr.completedShort')}
+      </Label>
     </group>
   )
 }
@@ -247,13 +282,13 @@ function StageTimeline({ run, position }) {
         const x = (i - (run.stages.length - 1) / 2) * 0.2
         const colour =
           s.outcome === 'passed' ? ACCENT
-          : s.outcome === 'failed' || s.outcome === 'blocked' ? ALERT
+          : s.outcome === 'failed' || s.outcome === 'blocked' ? 0xb84c30
           : 0xd0c8b8
         return (
           <group key={s.id} position={[x, 0, 0]}>
             <mesh><circleGeometry args={[0.04, 18]} /><meshBasicMaterial color={colour} /></mesh>
             {(s.outcome === 'failed' || s.outcome === 'blocked') && (
-              <Text position={[0, 0, 0.002]} fontSize={0.062} color={CREAM} anchorX="center" anchorY="middle">×</Text>
+              <Label position={[0, 0, 0.002]} fontSize={0.062} color="#f6f2eb">×</Label>
             )}
           </group>
         )
@@ -263,7 +298,7 @@ function StageTimeline({ run, position }) {
 }
 
 /** Shown when a disease has no footage: without it the canvas reads as broken. */
-function CycleBoard({ pathogen }) {
+function CycleBoard({ pathogen, t }) {
   return (
     <group>
       <mesh position={[0, 1.55, -2.6]}>
@@ -274,28 +309,27 @@ function CycleBoard({ pathogen }) {
         <planeGeometry args={[5.0, 2.72]} />
         <meshBasicMaterial color={CREAM} />
       </mesh>
-      <Text position={[0, 2.70, -2.4]} fontSize={0.105} color={MUTED} anchorX="center" maxWidth={4.4} textAlign="center">
-        No footage published for this disease yet — the cycle still runs
-      </Text>
+      <Label position={[0, 2.70, -2.4]} fontSize={0.105} color={MUTED} maxWidth={4.4}>
+        {t('vr.noFootage')}
+      </Label>
       {pathogen && (
-        <Text position={[0, 2.50, -2.4]} fontSize={0.088} color={INK} anchorX="center" maxWidth={4.4} textAlign="center">
+        <Label position={[0, 2.50, -2.4]} fontSize={0.088} maxWidth={4.4}>
           {pathogen}
-        </Text>
+        </Label>
       )}
     </group>
   )
 }
 
 export default function FieldScene({
-  video, run, pathogen, onElement, onStrategy,
+  video, run, pathogen, onElement,
   dials, ranges, onDial, onReset,
   videos = [], videoIndex = 0, onPickVideo, playing, onTogglePlay,
+  t,
 }) {
   const controls = useRef(null)
   const [layout, setLayout] = useState(null)
   const flat = !video || video.projection === 'flat'
-
-  useEffect(() => { onStrategy?.(video ? 'xr-layer' : 'none') }, [video, onStrategy])
 
   // Placed against the quad's ACTUAL edges. These were previously constants
   // tuned for a 2.9 x 1.63 plane; the quad is now sized from the clip, and a
@@ -318,23 +352,25 @@ export default function FieldScene({
       <XR store={xrStore}>
         <Suspense fallback={null}>
           <VideoStage video={video} onElement={onElement} onLayout={setLayout} />
-          {!video && run && <CycleBoard pathogen={pathogen} />}
+          {!video && run && <CycleBoard pathogen={pathogen} t={t} />}
 
           {/* Flat overlay panels are for the 2D canvas. In a headset they are
               replaced by the uikit panel below, which you can actually touch. */}
           <IfInSessionMode deny={['immersive-vr', 'immersive-ar']}>
             {run && (
               <>
-                <StagePanel run={run} position={[0, stageY, depth]} />
+                <StagePanel run={run} position={[0, stageY, depth]} t={t} />
                 <StageTimeline run={run} position={[0, timelineY, depth]} />
-                <DiseaseTriangle run={run} position={[triangleX, 1.56, depth + 0.05]} />
+                <DiseaseTriangle run={run} position={[triangleX, 1.56, depth + 0.05]} t={t} />
               </>
             )}
           </IfInSessionMode>
 
           <IfInSessionMode allow={['immersive-vr', 'immersive-ar']}>
-            {run && <DiseaseTriangle run={run} position={[-1.25, 1.62, -1.6]} />}
+            {run && <DiseaseTriangle run={run} position={[-1.25, 1.62, -1.6]} t={t} />}
             <VrControls
+              t={t}
+              onExit={() => xrStore.getState().session?.end()}
               run={run}
               dials={dials}
               ranges={ranges}
@@ -351,9 +387,11 @@ export default function FieldScene({
         </Suspense>
       </XR>
 
+      {/* No zoom. Inside a 360 sphere a dolly walks the camera out through the
+          wall, and on a flat panel it adds nothing a closer look needs. */}
       <OrbitControls
         ref={controls}
-        enableZoom={!flat}
+        enableZoom={false}
         enablePan={false}
         rotateSpeed={flat ? 0.35 : -0.3}
         target={flat ? [0, 1.62, depth] : [0, 1.6, 0]}

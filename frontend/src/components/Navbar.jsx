@@ -1,22 +1,24 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+
 import { useLang } from '../context/LanguageContext'
+import { LANGS } from '../i18n'
 
 const links = [
-  { to: '/', label: 'Home' },
-  { to: '/detect', label: 'Detect' },
-  { to: '/field', label: 'Field' },
-  { to: '/about', label: 'About' },
+  { to: '/', key: 'nav.home' },
+  { to: '/detect', key: 'nav.detect' },
+  { to: '/field', key: 'nav.field' },
+  { to: '/about', key: 'nav.about' },
 ]
 
 export default function Navbar() {
   const { pathname } = useLocation()
   const [scrolled, setScrolled] = useState(false)
-  const { lang, toggle } = useLang()
+  const { lang, setLang, t } = useLang()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -32,15 +34,9 @@ export default function Navbar() {
         transition: 'box-shadow 0.3s',
       }}
     >
-      <div style={{
-        maxWidth: 1100,
-        margin: '0 auto',
-        padding: '0 24px',
-        height: 64,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}>
+      {/* One row on desktop. On a phone the links drop to a second, scrollable
+          row so nothing overflows the viewport. */}
+      <div className="mx-auto flex max-w-[1100px] flex-wrap items-center justify-between gap-x-2 px-4 py-2 sm:h-16 sm:px-6 sm:py-0">
         {/* Logo */}
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
@@ -53,80 +49,52 @@ export default function Navbar() {
             justifyContent: 'center',
             fontSize: 17,
             boxShadow: '0 2px 8px rgba(45,106,79,0.3)',
-          }}>🌿</div>
+          }} aria-hidden="true">🌿</div>
           <div>
             <div style={{
-              fontFamily: '"Playfair Display", serif',
+              fontFamily: 'var(--font-display)',
               fontWeight: 700,
               fontSize: '1.05rem',
               color: 'var(--color-accent)',
               lineHeight: 1,
             }}>CropScan</div>
-            <div style={{
-              fontFamily: '"DM Mono", monospace',
-              fontSize: '0.58rem',
-              letterSpacing: '0.12em',
-              color: 'var(--color-text-muted)',
-              textTransform: 'uppercase',
-            }}>Disease Detector</div>
+            <div className="label-caps" style={{ fontSize: '0.58rem' }}>
+              {t('nav.subtitle')}
+            </div>
           </div>
         </Link>
 
-        {/* Nav links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          {links.map(({ to, label }) => {
-            const active = pathname === to
-            return (
-              <Link
-                key={to}
-                to={to}
-                style={{
-                  padding: '7px 16px',
-                  borderRadius: 8,
-                  fontSize: '0.875rem',
-                  fontWeight: active ? 600 : 400,
-                  color: active ? 'var(--color-accent)' : 'var(--color-text-muted)',
-                  background: active ? 'var(--color-accent-subtle)' : 'transparent',
-                  textDecoration: 'none',
-                  transition: 'background 0.15s, color 0.15s',
-                }}
-                onMouseEnter={e => { if (!active) { e.target.style.background = 'var(--color-surface-raised)'; e.target.style.color = 'var(--color-text)' } }}
-                onMouseLeave={e => { if (!active) { e.target.style.background = 'transparent'; e.target.style.color = 'var(--color-text-muted)' } }}
-              >
-                {label}
-              </Link>
-            )
-          })}
-          {/* Language toggle */}
-          <button
-            onClick={toggle}
-            title={lang === 'en' ? 'Switch to Telugu' : 'Switch to English'}
-            style={{
-              marginLeft: 8,
-              padding: '7px 14px',
-              borderRadius: 8,
-              border: '1.5px solid var(--color-border)',
-              background: lang === 'te' ? 'var(--color-accent-subtle)' : 'transparent',
-              color: lang === 'te' ? 'var(--color-accent)' : 'var(--color-text-muted)',
-              fontFamily: lang === 'te' ? '"DM Sans", sans-serif' : '"DM Mono", monospace',
-              fontSize: lang === 'te' ? '0.8rem' : '0.75rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              letterSpacing: lang === 'te' ? 0 : '0.05em',
-              transition: 'all 0.2s',
-              whiteSpace: 'nowrap',
-            }}
+        <div className="order-2 flex items-center gap-2 sm:order-3">
+          <select
+            className="lang-select"
+            value={lang}
+            onChange={(e) => setLang(e.target.value)}
+            aria-label={t('nav.language')}
           >
-            {lang === 'en' ? 'తె' : 'EN'}
-          </button>
-
+            {LANGS.map(({ code, name }) => (
+              <option key={code} value={code}>{name}</option>
+            ))}
+          </select>
           <Link
             to="/detect"
-            className="btn-primary"
-            style={{ marginLeft: 8, padding: '8px 20px', fontSize: '0.85rem' }}
+            className="btn-primary hidden sm:inline-flex"
+            style={{ padding: '8px 20px', fontSize: '0.85rem' }}
           >
-            Try Now →
+            {t('nav.tryNow')} →
           </Link>
+        </div>
+
+        <div className="order-3 -mx-1 mt-1 flex w-full gap-1 overflow-x-auto pb-1 sm:order-2 sm:mx-0 sm:mt-0 sm:w-auto sm:pb-0">
+          {links.map(({ to, key }) => (
+            <Link
+              key={to}
+              to={to}
+              className="nav-link"
+              aria-current={pathname === to ? 'page' : undefined}
+            >
+              {t(key)}
+            </Link>
+          ))}
         </div>
       </div>
     </nav>

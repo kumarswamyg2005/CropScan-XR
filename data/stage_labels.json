@@ -1,0 +1,35 @@
+{
+  "hi": {
+    "survival": "शीतकालीन उत्तरजीविता",
+    "inoculum_production": "संक्रमण स्रोत का निर्माण",
+    "deposition": "पत्ती पर पहुँचना",
+    "prepenetration": "अंकुरण",
+    "penetration": "पत्ती में प्रवेश",
+    "infection": "संक्रमण और ऊष्मायन",
+    "colonization": "ऊतक में फैलाव",
+    "reproduction": "प्रजनन",
+    "dispersal": "आगे फैलाव"
+  },
+  "ta": {
+    "survival": "குளிர்காலத்தில் உயிர்வாழ்தல்",
+    "inoculum_production": "தொற்று மூல உருவாக்கம்",
+    "deposition": "இலையில் படிதல்",
+    "prepenetration": "முளைத்தல்",
+    "penetration": "இலைக்குள் நுழைதல்",
+    "infection": "தொற்று மற்றும் அடைகாப்பு",
+    "colonization": "திசுக்களில் பரவுதல்",
+    "reproduction": "இனப்பெருக்கம்",
+    "dispersal": "மேலும் பரவுதல்"
+  },
+  "kn": {
+    "survival": "ಚಳಿಗಾಲದ ಉಳಿವು",
+    "inoculum_production": "ಸೋಂಕು ಮೂಲದ ಉತ್ಪಾದನೆ",
+    "deposition": "ಎಲೆಯ ಮೇಲೆ ತಲುಪುವುದು",
+    "prepenetration": "ಮೊಳಕೆಯೊಡೆಯುವಿಕೆ",
+    "penetration": "ಎಲೆಯೊಳಗೆ ಪ್ರವೇಶ",
+    "infection": "ಸೋಂಕು ಮತ್ತು ಸುಪ್ತಾವಧಿ",
+    "colonization": "ಅಂಗಾಂಶದಲ್ಲಿ ಹರಡುವಿಕೆ",
+    "reproduction": "ಸಂತಾನೋತ್ಪತ್ತಿ",
+    "dispersal": "ಮುಂದಿನ ಹರಡುವಿಕೆ"
+  }
+}

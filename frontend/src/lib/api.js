@@ -34,6 +34,7 @@ export function adaptScan(scan) {
     confidence: (scan.confidence ?? 0) * 100,
     top3: (scan.top3 || []).map((t) => ({
       class_name: t.disease_id,
+      name: t.name, // already in the requested language
       confidence: t.confidence * 100,
     })),
     disease_info: scan.info,
@@ -65,6 +66,7 @@ export const api = {
 
   listDiseases: (params = {}) => {
     const q = new URLSearchParams()
+    if (params.lang) q.set('lang', params.lang)
     if (params.crop) q.set('crop', params.crop)
     if (params.hasCycle !== undefined) q.set('has_cycle', String(params.hasCycle))
     return request(`/api/diseases?${q}`)
@@ -80,4 +82,7 @@ export const api = {
     request(`/api/videos?disease_id=${encodeURIComponent(diseaseId)}&lang=${lang}`),
 
   health: () => request('/healthz'),
+
+  /** Deployed model's measured metrics, from its meta.json. 503 when none. */
+  model: () => request('/api/model'),
 }

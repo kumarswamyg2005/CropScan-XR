@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app import storage
-from app.content import disease_info, info_for
+from app.content import LANG_PATTERN, disease_info, info_for
 from app.cycle import get_cycle, load_cycles
 from app.db import get_db
 from app.models import Video
@@ -31,6 +31,7 @@ def _video_out(v: Video) -> VideoOut:
 def list_diseases(
     crop: str | None = Query(None, description="Filter by plant, e.g. Tomato"),
     has_cycle: bool | None = Query(None),
+    lang: str = Query("en", pattern=LANG_PATTERN),
     db: Session = Depends(get_db),
 ) -> list[DiseaseSummary]:
     cycles = load_cycles()
@@ -44,7 +45,7 @@ def list_diseases(
             continue
         summary = DiseaseSummary(
             id=disease_id,
-            name=info["name"],
+            name=info_for(disease_id, lang)["name"],
             plant=info["plant"],
             is_healthy=info["is_healthy"],
             severity=info.get("severity"),
@@ -60,7 +61,7 @@ def list_diseases(
 @router.get("/{disease_id:path}/cycle")
 def get_disease_cycle(
     disease_id: str,
-    lang: str = Query("en", pattern="^(en|te)$"),
+    lang: str = Query("en", pattern=LANG_PATTERN),
 ) -> dict:
     """The Section 8 object, resolved for a language.
 
@@ -77,7 +78,7 @@ def get_disease_cycle(
 @router.get("/{disease_id:path}", response_model=DiseaseDetail)
 def get_disease(
     disease_id: str,
-    lang: str = Query("en", pattern="^(en|te)$"),
+    lang: str = Query("en", pattern=LANG_PATTERN),
     db: Session = Depends(get_db),
 ) -> DiseaseDetail:
     info = info_for(disease_id, lang)

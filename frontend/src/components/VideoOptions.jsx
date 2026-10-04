@@ -1,24 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-const KIND_LABEL = {
-  field360: { en: '360° field', te: '360° క్షేత్రం' },
-  field: { en: 'In the field', te: 'పొలంలో' },
-  symptom_closeup: { en: 'Close-up', te: 'దగ్గరి దృశ్యం' },
-  treatment: { en: 'Treatment', te: 'చికిత్స' },
-}
-
-const STAGE_LABEL = {
-  survival: 'Overwintering',
-  inoculum_production: 'Inoculum production',
-  deposition: 'Deposition',
-  prepenetration: 'Germination',
-  penetration: 'Penetration',
-  infection: 'Infection',
-  colonization: 'Colonization',
-  reproduction: 'Sporulation',
-  dispersal: 'Dispersal',
-}
-
 function time(seconds) {
   if (!Number.isFinite(seconds)) return '0:00'
   const m = Math.floor(seconds / 60)
@@ -27,7 +8,7 @@ function time(seconds) {
 }
 
 const chip = {
-  fontFamily: "'DM Mono', monospace",
+  fontFamily: 'var(--font-mono)',
   fontSize: 11,
   letterSpacing: '0.04em',
   padding: '2px 8px',
@@ -50,7 +31,8 @@ export default function VideoOptions({
   onPick,
   element,
   playback,
-  lang,
+  t,
+  stageLabels = {},
   onJumpToStage,
 }) {
   const [playing, setPlaying] = useState(false)
@@ -80,6 +62,13 @@ export default function VideoOptions({
     }
   }, [element])
 
+  // Commit a seek. Pointer and touch commit on release so dragging does not
+  // thrash the decoder; the keyboard has no release, so it commits on keyup.
+  const seek = (value) => {
+    scrubbing.current = false
+    if (element) element.currentTime = Number(value)
+  }
+
   const toggle = () => {
     if (!element || !playback) return
     if (element.paused) playback.play(element).catch(() => {})
@@ -89,9 +78,7 @@ export default function VideoOptions({
   if (videos.length === 0) {
     return (
       <p style={{ fontSize: 13, color: 'var(--color-text-muted)', marginTop: 14 }}>
-        {lang === 'te'
-          ? 'ఈ వ్యాధికి ఫుటేజ్ ఇంకా ప్రచురించబడలేదు.'
-          : 'No footage has been published for this disease yet.'}
+        {t('video.none')}
       </p>
     )
   }
@@ -102,7 +89,7 @@ export default function VideoOptions({
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <button
           onClick={toggle}
-          aria-label={playing ? 'Pause' : 'Play'}
+          aria-label={playing ? t('video.pause') : t('video.play')}
           style={{
             width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
             border: '1px solid var(--color-border)', background: 'var(--color-surface)',
@@ -118,23 +105,16 @@ export default function VideoOptions({
           max={duration || 0}
           step={0.1}
           value={Math.min(current, duration || 0)}
-          onMouseDown={() => { scrubbing.current = true }}
-          onTouchStart={() => { scrubbing.current = true }}
+          onPointerDown={() => { scrubbing.current = true }}
           onChange={(e) => setCurrent(Number(e.target.value))}
-          onMouseUp={(e) => {
-            scrubbing.current = false
-            if (element) element.currentTime = Number(e.target.value)
-          }}
-          onTouchEnd={(e) => {
-            scrubbing.current = false
-            if (element) element.currentTime = Number(e.target.value)
-          }}
-          aria-label="Seek"
+          onPointerUp={(e) => seek(e.target.value)}
+          onKeyUp={(e) => seek(e.target.value)}
+          aria-label={t('video.seek')}
           style={{ flex: 1, accentColor: 'var(--color-accent)' }}
         />
 
         <span style={{
-          fontFamily: "'DM Mono', monospace", fontSize: 12,
+          fontFamily: 'var(--font-mono)', fontSize: 12,
           color: 'var(--color-text-muted)', whiteSpace: 'nowrap',
         }}>
           {time(current)} / {time(duration)}
@@ -151,22 +131,22 @@ export default function VideoOptions({
         }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
             <span style={{ ...chip, color: 'var(--color-accent)', borderColor: 'var(--color-accent-subtle)' }}>
-              {(KIND_LABEL[video.kind] ?? { en: video.kind, te: video.kind })[lang]}
+              {t(`video.kind.${video.kind}`)}
             </span>
-            <span style={chip}>{video.projection === 'flat' ? '2D panel' : '360°'}</span>
+            <span style={chip}>{video.projection === 'flat' ? t('video.panel2d') : '360°'}</span>
             {video.stage_id && (
               <button
                 onClick={() => onJumpToStage?.(video.stage_id)}
                 style={{ ...chip, cursor: 'pointer', background: 'transparent' }}
-                title="Show this stage in the cycle"
+                title={t('video.showStage')}
               >
-                stage · {STAGE_LABEL[video.stage_id] ?? video.stage_id}
+                {t('video.stage')} · {stageLabels[video.stage_id] ?? video.stage_id}
               </button>
             )}
           </div>
 
           <h3 style={{
-            fontFamily: '"Playfair Display", serif', fontSize: 19,
+            fontFamily: 'var(--font-display)', fontSize: 19,
             margin: '0 0 6px', lineHeight: 1.3,
           }}>
             {video.title}
@@ -196,7 +176,7 @@ export default function VideoOptions({
                     rel="noreferrer"
                     style={{ color: 'var(--color-accent)' }}
                   >
-                    source
+                    {t('video.source')}
                   </a>
                 </>
               )}
@@ -209,7 +189,7 @@ export default function VideoOptions({
       {videos.length > 1 && (
         <div style={{ marginTop: 18 }}>
           <div className="label-caps" style={{ marginBottom: 10 }}>
-            {lang === 'te' ? 'ఫుటేజ్' : 'Footage'} ({videos.length})
+            {t('field.clips')} ({videos.length})
           </div>
           <div style={{ display: 'grid', gap: 8, gridTemplateColumns: 'repeat(auto-fill,minmax(210px,1fr))' }}>
             {videos.map((v, i) => (
@@ -221,7 +201,7 @@ export default function VideoOptions({
                   textAlign: 'left', cursor: 'pointer', padding: 12, borderRadius: 10,
                   background: i === index ? 'var(--color-accent-subtle)' : 'var(--color-surface)',
                   border: `1px solid ${i === index ? 'var(--color-accent)' : 'var(--color-border)'}`,
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: 'var(--font-sans)',
                   color: 'var(--color-text)',
                 }}
               >
@@ -229,10 +209,10 @@ export default function VideoOptions({
                   {v.title}
                 </div>
                 <div style={{
-                  fontFamily: "'DM Mono', monospace", fontSize: 11,
+                  fontFamily: 'var(--font-mono)', fontSize: 11,
                   color: 'var(--color-text-muted)',
                 }}>
-                  {(KIND_LABEL[v.kind] ?? { en: v.kind })[lang] ?? v.kind}
+                  {t(`video.kind.${v.kind}`)}
                   {v.duration_s ? ` · ${time(v.duration_s)}` : ''}
                   {v.projection !== 'flat' ? ' · 360°' : ''}
                 </div>

@@ -1,4 +1,4 @@
-"""Hand-written content: disease info and Telugu translations.
+"""Hand-written content: disease info and its translations.
 
 Loaded once from data/, which is shared with ml/ and the web app. These are the
 two files the deletion commit deliberately kept -- they are hand-written, and
@@ -23,17 +23,23 @@ def disease_info() -> dict[str, dict]:
     return json.loads((_data_dir() / "disease_info.json").read_text())
 
 
-@lru_cache(maxsize=1)
-def translations_te() -> dict[str, dict]:
-    return json.loads((_data_dir() / "translations_te.json").read_text())
+# English plus the four Indian languages the web app speaks.
+LANGS = ("en", "te", "hi", "ta", "kn")
+LANG_PATTERN = f"^({'|'.join(LANGS)})$"
+
+
+@lru_cache(maxsize=len(LANGS))
+def translations(lang: str) -> dict[str, dict]:
+    """data/translations_<lang>.json: name, symptoms and treatment text per class."""
+    return json.loads((_data_dir() / f"translations_{lang}.json").read_text())
 
 
 def info_for(disease_id: str, lang: str = "en") -> dict | None:
     base = disease_info().get(disease_id)
     if base is None:
         return None
-    if lang == "te":
-        # Telugu overlays the English base rather than replacing it, so a
-        # missing translation degrades to English instead of to a blank card.
-        return {**base, **translations_te().get(disease_id, {})}
-    return base
+    if lang == "en":
+        return base
+    # A translation overlays the English base rather than replacing it, so a
+    # missing string degrades to English instead of to a blank card.
+    return {**base, **translations(lang).get(disease_id, {})}

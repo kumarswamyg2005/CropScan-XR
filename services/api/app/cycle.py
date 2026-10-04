@@ -166,12 +166,19 @@ class DiseaseCycle(BaseModel):
         return next((s for s in self.stages if s.id == stage_id), None)
 
     def localized(self, lang: str) -> dict:
-        """Resolve for a language. Telugu is a real feature for this audience,
-        so 'te' swaps the stage labels rather than appending them."""
+        """Resolve for a language: the stage labels are swapped, not appended.
+
+        Telugu labels live on each stage; the other languages are one label per
+        canonical stage in data/stage_labels.json. English is the fallback.
+        """
         data = self.model_dump()
         if lang == "te":
             for stage in data["stages"]:
                 stage["label"] = stage["label_te"]
+        elif lang != "en":
+            labels = stage_labels().get(lang, {})
+            for stage in data["stages"]:
+                stage["label"] = labels.get(stage["id"], stage["label"])
         return data
 
 
@@ -186,6 +193,12 @@ def _data_dir() -> Path:
     from app.config import get_settings
 
     return Path(get_settings().data_dir)
+
+
+@lru_cache(maxsize=1)
+def stage_labels() -> dict[str, dict[str, str]]:
+    """{lang: {stage_id: label}} for the languages without per-stage labels."""
+    return json.loads((_data_dir() / "stage_labels.json").read_text())
 
 
 @lru_cache(maxsize=1)

@@ -1,5 +1,8 @@
 import { Component } from 'react'
 
+import { LanguageContext } from '../context/LanguageContext'
+import { translate } from '../i18n'
+
 /**
  * Stops one broken component blanking the whole document.
  *
@@ -14,6 +17,7 @@ import { Component } from 'react'
  * blanks the page, which is why it is worth having.
  */
 export default class ErrorBoundary extends Component {
+  static contextType = LanguageContext
   state = { error: null }
 
   static getDerivedStateFromError(error) {
@@ -28,6 +32,8 @@ export default class ErrorBoundary extends Component {
   render() {
     const { error } = this.state
     if (!error) return this.props.children
+    // Read straight from the context value: a class cannot call useLang().
+    const t = (key) => translate(this.context?.lang ?? 'en', key)
 
     return (
       <div style={{
@@ -35,17 +41,16 @@ export default class ErrorBoundary extends Component {
         margin: '0 auto',
         padding: 'var(--space-2xl) var(--space-lg)',
       }}>
-        <div className="label-caps" style={{ marginBottom: 8 }}>Something broke</div>
+        <div className="label-caps" style={{ marginBottom: 8 }}>{t('error.label')}</div>
         <h1 style={{
-          fontFamily: '"Playfair Display", serif',
+          fontFamily: 'var(--font-display)',
           fontSize: 32,
           margin: '0 0 12px',
         }}>
-          {this.props.title ?? 'This part of the page failed to load'}
+          {this.props.title ?? t('error.title')}
         </h1>
         <p style={{ color: 'var(--color-text-muted)', marginBottom: 20 }}>
-          The rest of the site still works. Reloading usually clears it — a stale
-          hot-reload during development is the most common cause.
+          {t('error.body')}
         </p>
 
         <pre style={{
@@ -63,10 +68,10 @@ export default class ErrorBoundary extends Component {
 
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           <button className="btn-primary" onClick={() => window.location.reload()}>
-            Reload the page
+            {t('error.reload')}
           </button>
           <button className="btn-secondary" onClick={() => this.setState({ error: null })}>
-            Try again
+            {t('error.retry')}
           </button>
         </div>
       </div>

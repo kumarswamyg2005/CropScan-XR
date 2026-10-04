@@ -10,6 +10,7 @@ from pydantic import BaseModel
 class TopK(BaseModel):
     disease_id: str
     confidence: float
+    name: str | None = None     # in the requested language
 
 
 class ScanOut(BaseModel):
