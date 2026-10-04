@@ -3,6 +3,7 @@ from __future__ import annotations
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Paths are derived from where this file actually sits, not from an assumed
@@ -39,6 +40,16 @@ class Settings(BaseSettings):
     ledger_anchor_enabled: bool = False        # Phase 10 stretch, default off
 
     cors_origins: str = "*"
+
+    @field_validator("database_url")
+    @classmethod
+    def _psycopg_driver(cls, v: str) -> str:
+        """Hosts like Render hand out postgres:// or postgresql:// URLs, which make
+        SQLAlchemy reach for psycopg2. Only psycopg 3 is installed."""
+        for prefix in ("postgres://", "postgresql://"):
+            if v.startswith(prefix):
+                return "postgresql+psycopg://" + v[len(prefix):]
+        return v
 
     @property
     def is_payment_configured(self) -> bool:

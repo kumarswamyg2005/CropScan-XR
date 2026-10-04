@@ -4,9 +4,9 @@ data/raw/
 *.pt
 *.pth
 *.onnx
-# Built by ml/export.py, never committed: model.onnx, labels.json, meta.json
-services/api/model/*
-!services/api/model/.gitkeep
+# The deployed model (built by ml/export.py) is committed so a host can build
+# the API image straight from git: model.onnx, labels.json, meta.json.
+!services/api/model/model.onnx
 # The paper's EfficientNet-B0 baseline; eval/ benchmarks load it from here
 !backend/model.pt
 

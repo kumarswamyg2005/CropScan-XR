@@ -1,0 +1,10 @@
+# Allowlist: only what services/api/Dockerfile copies. Keeps node_modules,
+# virtualenvs and the paper out of the build context.
+*
+!services/api/requirements.txt
+!services/api/app
+!services/api/alembic
+!services/api/alembic.ini
+!services/api/model
+!data
+**/__pycache__

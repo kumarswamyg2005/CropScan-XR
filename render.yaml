@@ -1,0 +1,33 @@
+# Render Blueprint: New -> Blueprint -> pick this repo. Creates the API and its
+# database; you paste the four storage values when Render asks for them.
+databases:
+  - name: cropscan-db
+    plan: free
+    databaseName: cropscan
+    user: cropscan
+
+services:
+  - type: web
+    name: cropscan-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./services/api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cropscan-db
+          property: connectionString
+      - key: S3_ENDPOINT_URL
+        sync: false
+      - key: S3_ACCESS_KEY_ID
+        sync: false
+      - key: S3_SECRET_ACCESS_KEY
+        sync: false
+      - key: S3_BUCKET
+        value: cropscan-media
+      - key: S3_REGION
+        value: auto
+      - key: CORS_ORIGINS
+        value: "*"
