@@ -54,3 +54,10 @@ Thumbs.db
 # Test and build caches
 .pytest_cache/
 *.tsbuildinfo
+
+# Lab->field experiments: weights, caches and per-image outputs stay local
+experiments/cache/
+experiments/cropscan_runs/
+experiments/cropscan_runs.zip
+experiments/results/*.npz
+!experiments/models/mixed-field.pt

@@ -1,0 +1,241 @@
+model,dataset,class,support,f1
+EfficientNet-B0 (CropScan),plantwild,Apple___Apple_scab,58,0.1231
+EfficientNet-B0 (CropScan),plantwild,Apple___Black_rot,34,0.1053
+EfficientNet-B0 (CropScan),plantwild,Apple___Cedar_apple_rust,61,0.1194
+EfficientNet-B0 (CropScan),plantwild,Apple___healthy,88,0.022
+EfficientNet-B0 (CropScan),plantwild,Blueberry___healthy,56,0.2857
+EfficientNet-B0 (CropScan),plantwild,Cherry_(including_sour)___Powdery_mildew,22,0.0
+EfficientNet-B0 (CropScan),plantwild,Cherry_(including_sour)___healthy,57,0.0
+EfficientNet-B0 (CropScan),plantwild,Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,43,0.3731
+EfficientNet-B0 (CropScan),plantwild,Corn_(maize)___Common_rust_,47,0.2414
+EfficientNet-B0 (CropScan),plantwild,Corn_(maize)___Northern_Leaf_Blight,44,0.2532
+EfficientNet-B0 (CropScan),plantwild,Corn_(maize)___healthy,31,0.1475
+EfficientNet-B0 (CropScan),plantwild,Grape___Black_rot,45,0.046
+EfficientNet-B0 (CropScan),plantwild,Grape___healthy,40,0.1304
+EfficientNet-B0 (CropScan),plantwild,Orange___Haunglongbing_(Citrus_greening),47,0.0385
+EfficientNet-B0 (CropScan),plantwild,Peach___healthy,31,0.0
+EfficientNet-B0 (CropScan),plantwild,"Pepper,_bell___Bacterial_spot",23,0.2222
+EfficientNet-B0 (CropScan),plantwild,"Pepper,_bell___healthy",48,0.0893
+EfficientNet-B0 (CropScan),plantwild,Potato___Early_blight,45,0.1695
+EfficientNet-B0 (CropScan),plantwild,Potato___Late_blight,48,0.2951
+EfficientNet-B0 (CropScan),plantwild,Potato___healthy,49,0.0
+EfficientNet-B0 (CropScan),plantwild,Raspberry___healthy,36,0.1905
+EfficientNet-B0 (CropScan),plantwild,Soybean___healthy,48,0.0
+EfficientNet-B0 (CropScan),plantwild,Squash___Powdery_mildew,56,0.4122
+EfficientNet-B0 (CropScan),plantwild,Strawberry___Leaf_scorch,15,0.0471
+EfficientNet-B0 (CropScan),plantwild,Strawberry___healthy,39,0.1702
+EfficientNet-B0 (CropScan),plantwild,Tomato___Bacterial_spot,56,0.0333
+EfficientNet-B0 (CropScan),plantwild,Tomato___Early_blight,69,0.0652
+EfficientNet-B0 (CropScan),plantwild,Tomato___Late_blight,59,0.1879
+EfficientNet-B0 (CropScan),plantwild,Tomato___Leaf_Mold,47,0.2712
+EfficientNet-B0 (CropScan),plantwild,Tomato___Septoria_leaf_spot,44,0.1143
+EfficientNet-B0 (CropScan),plantwild,Tomato___Tomato_Yellow_Leaf_Curl_Virus,34,0.0
+EfficientNet-B0 (CropScan),plantwild,Tomato___Tomato_mosaic_virus,37,0.0526
+EfficientNet-B0 (CropScan),plantwild,Tomato___healthy,45,0.0
+EfficientNet-B0 (CropScan),plantdoc,Apple___Apple_scab,10,0.1538
+EfficientNet-B0 (CropScan),plantdoc,Apple___Cedar_apple_rust,10,0.1818
+EfficientNet-B0 (CropScan),plantdoc,Apple___healthy,9,0.3333
+EfficientNet-B0 (CropScan),plantdoc,Blueberry___healthy,11,0.25
+EfficientNet-B0 (CropScan),plantdoc,Cherry_(including_sour)___healthy,10,0.0
+EfficientNet-B0 (CropScan),plantdoc,Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,4,0.2353
+EfficientNet-B0 (CropScan),plantdoc,Corn_(maize)___Common_rust_,10,0.3077
+EfficientNet-B0 (CropScan),plantdoc,Corn_(maize)___Northern_Leaf_Blight,12,0.3636
+EfficientNet-B0 (CropScan),plantdoc,Grape___Black_rot,8,0.1667
+EfficientNet-B0 (CropScan),plantdoc,Grape___healthy,12,0.2667
+EfficientNet-B0 (CropScan),plantdoc,Peach___healthy,9,0.0
+EfficientNet-B0 (CropScan),plantdoc,"Pepper,_bell___Bacterial_spot",9,0.4286
+EfficientNet-B0 (CropScan),plantdoc,"Pepper,_bell___healthy",8,0.4
+EfficientNet-B0 (CropScan),plantdoc,Potato___Early_blight,8,0.3077
+EfficientNet-B0 (CropScan),plantdoc,Potato___Late_blight,8,0.0
+EfficientNet-B0 (CropScan),plantdoc,Raspberry___healthy,7,0.0
+EfficientNet-B0 (CropScan),plantdoc,Soybean___healthy,8,0.0
+EfficientNet-B0 (CropScan),plantdoc,Squash___Powdery_mildew,6,0.4
+EfficientNet-B0 (CropScan),plantdoc,Strawberry___healthy,8,0.0
+EfficientNet-B0 (CropScan),plantdoc,Tomato___Bacterial_spot,9,0.0
+EfficientNet-B0 (CropScan),plantdoc,Tomato___Early_blight,9,0.0
+EfficientNet-B0 (CropScan),plantdoc,Tomato___Late_blight,10,0.3077
+EfficientNet-B0 (CropScan),plantdoc,Tomato___Leaf_Mold,6,0.0
+EfficientNet-B0 (CropScan),plantdoc,Tomato___Septoria_leaf_spot,11,0.1053
+EfficientNet-B0 (CropScan),plantdoc,Tomato___Tomato_Yellow_Leaf_Curl_Virus,6,0.0
+EfficientNet-B0 (CropScan),plantdoc,Tomato___Tomato_mosaic_virus,10,0.0
+EfficientNet-B0 (CropScan),plantdoc,Tomato___healthy,8,0.2
+MobileNetV2,plantwild,Apple___Apple_scab,58,0.0894
+MobileNetV2,plantwild,Apple___Black_rot,34,0.0563
+MobileNetV2,plantwild,Apple___Cedar_apple_rust,61,0.0548
+MobileNetV2,plantwild,Apple___healthy,88,0.0638
+MobileNetV2,plantwild,Blueberry___healthy,56,0.339
+MobileNetV2,plantwild,Cherry_(including_sour)___Powdery_mildew,22,0.0
+MobileNetV2,plantwild,Cherry_(including_sour)___healthy,57,0.0533
+MobileNetV2,plantwild,Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,43,0.3291
+MobileNetV2,plantwild,Corn_(maize)___Common_rust_,47,0.0635
+MobileNetV2,plantwild,Corn_(maize)___Northern_Leaf_Blight,44,0.2268
+MobileNetV2,plantwild,Corn_(maize)___healthy,31,0.2759
+MobileNetV2,plantwild,Grape___Black_rot,45,0.1587
+MobileNetV2,plantwild,Grape___healthy,40,0.0889
+MobileNetV2,plantwild,Orange___Haunglongbing_(Citrus_greening),47,0.1154
+MobileNetV2,plantwild,Peach___healthy,31,0.0
+MobileNetV2,plantwild,"Pepper,_bell___Bacterial_spot",23,0.0645
+MobileNetV2,plantwild,"Pepper,_bell___healthy",48,0.0
+MobileNetV2,plantwild,Potato___Early_blight,45,0.1481
+MobileNetV2,plantwild,Potato___Late_blight,48,0.2812
+MobileNetV2,plantwild,Potato___healthy,49,0.0
+MobileNetV2,plantwild,Raspberry___healthy,36,0.4583
+MobileNetV2,plantwild,Soybean___healthy,48,0.0
+MobileNetV2,plantwild,Squash___Powdery_mildew,56,0.127
+MobileNetV2,plantwild,Strawberry___Leaf_scorch,15,0.0913
+MobileNetV2,plantwild,Strawberry___healthy,39,0.1277
+MobileNetV2,plantwild,Tomato___Bacterial_spot,56,0.0345
+MobileNetV2,plantwild,Tomato___Early_blight,69,0.1938
+MobileNetV2,plantwild,Tomato___Late_blight,59,0.1296
+MobileNetV2,plantwild,Tomato___Leaf_Mold,47,0.0
+MobileNetV2,plantwild,Tomato___Septoria_leaf_spot,44,0.1127
+MobileNetV2,plantwild,Tomato___Tomato_Yellow_Leaf_Curl_Virus,34,0.2133
+MobileNetV2,plantwild,Tomato___Tomato_mosaic_virus,37,0.0345
+MobileNetV2,plantwild,Tomato___healthy,45,0.0
+MobileNetV2,plantdoc,Apple___Apple_scab,10,0.2353
+MobileNetV2,plantdoc,Apple___Cedar_apple_rust,10,0.2667
+MobileNetV2,plantdoc,Apple___healthy,9,0.0
+MobileNetV2,plantdoc,Blueberry___healthy,11,0.2564
+MobileNetV2,plantdoc,Cherry_(including_sour)___healthy,10,0.0
+MobileNetV2,plantdoc,Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,4,0.4
+MobileNetV2,plantdoc,Corn_(maize)___Common_rust_,10,0.1111
+MobileNetV2,plantdoc,Corn_(maize)___Northern_Leaf_Blight,12,0.32
+MobileNetV2,plantdoc,Grape___Black_rot,8,0.0
+MobileNetV2,plantdoc,Grape___healthy,12,0.1538
+MobileNetV2,plantdoc,Peach___healthy,9,0.0
+MobileNetV2,plantdoc,"Pepper,_bell___Bacterial_spot",9,0.0
+MobileNetV2,plantdoc,"Pepper,_bell___healthy",8,0.2667
+MobileNetV2,plantdoc,Potato___Early_blight,8,0.0
+MobileNetV2,plantdoc,Potato___Late_blight,8,0.0
+MobileNetV2,plantdoc,Raspberry___healthy,7,0.5
+MobileNetV2,plantdoc,Soybean___healthy,8,0.0
+MobileNetV2,plantdoc,Squash___Powdery_mildew,6,0.2857
+MobileNetV2,plantdoc,Strawberry___healthy,8,0.0
+MobileNetV2,plantdoc,Tomato___Bacterial_spot,9,0.0
+MobileNetV2,plantdoc,Tomato___Early_blight,9,0.3182
+MobileNetV2,plantdoc,Tomato___Late_blight,10,0.2564
+MobileNetV2,plantdoc,Tomato___Leaf_Mold,6,0.0
+MobileNetV2,plantdoc,Tomato___Septoria_leaf_spot,11,0.1111
+MobileNetV2,plantdoc,Tomato___Tomato_Yellow_Leaf_Curl_Virus,6,0.2
+MobileNetV2,plantdoc,Tomato___Tomato_mosaic_virus,10,0.0
+MobileNetV2,plantdoc,Tomato___healthy,8,0.0
+EfficientNet-B4,plantwild,Apple___Apple_scab,58,0.1205
+EfficientNet-B4,plantwild,Apple___Black_rot,34,0.0909
+EfficientNet-B4,plantwild,Apple___Cedar_apple_rust,61,0.0
+EfficientNet-B4,plantwild,Apple___healthy,88,0.2419
+EfficientNet-B4,plantwild,Blueberry___healthy,56,0.2329
+EfficientNet-B4,plantwild,Cherry_(including_sour)___Powdery_mildew,22,0.0714
+EfficientNet-B4,plantwild,Cherry_(including_sour)___healthy,57,0.0
+EfficientNet-B4,plantwild,Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,43,0.3492
+EfficientNet-B4,plantwild,Corn_(maize)___Common_rust_,47,0.3226
+EfficientNet-B4,plantwild,Corn_(maize)___Northern_Leaf_Blight,44,0.391
+EfficientNet-B4,plantwild,Corn_(maize)___healthy,31,0.4706
+EfficientNet-B4,plantwild,Grape___Black_rot,45,0.2
+EfficientNet-B4,plantwild,Grape___healthy,40,0.2609
+EfficientNet-B4,plantwild,Orange___Haunglongbing_(Citrus_greening),47,0.3099
+EfficientNet-B4,plantwild,Peach___healthy,31,0.0
+EfficientNet-B4,plantwild,"Pepper,_bell___Bacterial_spot",23,0.1765
+EfficientNet-B4,plantwild,"Pepper,_bell___healthy",48,0.242
+EfficientNet-B4,plantwild,Potato___Early_blight,45,0.3226
+EfficientNet-B4,plantwild,Potato___Late_blight,48,0.3051
+EfficientNet-B4,plantwild,Potato___healthy,49,0.0
+EfficientNet-B4,plantwild,Raspberry___healthy,36,0.5625
+EfficientNet-B4,plantwild,Soybean___healthy,48,0.0392
+EfficientNet-B4,plantwild,Squash___Powdery_mildew,56,0.1647
+EfficientNet-B4,plantwild,Strawberry___Leaf_scorch,15,0.3051
+EfficientNet-B4,plantwild,Strawberry___healthy,39,0.0488
+EfficientNet-B4,plantwild,Tomato___Bacterial_spot,56,0.0
+EfficientNet-B4,plantwild,Tomato___Early_blight,69,0.1584
+EfficientNet-B4,plantwild,Tomato___Late_blight,59,0.1233
+EfficientNet-B4,plantwild,Tomato___Leaf_Mold,47,0.1404
+EfficientNet-B4,plantwild,Tomato___Septoria_leaf_spot,44,0.1695
+EfficientNet-B4,plantwild,Tomato___Tomato_Yellow_Leaf_Curl_Virus,34,0.0825
+EfficientNet-B4,plantwild,Tomato___Tomato_mosaic_virus,37,0.0526
+EfficientNet-B4,plantwild,Tomato___healthy,45,0.0588
+EfficientNet-B4,plantdoc,Apple___Apple_scab,10,0.2222
+EfficientNet-B4,plantdoc,Apple___Cedar_apple_rust,10,0.0
+EfficientNet-B4,plantdoc,Apple___healthy,9,0.1905
+EfficientNet-B4,plantdoc,Blueberry___healthy,11,0.2857
+EfficientNet-B4,plantdoc,Cherry_(including_sour)___healthy,10,0.0
+EfficientNet-B4,plantdoc,Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,4,0.3636
+EfficientNet-B4,plantdoc,Corn_(maize)___Common_rust_,10,0.1538
+EfficientNet-B4,plantdoc,Corn_(maize)___Northern_Leaf_Blight,12,0.64
+EfficientNet-B4,plantdoc,Grape___Black_rot,8,0.3333
+EfficientNet-B4,plantdoc,Grape___healthy,12,0.4706
+EfficientNet-B4,plantdoc,Peach___healthy,9,0.3636
+EfficientNet-B4,plantdoc,"Pepper,_bell___Bacterial_spot",9,0.3571
+EfficientNet-B4,plantdoc,"Pepper,_bell___healthy",8,0.3784
+EfficientNet-B4,plantdoc,Potato___Early_blight,8,0.3077
+EfficientNet-B4,plantdoc,Potato___Late_blight,8,0.0
+EfficientNet-B4,plantdoc,Raspberry___healthy,7,0.7059
+EfficientNet-B4,plantdoc,Soybean___healthy,8,0.1818
+EfficientNet-B4,plantdoc,Squash___Powdery_mildew,6,0.0
+EfficientNet-B4,plantdoc,Strawberry___healthy,8,0.0
+EfficientNet-B4,plantdoc,Tomato___Bacterial_spot,9,0.0
+EfficientNet-B4,plantdoc,Tomato___Early_blight,9,0.2857
+EfficientNet-B4,plantdoc,Tomato___Late_blight,10,0.1905
+EfficientNet-B4,plantdoc,Tomato___Leaf_Mold,6,0.0
+EfficientNet-B4,plantdoc,Tomato___Septoria_leaf_spot,11,0.2353
+EfficientNet-B4,plantdoc,Tomato___Tomato_Yellow_Leaf_Curl_Virus,6,0.4444
+EfficientNet-B4,plantdoc,Tomato___Tomato_mosaic_virus,10,0.0
+EfficientNet-B4,plantdoc,Tomato___healthy,8,0.0
+Swin-Tiny,plantwild,Apple___Apple_scab,58,0.1739
+Swin-Tiny,plantwild,Apple___Black_rot,34,0.2326
+Swin-Tiny,plantwild,Apple___Cedar_apple_rust,61,0.1515
+Swin-Tiny,plantwild,Apple___healthy,88,0.1
+Swin-Tiny,plantwild,Blueberry___healthy,56,0.2703
+Swin-Tiny,plantwild,Cherry_(including_sour)___Powdery_mildew,22,0.0
+Swin-Tiny,plantwild,Cherry_(including_sour)___healthy,57,0.0548
+Swin-Tiny,plantwild,Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,43,0.5
+Swin-Tiny,plantwild,Corn_(maize)___Common_rust_,47,0.3889
+Swin-Tiny,plantwild,Corn_(maize)___Northern_Leaf_Blight,44,0.4356
+Swin-Tiny,plantwild,Corn_(maize)___healthy,31,0.5915
+Swin-Tiny,plantwild,Grape___Black_rot,45,0.1728
+Swin-Tiny,plantwild,Grape___healthy,40,0.3544
+Swin-Tiny,plantwild,Orange___Haunglongbing_(Citrus_greening),47,0.0656
+Swin-Tiny,plantwild,Peach___healthy,31,0.0625
+Swin-Tiny,plantwild,"Pepper,_bell___Bacterial_spot",23,0.2432
+Swin-Tiny,plantwild,"Pepper,_bell___healthy",48,0.2921
+Swin-Tiny,plantwild,Potato___Early_blight,45,0.3385
+Swin-Tiny,plantwild,Potato___Late_blight,48,0.4412
+Swin-Tiny,plantwild,Potato___healthy,49,0.0
+Swin-Tiny,plantwild,Raspberry___healthy,36,0.4348
+Swin-Tiny,plantwild,Soybean___healthy,48,0.0556
+Swin-Tiny,plantwild,Squash___Powdery_mildew,56,0.4818
+Swin-Tiny,plantwild,Strawberry___Leaf_scorch,15,0.0792
+Swin-Tiny,plantwild,Strawberry___healthy,39,0.1818
+Swin-Tiny,plantwild,Tomato___Bacterial_spot,56,0.0286
+Swin-Tiny,plantwild,Tomato___Early_blight,69,0.229
+Swin-Tiny,plantwild,Tomato___Late_blight,59,0.1991
+Swin-Tiny,plantwild,Tomato___Leaf_Mold,47,0.1887
+Swin-Tiny,plantwild,Tomato___Septoria_leaf_spot,44,0.2061
+Swin-Tiny,plantwild,Tomato___Tomato_Yellow_Leaf_Curl_Virus,34,0.1
+Swin-Tiny,plantwild,Tomato___Tomato_mosaic_virus,37,0.0513
+Swin-Tiny,plantwild,Tomato___healthy,45,0.0
+Swin-Tiny,plantdoc,Apple___Apple_scab,10,0.2667
+Swin-Tiny,plantdoc,Apple___Cedar_apple_rust,10,0.1818
+Swin-Tiny,plantdoc,Apple___healthy,9,0.4
+Swin-Tiny,plantdoc,Blueberry___healthy,11,0.4211
+Swin-Tiny,plantdoc,Cherry_(including_sour)___healthy,10,0.1333
+Swin-Tiny,plantdoc,Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,4,0.3077
+Swin-Tiny,plantdoc,Corn_(maize)___Common_rust_,10,0.3077
+Swin-Tiny,plantdoc,Corn_(maize)___Northern_Leaf_Blight,12,0.3846
+Swin-Tiny,plantdoc,Grape___Black_rot,8,0.0
+Swin-Tiny,plantdoc,Grape___healthy,12,0.6207
+Swin-Tiny,plantdoc,Peach___healthy,9,0.2
+Swin-Tiny,plantdoc,"Pepper,_bell___Bacterial_spot",9,0.5556
+Swin-Tiny,plantdoc,"Pepper,_bell___healthy",8,0.7778
+Swin-Tiny,plantdoc,Potato___Early_blight,8,0.2222
+Swin-Tiny,plantdoc,Potato___Late_blight,8,0.1818
+Swin-Tiny,plantdoc,Raspberry___healthy,7,0.75
+Swin-Tiny,plantdoc,Soybean___healthy,8,0.2609
+Swin-Tiny,plantdoc,Squash___Powdery_mildew,6,0.5714
+Swin-Tiny,plantdoc,Strawberry___healthy,8,0.0
+Swin-Tiny,plantdoc,Tomato___Bacterial_spot,9,0.0
+Swin-Tiny,plantdoc,Tomato___Early_blight,9,0.3158
+Swin-Tiny,plantdoc,Tomato___Late_blight,10,0.4706
+Swin-Tiny,plantdoc,Tomato___Leaf_Mold,6,0.0
+Swin-Tiny,plantdoc,Tomato___Septoria_leaf_spot,11,0.4615
+Swin-Tiny,plantdoc,Tomato___Tomato_Yellow_Leaf_Curl_Virus,6,0.0
+Swin-Tiny,plantdoc,Tomato___Tomato_mosaic_virus,10,0.0
+Swin-Tiny,plantdoc,Tomato___healthy,8,0.0

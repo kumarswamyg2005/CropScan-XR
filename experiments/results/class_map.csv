@@ -1,0 +1,39 @@
+plantvillage,plantdoc,plantwild,status,pv_images,plantdoc_test,plantdoc_train,plantwild_test,plantwild_train,note
+Apple___Apple_scab,Apple Scab Leaf,apple scab,exact,0,10,83,58,205,
+Apple___Black_rot,,apple black rot,exact,0,0,0,34,122,PlantDoc has no apple black rot
+Apple___Cedar_apple_rust,Apple rust leaf,apple rust,probable,0,10,79,61,217,"field labels say 'rust'; cedar-apple is the common one, others possible"
+Apple___healthy,Apple leaf,apple leaf,exact,1665,9,82,88,312,
+Blueberry___healthy,Blueberry leaf,blueberry leaf,exact,1502,11,106,56,197,
+Cherry_(including_sour)___Powdery_mildew,,cherry powdery mildew,exact,1052,0,0,22,81,
+Cherry_(including_sour)___healthy,Cherry leaf,cherry leaf,exact,854,10,47,57,201,
+Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,Corn Gray leaf spot,corn gray leaf spot,exact,514,4,64,43,152,
+Corn_(maize)___Common_rust_,Corn rust leaf,corn rust,probable,1192,10,106,47,167,field 'rust' may include southern rust (P. polysora)
+Corn_(maize)___Northern_Leaf_Blight,Corn leaf blight,corn northern leaf blight,exact,985,12,180,44,158,PlantDoc says only 'leaf blight'; its images are northern leaf blight
+Corn_(maize)___healthy,,corn leaf,exact,1162,0,0,31,110,PlantDoc has no healthy corn
+Grape___Black_rot,grape leaf black rot,grape black rot,exact,1180,8,56,45,161,
+Grape___Esca_(Black_Measles),,,none,1383,0,0,0,0,
+Grape___Leaf_blight_(Isariopsis_Leaf_Spot),,,none,1076,0,0,0,0,PlantWild 'grape leaf spot' is unspecific; left unmapped
+Grape___healthy,grape leaf,grape leaf,exact,423,12,57,40,141,
+Orange___Haunglongbing_(Citrus_greening),,citrus greening disease,exact,5507,0,0,47,167,"PlantWild is all citrus, not only orange"
+Peach___Bacterial_spot,,,none,2297,0,0,0,0,
+Peach___healthy,Peach leaf,peach leaf,exact,360,9,103,31,111,
+"Pepper,_bell___Bacterial_spot",Bell_pepper leaf spot,bell pepper leaf spot,probable,997,9,62,23,83,field 'leaf spot' is not necessarily bacterial
+"Pepper,_bell___healthy",Bell_pepper leaf,bell pepper leaf,exact,1478,8,53,48,168,
+Potato___Early_blight,Potato leaf early blight,potato early blight,exact,1000,8,109,45,160,
+Potato___Late_blight,Potato leaf late blight,potato late blight,exact,1000,8,97,48,168,
+Potato___healthy,,potato leaf,exact,152,0,0,49,175,PlantDoc has no healthy potato
+Raspberry___healthy,Raspberry leaf,raspberry leaf,exact,371,7,112,36,126,
+Soybean___healthy,Soyabean leaf,soybean leaf,exact,5090,8,57,48,170,
+Squash___Powdery_mildew,Squash Powdery mildew leaf,squash powdery mildew,exact,1835,6,124,56,197,
+Strawberry___Leaf_scorch,,strawberry leaf scorch,exact,1109,0,0,15,54,
+Strawberry___healthy,Strawberry leaf,strawberry leaf,exact,456,8,88,39,140,
+Tomato___Bacterial_spot,Tomato leaf bacterial spot,tomato bacterial leaf spot,exact,2137,9,101,56,196,
+Tomato___Early_blight,Tomato Early blight leaf,tomato early blight,exact,1000,9,79,69,243,
+Tomato___Late_blight,Tomato leaf late blight,tomato late blight,exact,1909,10,101,59,207,
+Tomato___Leaf_Mold,Tomato mold leaf,tomato leaf mold,exact,952,6,85,47,168,
+Tomato___Septoria_leaf_spot,Tomato Septoria leaf spot,tomato septoria leaf spot,exact,1771,11,140,44,154,
+Tomato___Spider_mites Two-spotted_spider_mite,Tomato two spotted spider mites leaf,,exact,1676,0,2,0,0,PlantDoc train only; 0 PlantDoc test images
+Tomato___Target_Spot,,,none,1404,0,0,0,0,
+Tomato___Tomato_Yellow_Leaf_Curl_Virus,Tomato leaf yellow virus,tomato yellow leaf curl virus,exact,5357,6,70,34,120,
+Tomato___Tomato_mosaic_virus,Tomato leaf mosaic virus,tomato mosaic virus,probable,373,10,44,37,133,"field 'mosaic virus' on tomato may include TMV/CMV, not only ToMV"
+Tomato___healthy,Tomato leaf,tomato leaf,exact,1625,8,55,45,159,
