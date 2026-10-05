@@ -119,7 +119,7 @@ export default function About() {
   }, [])
 
   const techStack = [
-    ['about.tech.model', 'EfficientNet-B0 (ImageNet → PlantVillage)'],
+    ['about.tech.model', 'EfficientNet-B0 (ImageNet → PlantVillage + PlantDoc)'],
     ['about.tech.dataset', t('about.tech.datasetValue')],
     ['about.tech.training', t('about.tech.trainingValue')],
     ['about.tech.abstain', t('about.tech.abstainValue')],
