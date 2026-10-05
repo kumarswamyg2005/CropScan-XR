@@ -22,26 +22,27 @@ cycle*. The ledger says *this happened, at this time, on this image*.
 
 ## Accuracy: the honest number
 
-> **Deployed model: the EfficientNet-B0 baseline** (`backend/model.pt`, trained
-> by `ml/train.ipynb`), until the ConvNeXt pipeline gets its GPU run. The table
-> is measured by `ml/eval_baseline.py` into `docs/eval_metrics.json`, never
-> typed by hand, and `/about` renders it live from the deployed `meta.json`.
+> **Deployed model: EfficientNet-B0 trained on PlantVillage + PlantDoc**
+> (`experiments/cropscan_runs/deploy-field`, recipe `scripts/train_mixed.py --data deploy`).
+> PlantWild is CC-BY-NC-ND, so it is not in the deployed model's training data or epoch
+> selection. The table is measured by `scripts/eval_deploy.py` into
+> `experiments/results/deploy-field_metrics.json`, never typed by hand, and `/about`
+> renders it live from the deployed `meta.json`. Test splits are never trained on.
 
-| | |
-| --- | ---: |
-| **Field accuracy** (PlantDoc, 2,569 outdoor photos) | **14.67%** |
-| Lab accuracy (PlantVillage, 4,333 held-out) | 97.07% |
-| **Domain gap** | **82.4 pp** |
-| Field macro-F1 | 0.147 |
-| Calibration error (ECE, lab) | 0.005 |
-| Background-bias probe | not measured |
+| | Deployed | Lab-only baseline (`backend/model.pt`) |
+| --- | ---: | ---: |
+| **Field accuracy** (PlantDoc test, 236 photos) | **65.3%** | 14.8% |
+| Field accuracy (PlantWild test, 1,502 photos; reference only) | 42.9% | 12.4% |
+| Lab accuracy (PlantVillage, 4,333 held-out) | 98.4% | 97.1% |
+| **Domain gap** (lab − PlantDoc) | **33.1 pp** | 82.4 pp |
+| Field macro-F1 (PlantDoc) | 0.631 | 0.163 |
+| Calibration error (ECE, lab) | 0.006 | 0.005 |
 
-The abstain thresholds were tuned against Imagenette (no plants). This model is
-confident even on non-plant photos, so reaching 90% junk rejection costs a lot:
-the tuned gate refuses 50% of studio leaf photos and 97.5% of field photos. That
-is the documented policy in `ml/ood.py` (rejection wins), not a bug. Rebuild with
-`python ml/eval_baseline.py`, then
-`python ml/export.py --checkpoint backend/model.pt --labels backend/class_names.json --resize-ratio 1.0`.
+The abstain thresholds were tuned to refuse 90.7% of Imagenette (no plants) while
+keeping 94% of PlantVillage + PlantDoc validation photos. On real field photos the
+gate answers 54% of them, and 82.8% of those answers are right; the rest get
+"retake the photo". Rebuild with `python scripts/eval_deploy.py`, then
+`python ml/export.py --checkpoint experiments/cropscan_runs/deploy-field/best.pt --metrics experiments/results/deploy-field_metrics.json --resize-ratio 1.0`.
 
 **The field number is the headline. The lab number is context.**
 

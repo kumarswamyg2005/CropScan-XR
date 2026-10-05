@@ -10,12 +10,14 @@ layers, 15 epochs, AdamW 1e-4 -> 1e-6, cosine. Only data and augmentation vary.
   --data lab    PlantVillage train (capped, see manifest)
   --data field  PlantWild train + PlantDoc train (mapped classes only)
   --data mixed  both
+  --data deploy PlantVillage + PlantDoc only: licence-safe for the live site
+                (no PlantWild in training; PlantWild test is still used to measure it)
   --aug base    the original notebook's augmentation
   --aug field   RandomResizedCrop, stronger colour jitter, blur, rotation, random erasing
 
 Class imbalance: WeightedRandomSampler with 1/class-count weights.
 Model selection: best epoch by val score = mean(PlantVillage val acc, field val acc),
-the same rule for every run; test sets are touched once, at the end.
+the same rule for every run (deploy: field val = PlantDoc only); test sets are touched once, at the end.
 Eval preprocessing: Resize(224, 224) + ImageNet norm, identical to the deployed API.
 """
 
@@ -144,7 +146,7 @@ def run_epoch(model, loader, opt, crit, device, scaler):
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--data", choices=["lab", "field", "mixed"], required=True)
+    ap.add_argument("--data", choices=["lab", "field", "mixed", "deploy"], required=True)
     ap.add_argument("--aug", choices=["base", "field"], required=True)
     ap.add_argument("--manifest", type=Path, required=True)
     ap.add_argument("--data-root", type=Path, required=True)
@@ -168,7 +170,8 @@ def main() -> None:
     pv_cache: dict = {}
     load = lambda d, s: load_split(manifest, args.data_root, d, s, args.limit, pv_cache)  # noqa: E731
     sources = {"lab": ["plantvillage"], "field": ["plantwild", "plantdoc"],
-               "mixed": ["plantvillage", "plantwild", "plantdoc"]}[args.data]
+               "mixed": ["plantvillage", "plantwild", "plantdoc"],
+               "deploy": ["plantvillage", "plantdoc"]}[args.data]
     t0 = time.time()
     train = [it for d in sources for it in load(d, "train")[0]]
     val = {d: load(d, "val")[0] for d in ("plantvillage", "plantwild", "plantdoc")}
@@ -189,6 +192,8 @@ def main() -> None:
                for d, v in val.items()}
         field = (acc["plantwild"] * len(val["plantwild"]) + acc["plantdoc"] * len(val["plantdoc"])) / \
                 (len(val["plantwild"]) + len(val["plantdoc"]))
+        if args.data == "deploy":  # PlantWild must not shape the deployed model, not even epoch choice
+            field = acc["plantdoc"]
         return 0.5 * acc["plantvillage"] + 0.5 * field, acc
 
     model = build_model(n_classes).to(device)

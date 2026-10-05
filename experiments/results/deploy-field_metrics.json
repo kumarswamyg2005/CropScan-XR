@@ -1,0 +1,36 @@
+{
+  "model": "efficientnet_b0 (torchvision), experiments/cropscan_runs/deploy-field: PlantVillage + PlantDoc only",
+  "lab_acc": 0.9836141241633972,
+  "field_acc": 0.652542372881356,
+  "macro_f1_field": 0.6307974706832037,
+  "ece": 0.006385138179670959,
+  "domain_gap": 0.33107175128204125,
+  "background_probe_ratio": null,
+  "thresholds": {
+    "msp_threshold": 0.16705749928951263,
+    "entropy_threshold": 0.23689075400488005,
+    "ood_rejection_rate": 0.9072611464968153,
+    "in_dist_abstain_rate": 0.06034482758620685,
+    "meets_targets": true
+  },
+  "field_abstain": {
+    "abstain_rate": 0.4576271186440678,
+    "acc_on_kept": 0.828125
+  },
+  "lab_abstain": {
+    "abstain_rate": 0.010846988229863852,
+    "acc_on_kept": 0.9883341110592627
+  },
+  "plantwild_reference": {
+    "acc": 0.42876165113182424,
+    "abstain_rate": 0.5439414114513981,
+    "acc_on_kept": 0.6613138686131387
+  },
+  "n": {
+    "lab": 4333,
+    "field": 236,
+    "plantwild": 1502,
+    "ood": 3925
+  },
+  "preprocessing": "resize 224x224, ImageNet normalisation"
+}

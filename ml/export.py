@@ -143,16 +143,17 @@ def main() -> int:
         )
 
     ckpt = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
-    if "model_name" in ckpt:                      # an ml/train.py checkpoint
+    if "model_name" in ckpt and not ckpt["model_name"].startswith("tv_"):  # an ml/train.py checkpoint
         labels, model_name = ckpt["labels"], ckpt["model_name"]
         model = timm.create_model(model_name, pretrained=False, num_classes=len(labels))
         model.load_state_dict(ckpt["state_dict"])
-    else:                                         # the torchvision baseline
-        if not args.labels:
+    else:  # torchvision B0: backend/model.pt (bare state dict) or scripts/train_mixed.py (tv_efficientnet_b0)
+        labels = ckpt.get("labels") or (json.loads(args.labels.read_text()) if args.labels else None)
+        if not labels:
             raise SystemExit("A bare state dict carries no class order; pass --labels.")
-        labels, model_name = json.loads(args.labels.read_text()), "efficientnet_b0"
+        model_name = "efficientnet_b0"
         model = TorchvisionB0(len(labels))
-        model.net.load_state_dict(ckpt.get("model_state_dict", ckpt))
+        model.net.load_state_dict(ckpt.get("state_dict") or ckpt.get("model_state_dict") or ckpt)
     model.eval()
 
     wrapper = ExportWrapper(model).eval()

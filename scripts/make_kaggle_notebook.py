@@ -30,6 +30,9 @@ def cell(kind: str, src: str) -> dict:
 
 
 def main() -> None:
+    import sys
+    deploy = "--deploy" in sys.argv
+    grid = '[("deploy", "field")]' if deploy else '[(d, a) for d in ("lab", "field", "mixed") for a in ("base", "field")]'
     script, manifest = b64(ROOT / "scripts" / "train_mixed.py"), b64(ROOT / "experiments" / "manifest.json")
     cells = [
         cell("markdown", """
@@ -86,13 +89,13 @@ for ds in ("plantwild", "plantdoc"):
     assert not missing
 """),
         cell("code", """
-# The 3 x 2 grid. Each run prints one line per epoch and its test scores at the end.
+GRID = """ + grid + """
+# Training runs. Each prints one line per epoch and its test scores at the end.
 import subprocess, sys
-for data in ("lab", "field", "mixed"):
-    for aug in ("base", "field"):
-        subprocess.run([sys.executable, "/kaggle/working/train_mixed.py", "--data", data, "--aug", aug,
-                        "--manifest", "/kaggle/working/manifest.json", "--data-root", "/tmp/data",
-                        "--out", "/kaggle/working/runs", "--workers", "4"], check=True)
+for data, aug in GRID:
+    subprocess.run([sys.executable, "/kaggle/working/train_mixed.py", "--data", data, "--aug", aug,
+                    "--manifest", "/kaggle/working/manifest.json", "--data-root", "/tmp/data",
+                    "--out", "/kaggle/working/runs", "--workers", "4"], check=True)
 """),
         cell("code", """
 import json, glob, shutil
@@ -105,7 +108,7 @@ print("download cropscan_runs.zip from the Output panel")
     ]
     nb = {"cells": cells, "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
                                        "language_info": {"name": "python"}}, "nbformat": 4, "nbformat_minor": 5}
-    out = ROOT / "experiments" / "kaggle_train.ipynb"
+    out = ROOT / "experiments" / ("kaggle_deploy.ipynb" if deploy else "kaggle_train.ipynb")
     out.write_text(json.dumps(nb, indent=1))
     print(f"wrote {out} ({out.stat().st_size / 1e3:.0f} kB)")
 
