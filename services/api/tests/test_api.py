@@ -31,9 +31,10 @@ def test_healthz_reports_degraded_without_a_model(client):
 
 # --- diseases ---------------------------------------------------------------
 
-def test_list_diseases_returns_all_38(client):
+def test_list_diseases_returns_all_40(client):
+    """38 PlantVillage classes plus healthy orange and healthy squash."""
     rows = client.get("/api/diseases").json()
-    assert len(rows) == 38
+    assert len(rows) == 40
 
 
 def test_list_diseases_filters_by_crop(client):

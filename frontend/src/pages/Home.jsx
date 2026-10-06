@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { useLang } from '../context/LanguageContext'
 
 const stats = [
-  { value: '38', label: 'home.stat.classes', sub: 'home.stat.classesSub' },
+  { value: '40', label: 'home.stat.classes', sub: 'home.stat.classesSub' },
   { value: '14', label: 'home.stat.cycles', sub: 'home.stat.cyclesSub' },
   { value: 'VR', label: 'home.stat.field', sub: 'home.stat.fieldSub' },
   { value: '5', label: 'home.stat.langs', sub: 'home.stat.langsSub' },

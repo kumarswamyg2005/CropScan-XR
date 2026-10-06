@@ -22,35 +22,38 @@ cycle*. The ledger says *this happened, at this time, on this image*.
 
 ## Accuracy: the honest number
 
-> **Deployed model: EfficientNet-B0, 38 disease classes plus "Not a leaf"**
-> (training run `deploy3-field`).
-> Trained on 16,494 images: 11,010 PlantVillage (capped at 300 per class), 4,084 field photos
-> (PlantDoc 2,046; grape, GVLiD + FieldVitis, 1,684; Indonesian potato 354; all CC BY) and 1,400
-> openly licensed COCO photos of people, objects and rooms as the 39th class. PlantWild is
-> CC-BY-NC-ND, so it is not in the deployed model's training data or epoch selection. The
-> table is measured into `experiments/results/deploy3-field_metrics.json`, never typed by hand,
-> and `/about` renders it live from the deployed `meta.json`. Test splits are never trained on.
+> **Deployed model: EfficientNet-B0, 40 leaf classes plus "Not a leaf"** (training run `deploy4-field`).
+> Trained on 19,805 images: 11,010 PlantVillage (capped at 300 per class), 7,395 field photos from
+> 10 CC BY sources (PlantDoc; grape from GVLiD and FieldVitis; potato, Indonesia; corn, Tanzania;
+> orange, Bangladesh and the HLB set; pumpkin as squash, Bangladesh; tomato, Bangladesh and Jaipur;
+> soybean, Maharashtra) and 1,400 openly licensed COCO photos of people, objects and rooms. Healthy
+> orange and healthy squash are field-only classes (PlantVillage has neither). PlantWild is
+> CC-BY-NC-ND, so it is not in the deployed model's training data or epoch selection. The table is
+> measured into `experiments/results/deploy4-field_metrics.json`, never typed by hand, and `/about`
+> renders it live from the deployed `meta.json`. Test splits are never trained on.
 
 | | Deployed | Lab-only baseline (`backend/model.pt`) |
 | --- | ---: | ---: |
-| **Field accuracy** (PlantDoc test, 236 photos) | **62.7%** | 14.8% |
-| Field accuracy (PlantWild test, 1,502 photos; never trained on) | 41.5% | 12.7% |
-| Lab accuracy (PlantVillage, 4,333 held-out) | 98.2% | 97.1% |
-| **Domain gap** (lab − PlantDoc) | **35.5 pp** | 82.4 pp |
-| Field macro-F1 (PlantDoc) | 0.622 | 0.163 |
-| Calibration error (ECE, lab) | 0.005 | 0.005 |
+| **Field accuracy** (PlantDoc test, 236 photos) | **64.0%** | 14.8% |
+| Field accuracy (PlantWild test, 1,502 photos; never trained on) | 43.9% | 12.7% |
+| Lab accuracy (PlantVillage, 4,333 held-out) | 98.1% | 97.1% |
+| **Domain gap** (lab − PlantDoc) | **34.1 pp** | 82.4 pp |
+| Field macro-F1 (PlantDoc) | 0.636 | 0.163 |
+| Calibration error (ECE, lab) | 0.004 | 0.005 |
 | Face photos refused (500, LFW) | 100.0% | 98.6% |
 
-Grape and potato test splits score 98.1% and 96.0%, but they come from the
-same farms as their training photos; on a farm left out of training, field accuracy is about
-31–33% (leave-one-source-out runs). Treat those two as optimistic.
+Test splits drawn from the same farms as the training photos (grape, potato, and the v4 sources)
+score 94–100%, but on a farm left out of training field accuracy is about 31–33%
+(leave-one-source-out runs). Treat same-source numbers as optimistic. **Known weakness:** healthy
+corn photographed as a whole plant or a field scene (not a leaf close-up) is still often called
+northern leaf blight; the corn field photos in training are mostly diseased.
 
 Two gates refuse a photo: the model answering "Not a leaf", and a confidence + entropy
 threshold. The threshold was tuned to refuse at least 90% of Imagenette (no plants), then
 raised until at least 80% of the answers given on PlantDoc validation photos are right. With
-both gates, 98.7% of Imagenette, 100.0% of 400 unseen COCO photos and all 500 faces are refused.
-On real field photos (PlantDoc test) the site answers 64.4% of them and
-78.9% of those answers are right; the rest get "retake the photo".
+both gates, 98.9% of Imagenette, 100.0% of 400 unseen COCO photos and all 500 faces are refused.
+On real field photos (PlantDoc test) the site answers 57.6% of them and
+83.1% of those answers are right; the rest get "retake the photo".
 
 **The field number is the headline. The lab number is context.**
 

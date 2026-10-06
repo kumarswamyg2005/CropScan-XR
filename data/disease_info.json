@@ -392,5 +392,23 @@
     "organic": "Apply neem oil preventively every 2 weeks during the growing season.",
     "chemical": "No treatment needed.",
     "prevention": "Stake plants, rotate crops every 3 years, mulch soil, and water at the base."
+  },
+  "Orange___healthy": {
+    "name": "Healthy Orange",
+    "plant": "Orange",
+    "is_healthy": true,
+    "symptoms": "No disease detected. The leaf looks healthy: even green colour, no blotchy yellowing.",
+    "organic": "Mulch around the tree and remove weeds; check new flushes for psyllids, the insect that spreads citrus greening.",
+    "chemical": "No treatment needed.",
+    "prevention": "Use certified disease-free saplings, control psyllids, and remove trees confirmed with citrus greening."
+  },
+  "Squash___healthy": {
+    "name": "Healthy Squash",
+    "plant": "Squash",
+    "is_healthy": true,
+    "symptoms": "No disease detected. The plant appears healthy.",
+    "organic": "Water at the base in the morning and keep leaves dry; neem oil can be used if pests appear.",
+    "chemical": "No treatment needed.",
+    "prevention": "Space plants for air flow, rotate crops each season, and remove old plant debris after harvest."
   }
 }

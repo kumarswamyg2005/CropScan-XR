@@ -1,0 +1,62 @@
+{
+  "model": "efficientnet_b0 (torchvision), experiments/cropscan_runs/deploy4-field, 41 classes",
+  "lab_acc": 0.9808446803600277,
+  "field_acc": 0.6398305084745762,
+  "macro_f1_field": 0.6357477518219206,
+  "ece": 0.0040773067674102085,
+  "domain_gap": 0.34101417188545147,
+  "background_probe_ratio": null,
+  "thresholds": {
+    "msp_threshold": 0.7179049849510193,
+    "entropy_threshold": 0.4765074915492112,
+    "ood_rejection_rate": 0.9885350318471338,
+    "in_dist_abstain_rate": 0.059547244094488194,
+    "meets_targets": true,
+    "field_val_precision": 0.8028169014084507,
+    "field_val_coverage": 0.6173913043478261
+  },
+  "field_abstain": {
+    "abstain_rate": 0.423728813559322,
+    "acc_on_kept": 0.8308823529411765
+  },
+  "lab_abstain": {
+    "abstain_rate": 0.022617124394184174,
+    "acc_on_kept": 0.9905548996458088
+  },
+  "per_source": {
+    "plantdoc": {
+      "acc": 0.6398305084745762,
+      "macro_f1": 0.6357477518219206,
+      "abstain_rate": 0.423728813559322,
+      "acc_on_kept": 0.8308823529411765,
+      "n": 236
+    },
+    "grape_field": {
+      "acc": 0.9896049896049897,
+      "macro_f1": 0.9474569146700295,
+      "abstain_rate": 0.02494802494802495,
+      "acc_on_kept": 1.0,
+      "n": 481
+    },
+    "potato_id": {
+      "acc": 0.9702970297029703,
+      "macro_f1": 0.9873949579831933,
+      "abstain_rate": 0.12871287128712872,
+      "acc_on_kept": 1.0,
+      "n": 101
+    },
+    "plantwild": {
+      "acc": 0.4394141145139814,
+      "macro_f1": 0.42312267479589527,
+      "abstain_rate": 0.5086551264980026,
+      "acc_on_kept": 0.6368563685636857,
+      "n": 1502
+    }
+  },
+  "non_plant_refused": {
+    "imagenette": 0.9885350318471338,
+    "coco_test": 1.0,
+    "faces": 1.0
+  },
+  "preprocessing": "resize 224x224, ImageNet normalisation"
+}

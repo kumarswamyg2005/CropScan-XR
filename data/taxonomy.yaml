@@ -4,7 +4,8 @@
 # "apple scab"). Every disagreement is resolved in this file and nowhere else --
 # never in training code.
 #
-# The canonical ids are the 38 existing PlantVillage ids, unchanged, because
+# The canonical ids are the 38 PlantVillage ids, unchanged, plus Orange___healthy and
+# Squash___healthy (PlantVillage has no healthy class for either), because
 # data/disease_info.json already carries hand-written symptom/treatment content
 # keyed by exactly those ids. Re-keying the taxonomy would orphan that content
 # for no gain. Source labels that have no canonical home are listed under
@@ -33,6 +34,7 @@ canonical:
   Grape___Leaf_blight_(Isariopsis_Leaf_Spot):          { crop: Grape,       healthy: false }
   Grape___healthy:                                     { crop: Grape,       healthy: true  }
   Orange___Haunglongbing_(Citrus_greening):            { crop: Orange,      healthy: false }
+  Orange___healthy:                                    { crop: Orange,      healthy: true  }   # added 2026-10: field photos only
   Peach___Bacterial_spot:                              { crop: Peach,       healthy: false }
   Peach___healthy:                                     { crop: Peach,       healthy: true  }
   "Pepper,_bell___Bacterial_spot":                     { crop: Bell Pepper, healthy: false }
@@ -43,6 +45,7 @@ canonical:
   Raspberry___healthy:                                 { crop: Raspberry,   healthy: true  }
   Soybean___healthy:                                   { crop: Soybean,     healthy: true  }
   Squash___Powdery_mildew:                             { crop: Squash,      healthy: false }
+  Squash___healthy:                                    { crop: Squash,      healthy: true  }   # added 2026-10: field photos only
   Strawberry___Leaf_scorch:                            { crop: Strawberry,  healthy: false }
   Strawberry___healthy:                                { crop: Strawberry,  healthy: true  }
   Tomato___Bacterial_spot:                             { crop: Tomato,      healthy: false }

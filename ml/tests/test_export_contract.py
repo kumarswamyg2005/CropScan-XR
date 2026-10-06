@@ -49,7 +49,9 @@ def test_labels_match_meta_count():
     meta = json.loads((MODEL_DIR / "meta.json").read_text())
     labels = json.loads((MODEL_DIR / "labels.json").read_text())
     assert len(labels) == meta["num_classes"]
-    assert labels == sorted(labels), "label order must be stable and sorted"
+    # The 38 PlantVillage ids keep their sorted positions; classes added later
+    # (healthy orange/squash, Not_a_leaf) are appended so no existing index moves.
+    assert labels[:38] == sorted(labels[:38]), "the original 38 must stay sorted, in front"
     assert len(set(labels)) == len(labels), "duplicate label"
 
 
