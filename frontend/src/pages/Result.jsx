@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { api } from '../lib/api'
 import { useLang } from '../context/LanguageContext'
 
+const NOT_A_LEAF = 'Not_a_leaf'
+
 function ConfidenceBar({ value, label }) {
   const [width, setWidth] = useState(0)
   useEffect(() => {
@@ -182,9 +184,12 @@ export default function Result() {
   const { class_name, confidence, top3, disease_info: info } = result
   const { gradcamUrl, canEnterField, hasCycle, status, modelVersion } = result
   const uncertain = status === 'uncertain'
+  // The model's own "this is not a plant" answer (the Not_a_leaf class), when it has one
+  const notLeaf = uncertain && top3?.[0]?.class_name === NOT_A_LEAF
 
   const isHealthy = !uncertain && (info?.is_healthy ?? class_name.includes('healthy'))
-  const displayName = uncertain ? t('result.uncertainTitle') : (info?.name || prettyClass(class_name))
+  const displayName = notLeaf ? t('result.notLeafTitle')
+    : uncertain ? t('result.uncertainTitle') : (info?.name || prettyClass(class_name))
   const plant = info?.plant ?? class_name.split('___')[0].replace(/_/g, ' ')
 
   const blockedReason = uncertain
@@ -246,7 +251,7 @@ export default function Result() {
 
         {/* Image + confidence grid */}
         <div
-          className={`anim-fade-up anim-delay-2 grid grid-cols-1 gap-5 ${imageUrl ? 'md:grid-cols-2' : ''}`}
+          className={`anim-fade-up anim-delay-2 grid grid-cols-1 gap-5 ${imageUrl && !uncertain ? 'md:grid-cols-2' : ''}`}
           style={{ marginBottom: 28 }}
         >
           {imageUrl && (
@@ -257,6 +262,7 @@ export default function Result() {
               background: 'var(--color-surface-raised)',
               aspectRatio: '4/3',
               position: 'relative',
+              ...(uncertain && { width: '100%', maxWidth: 420, margin: '0 auto' }),
             }}>
               <img src={imageUrl} alt={t('result.photoAlt')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               {gradcamUrl && (
@@ -288,24 +294,23 @@ export default function Result() {
             </div>
           )}
 
-          <div style={{
-            background: 'var(--color-surface)',
-            border: '1px solid var(--color-border)',
-            borderRadius: 20,
-            padding: '24px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            gap: 20,
-          }}>
-            <ConfidenceBar value={confidence} label={t('result.confidence')} />
-            {top3?.length > 1 && (
-              <TopPredictions
-                top3={top3}
-                title={uncertain ? t('result.closest') : t('result.top')}
-              />
-            )}
-          </div>
+          {/* No scores on an uncertain result: "Healthy Peach 61.8%" next to a photo of a
+              person reads as an answer even under a "not a diagnosis" label. */}
+          {!uncertain && (
+            <div style={{
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+              borderRadius: 20,
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: 20,
+            }}>
+              <ConfidenceBar value={confidence} label={t('result.confidence')} />
+              {top3?.length > 1 && <TopPredictions top3={top3} title={t('result.top')} />}
+            </div>
+          )}
         </div>
 
         {uncertain ? (
@@ -319,7 +324,7 @@ export default function Result() {
             marginBottom: 28,
           }}>
             <p style={{ margin: '0 0 14px', color: 'var(--color-text)', lineHeight: 1.65 }}>
-              {t('result.uncertainBody')}
+              {notLeaf ? t('result.notLeafBody') : t('result.uncertainBody')}
             </p>
             <ul style={{ margin: 0, paddingLeft: 20, color: 'var(--color-text-muted)', fontSize: '0.9rem', lineHeight: 1.8, listStyle: 'disc' }}>
               <li>{t('detect.tip.singleDesc')}</li>
