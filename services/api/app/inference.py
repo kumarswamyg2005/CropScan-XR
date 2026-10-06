@@ -29,6 +29,10 @@ from app.config import get_settings
 Image.MAX_IMAGE_PIXELS = 64_000_000
 
 
+# The model's own "this photo is not a crop leaf" class. It is never a diagnosis.
+NOT_A_LEAF = "Not_a_leaf"
+
+
 class ModelUnavailable(RuntimeError):
     """No model on disk. /predict 503s rather than inventing an answer."""
 
@@ -141,12 +145,13 @@ def predict(image: Image.Image) -> Prediction:
 
     # Both conditions must pass. A high top-1 with a broad messy tail is exactly
     # the case entropy is here to catch.
+    top_index = int(order[0])
     accepted = (
         confidence >= model.meta["confidence_threshold"]
         and entropy <= model.meta["entropy_threshold"]
+        and model.labels[top_index] != NOT_A_LEAF
     )
 
-    top_index = int(order[0])
     return Prediction(
         status="ok" if accepted else "uncertain",
         disease_id=model.labels[top_index] if accepted else None,

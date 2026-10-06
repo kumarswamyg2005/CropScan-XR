@@ -343,3 +343,32 @@ def test_storage_failure_is_a_clear_error_with_cors(client, monkeypatch):
 def test_root_points_to_health_and_docs(client):
     body = client.get("/").json()
     assert body == {"service": "CropScan API", "health": "/healthz", "docs": "/docs"}
+
+
+def test_not_a_leaf_is_never_a_diagnosis(monkeypatch):
+    """However sure the model is that a photo is not a leaf, that is not a disease."""
+    import numpy as np
+    from PIL import Image
+    from app import inference
+
+    labels = ["Apple___Apple_scab", "Apple___healthy", inference.NOT_A_LEAF]
+
+    class Session:
+        def __init__(self, top):
+            self.top = top
+
+        def run(self, _, feeds):
+            logits = np.full((1, 3), -5.0, dtype=np.float32)
+            logits[0, self.top] = 10.0
+            return logits, np.zeros((1, 3, 7, 7), dtype=np.float32)
+
+    meta = {"model_name": "t", "input_size": 32, "resize_ratio": 1.0, "num_classes": 3,
+            "normalization": {"mean": [0.5] * 3, "std": [0.5] * 3},
+            "confidence_threshold": 0.2, "entropy_threshold": 0.5}
+    img = Image.new("RGB", (40, 40), "green")
+    for top, status in ((2, "uncertain"), (0, "ok")):
+        model = inference.LoadedModel(session=Session(top), labels=labels, meta=meta)
+        monkeypatch.setattr(inference, "load_model", lambda: model)
+        p = inference.predict(img)
+        assert p.status == status, (top, p)
+        assert (p.disease_id is None) == (status == "uncertain")

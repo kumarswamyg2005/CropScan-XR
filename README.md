@@ -22,27 +22,35 @@ cycle*. The ledger says *this happened, at this time, on this image*.
 
 ## Accuracy: the honest number
 
-> **Deployed model: EfficientNet-B0 trained on PlantVillage + PlantDoc**
-> (`experiments/cropscan_runs/deploy-field`, recipe `scripts/train_mixed.py --data deploy`).
-> PlantWild is CC-BY-NC-ND, so it is not in the deployed model's training data or epoch
-> selection. The table is measured by `scripts/eval_deploy.py` into
-> `experiments/results/deploy-field_metrics.json`, never typed by hand, and `/about`
-> renders it live from the deployed `meta.json`. Test splits are never trained on.
+> **Deployed model: EfficientNet-B0, 38 disease classes plus "Not a leaf"**
+> (training run `deploy3-field`).
+> Trained on 16,494 images: 11,010 PlantVillage (capped at 300 per class), 4,084 field photos
+> (PlantDoc 2,046; grape, GVLiD + FieldVitis, 1,684; Indonesian potato 354; all CC BY) and 1,400
+> openly licensed COCO photos of people, objects and rooms as the 39th class. PlantWild is
+> CC-BY-NC-ND, so it is not in the deployed model's training data or epoch selection. The
+> table is measured into `experiments/results/deploy3-field_metrics.json`, never typed by hand,
+> and `/about` renders it live from the deployed `meta.json`. Test splits are never trained on.
 
 | | Deployed | Lab-only baseline (`backend/model.pt`) |
 | --- | ---: | ---: |
-| **Field accuracy** (PlantDoc test, 236 photos) | **65.3%** | 14.8% |
-| Field accuracy (PlantWild test, 1,502 photos; reference only) | 42.9% | 12.4% |
-| Lab accuracy (PlantVillage, 4,333 held-out) | 98.4% | 97.1% |
-| **Domain gap** (lab − PlantDoc) | **33.1 pp** | 82.4 pp |
-| Field macro-F1 (PlantDoc) | 0.631 | 0.163 |
-| Calibration error (ECE, lab) | 0.006 | 0.005 |
+| **Field accuracy** (PlantDoc test, 236 photos) | **62.7%** | 14.8% |
+| Field accuracy (PlantWild test, 1,502 photos; never trained on) | 41.5% | 12.7% |
+| Lab accuracy (PlantVillage, 4,333 held-out) | 98.2% | 97.1% |
+| **Domain gap** (lab − PlantDoc) | **35.5 pp** | 82.4 pp |
+| Field macro-F1 (PlantDoc) | 0.622 | 0.163 |
+| Calibration error (ECE, lab) | 0.005 | 0.005 |
+| Face photos refused (500, LFW) | 100.0% | 98.6% |
 
-The abstain thresholds were tuned to refuse 90.7% of Imagenette (no plants) while
-keeping 94% of PlantVillage + PlantDoc validation photos. On real field photos the
-gate answers 54% of them, and 82.8% of those answers are right; the rest get
-"retake the photo". Rebuild with `python scripts/eval_deploy.py`, then
-`python ml/export.py --checkpoint experiments/cropscan_runs/deploy-field/best.pt --metrics experiments/results/deploy-field_metrics.json --resize-ratio 1.0`.
+Grape and potato test splits score 98.1% and 96.0%, but they come from the
+same farms as their training photos; on a farm left out of training, field accuracy is about
+31–33% (leave-one-source-out runs). Treat those two as optimistic.
+
+Two gates refuse a photo: the model answering "Not a leaf", and a confidence + entropy
+threshold. The threshold was tuned to refuse at least 90% of Imagenette (no plants), then
+raised until at least 80% of the answers given on PlantDoc validation photos are right. With
+both gates, 98.7% of Imagenette, 100.0% of 400 unseen COCO photos and all 500 faces are refused.
+On real field photos (PlantDoc test) the site answers 64.4% of them and
+78.9% of those answers are right; the rest get "retake the photo".
 
 **The field number is the headline. The lab number is context.**
 
