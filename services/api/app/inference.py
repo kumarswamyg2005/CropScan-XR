@@ -131,14 +131,20 @@ def _softmax(logits: np.ndarray) -> np.ndarray:
     return e / e.sum()
 
 
-def predict(image: Image.Image) -> Prediction:
+def predict(image: Image.Image, allowed: set[str] | None = None) -> Prediction:
+    """allowed: the class ids the user's chosen crop can be (None = any crop). Not_a_leaf
+    always competes, so a photo of a person stays "not a leaf" whatever crop is chosen."""
     model = load_model()
     x = preprocess(image, model.meta)
     logits, cam = model.session.run(None, {"input": x})
 
-    probs = _softmax(logits[0])
+    scores = logits[0]
+    if allowed is not None:
+        keep = np.array([label in allowed or label == NOT_A_LEAF for label in model.labels])
+        scores = np.where(keep, scores, -np.inf)
+    probs = _softmax(scores)
     order = np.argsort(probs)[::-1]
-    top3 = [{"disease_id": model.labels[i], "confidence": float(probs[i])} for i in order[:3]]
+    top3 = [{"disease_id": model.labels[i], "confidence": float(probs[i])} for i in order[:3] if probs[i] > 0]
 
     confidence = float(probs[order[0]])
     entropy = float(-(probs * np.log(probs + 1e-12)).sum() / math.log(len(probs)))

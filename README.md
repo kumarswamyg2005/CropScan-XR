@@ -22,38 +22,42 @@ cycle*. The ledger says *this happened, at this time, on this image*.
 
 ## Accuracy: the honest number
 
-> **Deployed model: EfficientNet-B0, 40 leaf classes plus "Not a leaf"** (training run `deploy4-field`).
-> Trained on 19,805 images: 11,010 PlantVillage (capped at 300 per class), 7,395 field photos from
-> 10 CC BY sources (PlantDoc; grape from GVLiD and FieldVitis; potato, Indonesia; corn, Tanzania;
-> orange, Bangladesh and the HLB set; pumpkin as squash, Bangladesh; tomato, Bangladesh and Jaipur;
-> soybean, Maharashtra) and 1,400 openly licensed COCO photos of people, objects and rooms. Healthy
-> orange and healthy squash are field-only classes (PlantVillage has neither). PlantWild is
+> **Deployed model: EfficientNet-B0, 68 leaf classes across 20 crops, plus "Not a leaf"** (training run
+> `deploy5-field`). Trained on 31,982 images: 11,010 PlantVillage (capped at 300 per class), 19,572 field
+> photos from 26 CC BY / CC0 sources (PlantDoc; grape, potato, corn, orange, squash, tomato and soybean
+> sets; and rice, wheat, cotton, sugarcane, chilli and mango sets from India, Bangladesh and elsewhere)
+> and 1,400 openly licensed COCO photos of people, objects and rooms. Every source passed a
+> cross-dataset copy audit; six candidates were rejected. PlantWild is
 > CC-BY-NC-ND, so it is not in the deployed model's training data or epoch selection. The table is
-> measured into `experiments/results/deploy4-field_metrics.json`, never typed by hand, and `/about`
+> measured into `experiments/results/deploy5-field_metrics.json`, never typed by hand, and `/about`
 > renders it live from the deployed `meta.json`. Test splits are never trained on.
+
+**Pick the crop.** The Detect page asks which crop the photo shows (optional). The API then lets
+only that crop's classes and "Not a leaf" compete, which stops look-alike crops (corn vs rice,
+wheat and sugarcane; bell pepper vs chilli; peach vs mango) from being confused:
+
+| Real field photos, never trained on | Crop not given | **Crop given** |
+| --- | ---: | ---: |
+| PlantDoc test (236): accuracy | 58.9% | **80.5%** |
+| PlantDoc test: answers given / right | 58.9% / 73.4% | **73% / 90.8%** |
+| PlantWild test (1,502): accuracy | 42.3% | **69.0%** |
 
 | | Deployed | Lab-only baseline (`backend/model.pt`) |
 | --- | ---: | ---: |
-| **Field accuracy** (PlantDoc test, 236 photos) | **64.0%** | 14.8% |
-| Field accuracy (PlantWild test, 1,502 photos; never trained on) | 43.9% | 12.7% |
-| Lab accuracy (PlantVillage, 4,333 held-out) | 98.1% | 97.1% |
-| **Domain gap** (lab − PlantDoc) | **34.1 pp** | 82.4 pp |
-| Field macro-F1 (PlantDoc) | 0.636 | 0.163 |
-| Calibration error (ECE, lab) | 0.004 | 0.005 |
+| Lab accuracy (PlantVillage, 4,333 held-out) | 97.9% | 97.1% |
+| **Domain gap** (lab − PlantDoc, crop not given) | **39.0 pp** | 82.4 pp |
+| Field macro-F1 (PlantDoc) | 0.593 | 0.163 |
+| Calibration error (ECE, lab) | 0.006 | 0.005 |
 | Face photos refused (500, LFW) | 100.0% | 98.6% |
 
-Test splits drawn from the same farms as the training photos (grape, potato, and the v4 sources)
-score 94–100%, but on a farm left out of training field accuracy is about 31–33%
-(leave-one-source-out runs). Treat same-source numbers as optimistic. **Known weakness:** healthy
-corn photographed as a whole plant or a field scene (not a leaf close-up) is still often called
-northern leaf blight; the corn field photos in training are mostly diseased.
+The new crops' test splits score 87–100%, but they come from the same farms as their training
+photos; treat them as optimistic (on a new farm, held-out-source tests in v2 scored 31–33%).
+Several new-crop classes have a single source and cannot be tested on a new farm at all.
 
-Two gates refuse a photo: the model answering "Not a leaf", and a confidence + entropy
-threshold. The threshold was tuned to refuse at least 90% of Imagenette (no plants), then
-raised until at least 80% of the answers given on PlantDoc validation photos are right. With
-both gates, 98.9% of Imagenette, 100.0% of 400 unseen COCO photos and all 500 faces are refused.
-On real field photos (PlantDoc test) the site answers 57.6% of them and
-83.1% of those answers are right; the rest get "retake the photo".
+Two gates refuse a photo: the model answering "Not a leaf", and a confidence + entropy threshold
+tuned to refuse at least 90% of Imagenette (no plants) and keep answers on PlantDoc validation at
+least 80% right. With both gates, 98.4% of Imagenette, 100.0% of 400 unseen COCO photos
+and all 500 faces are refused, with or without a crop given.
 
 **The field number is the headline. The lab number is context.**
 

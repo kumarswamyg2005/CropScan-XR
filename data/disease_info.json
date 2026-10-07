@@ -410,5 +410,301 @@
     "organic": "Water at the base in the morning and keep leaves dry; neem oil can be used if pests appear.",
     "chemical": "No treatment needed.",
     "prevention": "Space plants for air flow, rotate crops each season, and remove old plant debris after harvest."
+  },
+  "Rice___healthy": {
+    "name": "Healthy Rice",
+    "plant": "Rice",
+    "is_healthy": true,
+    "symptoms": "No disease detected. The leaves are evenly green with no spots or streaks.",
+    "organic": "Keep fields free of weeds and use well-rotted farmyard manure.",
+    "chemical": "No treatment needed.",
+    "prevention": "Use certified seed, balanced fertiliser (avoid excess nitrogen) and proper spacing for air flow."
+  },
+  "Rice___Bacterial_leaf_blight": {
+    "name": "Rice Bacterial Leaf Blight",
+    "plant": "Rice",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Water-soaked streaks along the leaf edges that turn yellow, then straw-white, starting from the tip. In the morning, milky drops of bacterial ooze can be seen on young lesions.",
+    "formation": "Caused by the bacterium Xanthomonas oryzae pv. oryzae. It survives in infected stubble, straw and weeds, enters through wounds and leaf pores, and spreads with irrigation water, rain splash and strong wind. Warm (25–34 °C), humid weather and heavy nitrogen favour it.",
+    "organic": "Drain the field for a few days, remove infected stubble, and apply fresh cow-dung slurry or neem cake; avoid clipping seedling tips at transplanting.",
+    "chemical": "No fungicide works on bacteria. Copper-based sprays (e.g. copper oxychloride) can slow spread; use only as advised by your local agriculture officer.",
+    "prevention": "Grow resistant varieties, use split doses of nitrogen, avoid flooding from infected fields and destroy infected stubble."
+  },
+  "Rice___Leaf_blast": {
+    "name": "Rice Leaf Blast",
+    "plant": "Rice",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Diamond- or spindle-shaped spots with grey or whitish centres and brown borders. Spots join up and whole leaves dry out; the neck of the panicle can also rot.",
+    "formation": "Caused by the fungus Magnaporthe oryzae. Spores are carried by wind and need several hours of leaf wetness (dew, drizzle) at about 24–28 °C to infect. High nitrogen and dry nursery soils increase attack.",
+    "organic": "Spray Pseudomonas fluorescens or Trichoderma formulations, and remove badly infected plants and weeds around the field.",
+    "chemical": "Fungicides such as tricyclazole or azoxystrobin are commonly used at the first spots; follow the label and local advice.",
+    "prevention": "Use resistant varieties and treated seed, avoid excess nitrogen, and keep fields evenly flooded where possible."
+  },
+  "Rice___Brown_spot": {
+    "name": "Rice Brown Spot",
+    "plant": "Rice",
+    "is_healthy": false,
+    "severity": "moderate",
+    "symptoms": "Small round to oval brown spots with a grey centre and a yellow halo, scattered over the leaf. Grains can show dark spots too.",
+    "formation": "Caused by the fungus Bipolaris oryzae (Cochliobolus miyabeanus). It is carried on seed and in crop debris, and attacks plants that are weak from poor soil, low potassium or drought.",
+    "organic": "Improve soil fertility with compost, apply potash, and remove infected debris after harvest.",
+    "chemical": "Seed treatment and sprays with fungicides such as mancozeb or propiconazole are commonly recommended; follow the label.",
+    "prevention": "Use clean seed, balanced fertiliser with enough potassium, and keep the crop from drought stress."
+  },
+  "Rice___Tungro": {
+    "name": "Rice Tungro",
+    "plant": "Rice",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Leaves turn yellow to orange from the tip, plants are stunted with fewer tillers, and young leaves may be twisted.",
+    "formation": "Caused by two viruses (rice tungro bacilliform and spherical viruses) spread by green leafhoppers that feed on infected plants and then on healthy ones. It spreads fastest when leafhopper numbers are high.",
+    "organic": "Pull out and destroy infected plants early, and use light traps to monitor leafhoppers.",
+    "chemical": "There is no cure for the virus. Leafhoppers can be controlled with recommended insecticides at the nursery and early crop stage, as advised locally.",
+    "prevention": "Grow resistant varieties, plant at the same time as neighbours, and keep the field and bunds free of volunteer rice and weeds."
+  },
+  "Rice___Sheath_blight": {
+    "name": "Rice Sheath Blight",
+    "plant": "Rice",
+    "is_healthy": false,
+    "severity": "moderate",
+    "symptoms": "Oval greenish-grey lesions with brown borders on the leaf sheath near the water line, spreading upward to the leaves in irregular 'snake-skin' patches.",
+    "formation": "Caused by the soil fungus Rhizoctonia solani, which survives as hard sclerotia in soil and water. Dense planting, high nitrogen and warm humid weather let it spread from plant to plant.",
+    "organic": "Apply Trichoderma or Pseudomonas fluorescens, and remove floating sclerotia and weed hosts.",
+    "chemical": "Fungicides such as hexaconazole, validamycin or azoxystrobin are commonly used at first symptoms; follow the label.",
+    "prevention": "Use wider spacing, split nitrogen doses and deep ploughing after harvest to bury sclerotia."
+  },
+  "Wheat___healthy": {
+    "name": "Healthy Wheat",
+    "plant": "Wheat",
+    "is_healthy": true,
+    "symptoms": "No disease detected. The leaves are evenly green with no pustules or blotches.",
+    "organic": "Use farmyard manure and keep the field weed-free.",
+    "chemical": "No treatment needed.",
+    "prevention": "Sow recommended varieties on time with treated seed and balanced fertiliser."
+  },
+  "Wheat___Rust": {
+    "name": "Wheat Rust",
+    "plant": "Wheat",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Small orange-brown (leaf rust) or yellow, striped (stripe/yellow rust) powdery pustules on the leaves that rub off on fingers. Badly hit leaves dry early.",
+    "formation": "Caused by Puccinia rust fungi. Spores travel long distances on wind and infect when leaves stay wet for a few hours; yellow rust likes cool weather (10–15 °C), brown rust warmer weather (15–25 °C).",
+    "organic": "Remove volunteer wheat and grassy weeds that carry rust between seasons.",
+    "chemical": "Fungicides such as propiconazole or tebuconazole are commonly sprayed when pustules first appear; follow the label and local advice.",
+    "prevention": "Grow rust-resistant varieties, sow on time, and avoid excess nitrogen."
+  },
+  "Wheat___Leaf_blight": {
+    "name": "Wheat Leaf Blight",
+    "plant": "Wheat",
+    "is_healthy": false,
+    "severity": "moderate",
+    "symptoms": "Oval brown spots with yellow margins that merge into large dead patches, starting on lower leaves.",
+    "formation": "Caused mainly by the fungi Bipolaris sorokiniana and Alternaria triticina, carried on seed and in crop residue. Warm, humid weather after heading speeds it up.",
+    "organic": "Remove infected crop residue and use seed treated with Trichoderma.",
+    "chemical": "Seed treatment and sprays with fungicides such as mancozeb or propiconazole are commonly recommended; follow the label.",
+    "prevention": "Use clean, treated seed, rotate crops and keep balanced fertility."
+  },
+  "Wheat___Blast": {
+    "name": "Wheat Blast",
+    "plant": "Wheat",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Bleached, whitened ears above a dark point on the stem, with eye-shaped grey spots on leaves; grains are shrivelled or empty.",
+    "formation": "Caused by the fungus Magnaporthe oryzae (Triticum pathotype), spread by seed and windborne spores in warm (above 25 °C), wet weather at heading.",
+    "organic": "Remove and burn infected ears and plants; do not save seed from infected fields.",
+    "chemical": "Preventive sprays with fungicides such as tebuconazole or azoxystrobin at heading are used where blast is known; follow local advice.",
+    "prevention": "Use certified, treated seed, sow early so heading avoids warm wet spells, and follow local quarantine advice."
+  },
+  "Cotton___healthy": {
+    "name": "Healthy Cotton",
+    "plant": "Cotton",
+    "is_healthy": true,
+    "symptoms": "No disease detected. The leaves are green and flat, with no spots or curling.",
+    "organic": "Use compost and keep the field weed-free.",
+    "chemical": "No treatment needed.",
+    "prevention": "Use certified seed, crop rotation and balanced fertiliser."
+  },
+  "Cotton___Bacterial_blight": {
+    "name": "Cotton Bacterial Blight",
+    "plant": "Cotton",
+    "is_healthy": false,
+    "severity": "moderate",
+    "symptoms": "Angular, water-soaked spots between the leaf veins that turn brown to black; veins can blacken and leaves drop.",
+    "formation": "Caused by the bacterium Xanthomonas citri pv. malvacearum, carried on seed and crop debris and spread by rain splash and wind-driven rain in warm, wet weather.",
+    "organic": "Remove infected leaves and debris, and avoid working in the field when plants are wet.",
+    "chemical": "Copper oxychloride sprays, sometimes with streptocycline where permitted, are used to slow spread; follow local advice.",
+    "prevention": "Use acid-delinted, treated seed of resistant varieties and rotate crops."
+  },
+  "Cotton___Leaf_curl_virus": {
+    "name": "Cotton Leaf Curl Virus",
+    "plant": "Cotton",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Leaves curl upward or downward, veins thicken, and small leaf-like outgrowths (enations) form under the leaf; plants are stunted.",
+    "formation": "Caused by begomoviruses spread by the whitefly Bemisia tabaci, which picks up the virus from infected plants and weeds and carries it to healthy cotton.",
+    "organic": "Uproot and destroy infected plants early, use yellow sticky traps and spray neem oil to reduce whiteflies.",
+    "chemical": "There is no cure for the virus. Whitefly can be controlled with recommended insecticides, rotating chemical groups, as advised locally.",
+    "prevention": "Grow tolerant varieties, remove weed hosts around the field, and avoid sowing next to infected crops."
+  },
+  "Cotton___Fusarium_wilt": {
+    "name": "Cotton Fusarium Wilt",
+    "plant": "Cotton",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Leaves yellow and wilt, often on one side of the plant first; the stem shows brown streaks inside when cut.",
+    "formation": "Caused by the soil fungus Fusarium oxysporum f. sp. vasinfectum, which enters through the roots (often helped by nematodes) and blocks the water-conducting tissue. It survives in soil for years.",
+    "organic": "Apply Trichoderma-enriched compost to the soil and remove wilted plants with their roots.",
+    "chemical": "Seed treatment with recommended fungicides helps at sowing; there is no cure once plants wilt.",
+    "prevention": "Grow resistant varieties, rotate with non-host crops and avoid moving infected soil."
+  },
+  "Sugarcane___healthy": {
+    "name": "Healthy Sugarcane",
+    "plant": "Sugarcane",
+    "is_healthy": true,
+    "symptoms": "No disease detected. The leaves are green with no stripes, spots or pustules.",
+    "organic": "Use pressmud compost or farmyard manure and remove dry trash.",
+    "chemical": "No treatment needed.",
+    "prevention": "Plant healthy, treated setts of recommended varieties."
+  },
+  "Sugarcane___Rust": {
+    "name": "Sugarcane Rust",
+    "plant": "Sugarcane",
+    "is_healthy": false,
+    "severity": "moderate",
+    "symptoms": "Small elongated yellowish spots that turn into orange-brown or dark brown pustules, mostly on the underside of the leaf.",
+    "formation": "Caused by Puccinia rust fungi (brown rust, P. melanocephala). Wind carries spores, which infect when leaves stay wet in mild, humid weather.",
+    "organic": "Remove and destroy heavily infected leaves.",
+    "chemical": "Fungicides such as propiconazole are used when rust is severe; follow local advice.",
+    "prevention": "Grow resistant varieties and avoid excess nitrogen."
+  },
+  "Sugarcane___Yellow_leaf": {
+    "name": "Sugarcane Yellow Leaf",
+    "plant": "Sugarcane",
+    "is_healthy": false,
+    "severity": "moderate",
+    "symptoms": "The midrib on the underside of the leaf turns bright yellow, then the yellowing spreads across the leaf blade; tops of plants may bunch.",
+    "formation": "Caused by sugarcane yellow leaf virus, spread by aphids and by planting setts taken from infected cane.",
+    "organic": "Remove infected clumps and control aphids with neem-based sprays.",
+    "chemical": "There is no cure for the virus; aphids can be controlled with recommended insecticides if numbers are high.",
+    "prevention": "Plant virus-free setts (from tissue-culture nurseries where possible) of tolerant varieties."
+  },
+  "Sugarcane___Red_rot": {
+    "name": "Sugarcane Red Rot",
+    "plant": "Sugarcane",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Leaves yellow and dry from the top; the split cane shows red tissue with white cross-bands and smells sour. Red spots can appear on the leaf midrib.",
+    "formation": "Caused by the fungus Colletotrichum falcatum, spread mainly through infected setts, and also by water and soil in waterlogged fields.",
+    "organic": "Uproot and burn infected clumps, and treat setts with Trichoderma before planting.",
+    "chemical": "Sett treatment with recommended fungicides (e.g. carbendazim) is advised; there is no cure in standing cane.",
+    "prevention": "Plant only healthy setts of resistant varieties, avoid waterlogging and rotate crops."
+  },
+  "Sugarcane___Mosaic": {
+    "name": "Sugarcane Mosaic",
+    "plant": "Sugarcane",
+    "is_healthy": false,
+    "severity": "moderate",
+    "symptoms": "Patchy mosaic of light green or yellow and normal green areas on young leaves; plants may be stunted.",
+    "formation": "Caused by sugarcane mosaic virus, spread by aphids and by planting infected setts.",
+    "organic": "Remove infected clumps and control aphids with neem-based sprays.",
+    "chemical": "There is no cure for the virus; manage aphids as advised locally.",
+    "prevention": "Use virus-free setts of resistant varieties and remove grassy weed hosts."
+  },
+  "Chilli___healthy": {
+    "name": "Healthy Chilli",
+    "plant": "Chilli",
+    "is_healthy": true,
+    "symptoms": "No disease detected. The leaves are flat and evenly green with no spots or curling.",
+    "organic": "Use compost and mulch, and keep the field weed-free.",
+    "chemical": "No treatment needed.",
+    "prevention": "Use healthy seedlings, crop rotation and balanced fertiliser."
+  },
+  "Chilli___Leaf_curl": {
+    "name": "Chilli Leaf Curl",
+    "plant": "Chilli",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Leaves curl, crinkle and become small and thick; plants are bushy and stunted with few flowers or fruits.",
+    "formation": "Caused by chilli leaf curl begomoviruses spread by whiteflies; thrips and mites can cause similar curling.",
+    "organic": "Remove infected plants early, use yellow sticky traps and neem oil, and raise seedlings under insect net.",
+    "chemical": "There is no cure for the virus; manage whiteflies, thrips and mites with recommended products as advised locally.",
+    "prevention": "Use tolerant varieties, insect-proof nurseries and remove weed hosts."
+  },
+  "Chilli___Cercospora_leaf_spot": {
+    "name": "Chilli Cercospora Leaf Spot",
+    "plant": "Chilli",
+    "is_healthy": false,
+    "severity": "moderate",
+    "symptoms": "Round spots with a light grey centre and dark brown border ('frog-eye'); badly spotted leaves turn yellow and drop.",
+    "formation": "Caused by the fungus Cercospora capsici, which survives in crop debris and on seed and spreads by rain splash and wind in warm, humid weather.",
+    "organic": "Remove spotted leaves and crop debris, and avoid overhead watering.",
+    "chemical": "Fungicides such as mancozeb or copper oxychloride are commonly used; follow the label.",
+    "prevention": "Use clean seed, wider spacing and crop rotation."
+  },
+  "Chilli___Anthracnose": {
+    "name": "Chilli Anthracnose",
+    "plant": "Chilli",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Sunken, dark, round spots on leaves and fruits, often with rings of pink or orange spore masses; twigs can die back from the tip.",
+    "formation": "Caused by Colletotrichum fungi carried on seed and crop debris, spreading by rain splash in warm, wet weather.",
+    "organic": "Remove infected fruits and twigs, and treat seed with Trichoderma.",
+    "chemical": "Fungicides such as mancozeb, propiconazole or azoxystrobin are commonly used; follow the label.",
+    "prevention": "Use disease-free seed, rotate crops and avoid wetting the plants."
+  },
+  "Mango___healthy": {
+    "name": "Healthy Mango",
+    "plant": "Mango",
+    "is_healthy": true,
+    "symptoms": "No disease detected. The leaves are evenly green with no spots, galls or powdery growth.",
+    "organic": "Mulch around the tree and apply compost.",
+    "chemical": "No treatment needed.",
+    "prevention": "Prune for air flow and remove dead twigs and fallen leaves."
+  },
+  "Mango___Anthracnose": {
+    "name": "Mango Anthracnose",
+    "plant": "Mango",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Irregular dark brown to black spots on young leaves that merge and may fall out, leaving holes; flowers blacken and fruits get dark sunken spots.",
+    "formation": "Caused by the fungus Colletotrichum gloeosporioides, which survives on twigs and old leaves and spreads by rain splash during wet, humid weather at flushing and flowering.",
+    "organic": "Prune and burn infected twigs and leaves, and keep the orchard floor clean.",
+    "chemical": "Fungicides such as carbendazim or copper oxychloride are commonly sprayed at new flushes and flowering; follow local advice.",
+    "prevention": "Prune for an open canopy and spray preventively before wet flowering periods."
+  },
+  "Mango___Gall_midge": {
+    "name": "Mango Gall Midge",
+    "plant": "Mango",
+    "is_healthy": false,
+    "severity": "moderate",
+    "symptoms": "Many small raised, wart-like galls on the leaves; leaves may be deformed and drop early.",
+    "formation": "Caused by tiny gall midge flies (Procontarinia species) that lay eggs in tender leaves; the larvae make the leaf tissue swell into galls.",
+    "organic": "Collect and destroy fallen galled leaves, and plough the soil under the tree to expose the pupae.",
+    "chemical": "Recommended insecticides at the new flush stage can reduce attack; follow local advice.",
+    "prevention": "Keep the orchard clean and monitor new flushes."
+  },
+  "Mango___Bacterial_canker": {
+    "name": "Mango Bacterial Canker",
+    "plant": "Mango",
+    "is_healthy": false,
+    "severity": "moderate",
+    "symptoms": "Small water-soaked spots that become raised, black, angular cankers with a yellow halo; leaves and fruits can crack and ooze.",
+    "formation": "Caused by the bacterium Xanthomonas citri pv. mangiferaeindicae, spread by wind-driven rain and through wounds.",
+    "organic": "Prune and burn infected twigs, and protect trees from wounds and windbreak damage.",
+    "chemical": "Copper-based sprays are commonly used to slow spread; follow local advice.",
+    "prevention": "Use healthy grafts, plant windbreaks and avoid wounding."
+  },
+  "Mango___Die_back": {
+    "name": "Mango Die Back",
+    "plant": "Mango",
+    "is_healthy": false,
+    "severity": "high",
+    "symptoms": "Twigs dry from the tip backwards, leaves turn brown and curl, and the bark may ooze gum.",
+    "formation": "Caused by the fungus Lasiodiplodia theobromae, entering through wounds and pruning cuts, especially in stressed trees in hot, dry weather.",
+    "organic": "Cut infected twigs a few centimetres below the dead part and burn them; protect cuts with Bordeaux paste.",
+    "chemical": "Copper oxychloride or carbendazim sprays after pruning are commonly used; follow local advice.",
+    "prevention": "Prune cleanly, avoid water stress and feed trees well."
   }
 }

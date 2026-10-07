@@ -31,10 +31,11 @@ def test_healthz_reports_degraded_without_a_model(client):
 
 # --- diseases ---------------------------------------------------------------
 
-def test_list_diseases_returns_all_40(client):
-    """38 PlantVillage classes plus healthy orange and healthy squash."""
+def test_list_diseases_returns_all_68(client):
+    """38 PlantVillage classes, healthy orange and squash, and 28 for rice, wheat,
+    cotton, sugarcane, chilli and mango."""
     rows = client.get("/api/diseases").json()
-    assert len(rows) == 40
+    assert len(rows) == 68
 
 
 def test_list_diseases_filters_by_crop(client):
@@ -202,7 +203,7 @@ def fake_model(monkeypatch):
         monkeypatch.setattr("app.storage.put", lambda key, data, ct: key)
         monkeypatch.setattr(
             "app.inference.predict",
-            lambda image: Prediction(
+            lambda image, allowed=None: Prediction(
                 status=status,
                 disease_id=disease_id,
                 confidence=confidence,
@@ -325,7 +326,7 @@ def test_storage_failure_is_a_clear_error_with_cors(client, monkeypatch):
     as a network failure. The ledger stays untouched."""
     from app import inference
 
-    monkeypatch.setattr(inference, "predict", lambda image: inference.Prediction(
+    monkeypatch.setattr(inference, "predict", lambda image, allowed=None: inference.Prediction(
         status="ok", disease_id="Apple___Apple_scab", confidence=0.99, top3=[],
         entropy=0.0, model_version="test@0", cam=None))
 
@@ -373,3 +374,40 @@ def test_not_a_leaf_is_never_a_diagnosis(monkeypatch):
         p = inference.predict(img)
         assert p.status == status, (top, p)
         assert (p.disease_id is None) == (status == "uncertain")
+
+
+def test_a_chosen_crop_limits_the_answer_to_that_crop(monkeypatch):
+    """Tomato-looking logits, but the farmer says Apple: the answer must be an apple class,
+    and Not_a_leaf still competes whatever crop is chosen."""
+    import numpy as np
+    from PIL import Image
+    from app import inference
+
+    labels = ["Apple___Apple_scab", "Apple___healthy", "Tomato___healthy", inference.NOT_A_LEAF]
+
+    class Session:
+        def __init__(self, logits):
+            self.logits = logits
+
+        def run(self, _, feeds):
+            return np.array([self.logits], dtype=np.float32), np.zeros((1, 4, 7, 7), dtype=np.float32)
+
+    meta = {"model_name": "t", "input_size": 32, "resize_ratio": 1.0, "num_classes": 4,
+            "normalization": {"mean": [0.5] * 3, "std": [0.5] * 3},
+            "confidence_threshold": 0.2, "entropy_threshold": 0.9}
+    img = Image.new("RGB", (40, 40), "green")
+    apple = {"Apple___Apple_scab", "Apple___healthy"}
+    for logits, want in (([1.0, 4.0, 9.0, -5.0], "Apple___healthy"), ([1.0, 1.0, 1.0, 9.0], inference.NOT_A_LEAF)):
+        model = inference.LoadedModel(session=Session(logits), labels=labels, meta=meta)
+        monkeypatch.setattr(inference, "load_model", lambda: model)
+        p = inference.predict(img, allowed=apple)
+        assert p.top3[0]["disease_id"] == want, p
+        assert all(t["disease_id"] in apple | {inference.NOT_A_LEAF} for t in p.top3)
+
+
+def test_an_unknown_crop_is_rejected(client):
+    import io
+    from PIL import Image
+    buf = io.BytesIO(); Image.new("RGB", (40, 40), "green").save(buf, "JPEG")
+    r = client.post("/api/scans?crop=Banana", files={"file": ("leaf.jpg", buf.getvalue(), "image/jpeg")})
+    assert r.status_code == 422

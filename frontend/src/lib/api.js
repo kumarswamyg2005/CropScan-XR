@@ -53,10 +53,12 @@ export function adaptScan(scan) {
 }
 
 export const api = {
-  async createScan(file, lang = 'en') {
+  async createScan(file, lang = 'en', crop = '') {
     const form = new FormData()
     form.append('file', file)
-    const scan = await request(`/api/scans?lang=${lang}`, { method: 'POST', body: form })
+    // crop: the plant the farmer picked; '' lets every crop compete
+    const q = crop ? `&crop=${encodeURIComponent(crop)}` : ''
+    const scan = await request(`/api/scans?lang=${lang}${q}`, { method: 'POST', body: form })
     return adaptScan(scan)
   },
 

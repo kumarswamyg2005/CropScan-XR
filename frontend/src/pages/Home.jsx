@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
 
 import { useLang } from '../context/LanguageContext'
+import { CROPS } from '../crops'
 
 const stats = [
-  { value: '40', label: 'home.stat.classes', sub: 'home.stat.classesSub' },
+  { value: '68', label: 'home.stat.classes', sub: 'home.stat.classesSub' },
   { value: '14', label: 'home.stat.cycles', sub: 'home.stat.cyclesSub' },
   { value: 'VR', label: 'home.stat.field', sub: 'home.stat.fieldSub' },
   { value: '5', label: 'home.stat.langs', sub: 'home.stat.langsSub' },
@@ -16,13 +17,7 @@ const steps = [
   { num: '03', icon: '💊', title: 'home.step3.title', desc: 'home.step3.desc' },
 ]
 
-// Keyed by the plant names in data/disease_info.json, which crop.* translates.
-const crops = [
-  ['🍎', 'Apple'], ['🍅', 'Tomato'], ['🥔', 'Potato'], ['🌽', 'Corn (Maize)'],
-  ['🍇', 'Grape'], ['🫑', 'Bell Pepper'], ['🍑', 'Peach'], ['🍊', 'Orange'],
-  ['🫐', 'Blueberry'], ['🍓', 'Strawberry'], ['🍒', 'Cherry'], ['🍃', 'Raspberry'],
-  ['🌱', 'Soybean'], ['🎃', 'Squash'],
-]
+const crops = CROPS
 
 export default function Home() {
   const { t } = useLang()

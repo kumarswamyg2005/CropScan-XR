@@ -58,6 +58,34 @@ canonical:
   Tomato___Tomato_Yellow_Leaf_Curl_Virus:              { crop: Tomato,      healthy: false }
   Tomato___Tomato_mosaic_virus:                        { crop: Tomato,      healthy: false }
   Tomato___healthy:                                    { crop: Tomato,      healthy: true  }
+  Rice___healthy:                                      { crop: Rice,        healthy: true  }   # added 2026-10: field photos only
+  Rice___Bacterial_leaf_blight:                        { crop: Rice,        healthy: false }   # added 2026-10: field photos only
+  Rice___Leaf_blast:                                   { crop: Rice,        healthy: false }   # added 2026-10: field photos only
+  Rice___Brown_spot:                                   { crop: Rice,        healthy: false }   # added 2026-10: field photos only
+  Rice___Tungro:                                       { crop: Rice,        healthy: false }   # added 2026-10: field photos only
+  Rice___Sheath_blight:                                { crop: Rice,        healthy: false }   # added 2026-10: field photos only
+  Wheat___healthy:                                     { crop: Wheat,       healthy: true  }   # added 2026-10: field photos only
+  Wheat___Rust:                                        { crop: Wheat,       healthy: false }   # added 2026-10: field photos only
+  Wheat___Leaf_blight:                                 { crop: Wheat,       healthy: false }   # added 2026-10: field photos only
+  Wheat___Blast:                                       { crop: Wheat,       healthy: false }   # added 2026-10: field photos only
+  Cotton___healthy:                                    { crop: Cotton,      healthy: true  }   # added 2026-10: field photos only
+  Cotton___Bacterial_blight:                           { crop: Cotton,      healthy: false }   # added 2026-10: field photos only
+  Cotton___Leaf_curl_virus:                            { crop: Cotton,      healthy: false }   # added 2026-10: field photos only
+  Cotton___Fusarium_wilt:                              { crop: Cotton,      healthy: false }   # added 2026-10: field photos only
+  Sugarcane___healthy:                                 { crop: Sugarcane,   healthy: true  }   # added 2026-10: field photos only
+  Sugarcane___Rust:                                    { crop: Sugarcane,   healthy: false }   # added 2026-10: field photos only
+  Sugarcane___Yellow_leaf:                             { crop: Sugarcane,   healthy: false }   # added 2026-10: field photos only
+  Sugarcane___Red_rot:                                 { crop: Sugarcane,   healthy: false }   # added 2026-10: field photos only
+  Sugarcane___Mosaic:                                  { crop: Sugarcane,   healthy: false }   # added 2026-10: field photos only
+  Chilli___healthy:                                    { crop: Chilli,      healthy: true  }   # added 2026-10: field photos only
+  Chilli___Leaf_curl:                                  { crop: Chilli,      healthy: false }   # added 2026-10: field photos only
+  Chilli___Cercospora_leaf_spot:                       { crop: Chilli,      healthy: false }   # added 2026-10: field photos only
+  Chilli___Anthracnose:                                { crop: Chilli,      healthy: false }   # added 2026-10: field photos only
+  Mango___healthy:                                     { crop: Mango,       healthy: true  }   # added 2026-10: field photos only
+  Mango___Anthracnose:                                 { crop: Mango,       healthy: false }   # added 2026-10: field photos only
+  Mango___Gall_midge:                                  { crop: Mango,       healthy: false }   # added 2026-10: field photos only
+  Mango___Bacterial_canker:                            { crop: Mango,       healthy: false }   # added 2026-10: field photos only
+  Mango___Die_back:                                    { crop: Mango,       healthy: false }   # added 2026-10: field photos only
 
 sources:
 
