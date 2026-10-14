@@ -367,13 +367,18 @@ def test_not_a_leaf_is_never_a_diagnosis(monkeypatch):
     meta = {"model_name": "t", "input_size": 32, "resize_ratio": 1.0, "num_classes": 3,
             "normalization": {"mean": [0.5] * 3, "std": [0.5] * 3},
             "confidence_threshold": 0.2, "entropy_threshold": 0.5}
-    img = Image.new("RGB", (40, 40), "green")
+    # Textured, so the flat-photo guard stays out of the way of what this test checks.
+    img = Image.fromarray(np.random.default_rng(0).integers(0, 255, (40, 40, 3), dtype=np.uint8))
     for top, status in ((2, "uncertain"), (0, "ok")):
         model = inference.LoadedModel(session=Session(top), labels=labels, meta=meta)
         monkeypatch.setattr(inference, "load_model", lambda: model)
         p = inference.predict(img)
         assert p.status == status, (top, p)
         assert (p.disease_id is None) == (status == "uncertain")
+
+    # A single-colour photo is refused however sure the model is: it has no leaf detail.
+    p = inference.predict(Image.new("RGB", (40, 40), "green"))
+    assert p.status == "uncertain" and p.disease_id is None, p
 
 
 def test_a_chosen_crop_limits_the_answer_to_that_crop(monkeypatch):

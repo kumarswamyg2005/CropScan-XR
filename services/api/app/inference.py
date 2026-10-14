@@ -28,6 +28,15 @@ from app.config import get_settings
 # leaf photo. Pillow's own guard, set explicitly rather than left at the default.
 Image.MAX_IMAGE_PIXELS = 64_000_000
 
+# Uploads are decoded at most this big. The model sees 224 px; a full 24 MP phone
+# photo decoded three times over pushed the process past the 512 MB server limit.
+MAX_SIDE = 1600
+
+# A photo with almost no detail (lens covered, blank or single-colour image) is
+# refused before the model can name a disease in it. Real field photos measured
+# >= 14.9 grey-level standard deviation (1,500 PlantDoc/PlantWild/Potato photos).
+MIN_DETAIL = 6.0
+
 
 # The model's own "this photo is not a crop leaf" class. It is never a diagnosis.
 NOT_A_LEAF = "Not_a_leaf"
@@ -97,6 +106,7 @@ def decode_image(raw: bytes) -> Image.Image:
     try:
         Image.open(io.BytesIO(raw)).verify()
         image = Image.open(io.BytesIO(raw))
+        image.draft("RGB", (MAX_SIDE, MAX_SIDE))  # JPEG: decode at reduced scale; no-op otherwise
         image.load()
     except Exception as exc:
         raise ValueError("Could not decode the uploaded file as an image.") from exc
@@ -107,6 +117,7 @@ def decode_image(raw: bytes) -> Image.Image:
     from PIL import ImageOps
 
     image = ImageOps.exif_transpose(image).convert("RGB")
+    image.thumbnail((MAX_SIDE, MAX_SIDE))
 
     # Rebuild from raw pixels. Nothing but the pixels survives, so GPS
     # coordinates of someone's farm cannot ride along into object storage.
@@ -157,8 +168,10 @@ def predict(image: Image.Image, allowed: set[str] | None = None) -> Prediction:
     # Both conditions must pass. A high top-1 with a broad messy tail is exactly
     # the case entropy is here to catch.
     top_index = int(order[0])
+    detail = float(np.asarray(image.convert("L").resize((64, 64)), dtype=np.float32).std())
     accepted = (
-        confidence >= model.meta["confidence_threshold"]
+        detail >= MIN_DETAIL
+        and confidence >= model.meta["confidence_threshold"]
         and entropy <= model.meta["entropy_threshold"]
         and model.labels[top_index] != NOT_A_LEAF
     )
