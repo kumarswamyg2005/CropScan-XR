@@ -1,5 +1,5 @@
 {
-  "model_name": "efficientnet_b0",
+  "model_name": "bioclip_vit_b16",
   "input_size": 224,
   "resize_ratio": 1.0,
   "normalization": {
@@ -16,27 +16,29 @@
   },
   "layout": "NCHW",
   "colour_space": "RGB",
-  "trained_at": "2026-10-07T07:31:24+00:00",
-  "git_sha": "9084eba9d55280692cf11b335cdd66f956d1e143",
+  "trained_at": "2026-10-12T04:42:53+00:00",
+  "git_sha": "v6",
   "num_classes": 69,
   "metrics": {
-    "lab_acc": 0.9785368105238864,
-    "field_acc": 0.5889830508474576,
-    "macro_f1_field": 0.5930121652841175,
-    "ece": 0.005972820748750217,
-    "domain_gap": 0.3895537596764288,
+    "lab_acc": 0.9935379644588045,
+    "field_acc": 0.7711864406779662,
+    "macro_f1_field": 0.7695421584620071,
+    "ece": 0.0017422935978083811,
+    "domain_gap": 0.22235152378083833,
     "background_probe_ratio": null
   },
-  "confidence_threshold": 0.708062469959259,
-  "entropy_threshold": 0.4288289519193621,
-  "gradcam_layer": "baked_into_graph:cam",
+  "confidence_threshold": 0.7,
+  "entropy_threshold": 0.283,
+  "gradcam_layer": "baked_into_graph:patch_token_logits",
   "cam_shape": [
     69,
-    7,
-    7
+    14,
+    14
   ],
   "outputs": [
     "logits",
     "cam"
-  ]
+  ],
+  "precision": "int8_dynamic_matmul",
+  "display_name": "CropScan field model v6 (fine-tuned from BioCLIP ViT-B/16)"
 }

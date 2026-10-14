@@ -74,7 +74,12 @@ def load_model() -> LoadedModel:
 
     import onnxruntime as ort
 
-    session = ort.InferenceSession(str(onnx_path), providers=["CPUExecutionProvider"])
+    # The arena and memory-pattern planner cost ~80 MB on the int8 BioCLIP
+    # model and buy nothing here: one image at a time, same latency without.
+    opts = ort.SessionOptions()
+    opts.enable_cpu_mem_arena = False
+    opts.enable_mem_pattern = False
+    session = ort.InferenceSession(str(onnx_path), opts, providers=["CPUExecutionProvider"])
     labels = json.loads((model_dir / "labels.json").read_text())
     meta = json.loads((model_dir / "meta.json").read_text())
 

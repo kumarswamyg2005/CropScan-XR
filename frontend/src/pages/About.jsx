@@ -119,7 +119,7 @@ export default function About() {
   }, [])
 
   const techStack = [
-    ['about.tech.model', 'EfficientNet-B0 (ImageNet → PlantVillage + field photos)'],
+    ['about.tech.model', 'Fine-tuned from BioCLIP ViT-B/16 (PlantVillage + 26 field-photo sources)'],
     ['about.tech.dataset', t('about.tech.datasetValue')],
     ['about.tech.training', t('about.tech.trainingValue')],
     ['about.tech.abstain', t('about.tech.abstainValue')],

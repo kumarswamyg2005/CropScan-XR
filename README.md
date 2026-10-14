@@ -22,8 +22,10 @@ cycle*. The ledger says *this happened, at this time, on this image*.
 
 ## Accuracy: the honest number
 
-> **Deployed model: EfficientNet-B0, 68 leaf classes across 20 crops, plus "Not a leaf"** (training run
-> `deploy5-field`). Trained on 31,982 images: 11,010 PlantVillage (capped at 300 per class), 19,572 field
+> **Deployed model: fine-tuned from BioCLIP ViT-B/16 (Stevens et al., CVPR 2024, MIT licence), 68 leaf classes
+> across 20 crops, plus "Not a leaf"** (training run `deploy5-field`). The tables below were measured on the
+> earlier EfficientNet-B0 run of the same data; the deployed model's own numbers are served live at `/api/model`.
+> Trained on 31,982 images: 11,010 PlantVillage (capped at 300 per class), 19,572 field
 > photos from 26 CC BY / CC0 sources (PlantDoc; grape, potato, corn, orange, squash, tomato and soybean
 > sets; and rice, wheat, cotton, sugarcane, chilli and mango sets from India, Bangladesh and elsewhere)
 > and 1,400 openly licensed COCO photos of people, objects and rooms. Every source passed a
@@ -264,9 +266,9 @@ Quest 3 for the frame-rate gate.
 - **`backend/model.pt` (15.7 MB) is committed** because the paper's
   benchmarks in `eval/` load it. The API does not use it; it serves
   `services/api/model/model.onnx`.
-- **The homepage still advertises 99.3% accuracy and EfficientNet-B0.** Both
-  describe the deleted model. They must be replaced with the field number before
-  this is published — see the note at the end of ADR 0005.
+- **The homepage must not advertise 99.3% accuracy.** That number
+  describes the deleted model. Check the homepage shows the field number
+  before this is published — see the note at the end of ADR 0005.
 - **Two diseases still have no footage**: tomato bacterial spot and tomato
   mosaic virus. A bacterium and a mechanically transmitted virus are both hard
   to film, and nothing reusable exists. The fungal-infection clip is
