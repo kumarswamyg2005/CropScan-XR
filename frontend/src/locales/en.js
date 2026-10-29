@@ -115,6 +115,8 @@ export default {
   'result.uncertainBody': 'CropScan only names a disease when it is confident. This photo may not show a crop leaf, or the leaf may be unclear. Please take another photo:',
   'result.notLeafTitle': 'This does not look like a crop leaf',
   'result.notLeafBody': 'CropScan checks crop leaves only. This photo seems to show something else, such as a person, an object or a room. Please photograph one leaf of the plant:',
+  'result.wrongCropTitle': 'This looks like {crop}, not the crop you picked',
+  'result.wrongCropBody': 'The crop you picked does not match this leaf, so CropScan did not guess a disease. Pick {crop}, or “I don’t know / any crop”, and scan again. Tips for a clear photo:',
   'result.plant': 'Plant',
   'result.severity': 'Severity',
   'result.confidence': 'Confidence',

@@ -21,8 +21,12 @@ log = logging.getLogger(__name__)
 
 def _to_out(scan: Scan, lang: str) -> ScanOut:
     cycle = get_cycle(scan.disease_id) if scan.disease_id else None
+    looks_like = (scan.client_meta or {}).get("looks_like")
 
-    if scan.status == "uncertain":
+    if looks_like:
+        blocked = (f"This photo looks like {looks_like}, not the crop that was picked. "
+                   f"Pick {looks_like}, or no crop, and scan again.")
+    elif scan.status == "uncertain":
         blocked = ("This scan was not confident enough to identify a disease. "
                    "The field module would tell a story about the wrong pathogen.")
     elif cycle is None:
@@ -45,6 +49,7 @@ def _to_out(scan: Scan, lang: str) -> ScanOut:
         has_cycle=cycle is not None,
         can_enter_field=blocked is None,
         field_blocked_reason=blocked,
+        looks_like_crop=looks_like,
     )
 
 
@@ -137,7 +142,10 @@ async def create_scan(
         top3=[t for t in prediction.top3],
         status=prediction.status,
         gradcam_key=gradcam_key,
-        client_meta={"filename": file.filename, "content_type": file.content_type},
+        client_meta={
+            "filename": file.filename, "content_type": file.content_type, "crop": crop,
+            "looks_like": (info_for(prediction.looks_like) or {}).get("plant") if prediction.looks_like else None,
+        },
     )
     db.add(scan)
 

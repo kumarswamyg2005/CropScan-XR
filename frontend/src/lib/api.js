@@ -49,6 +49,7 @@ export function adaptScan(scan) {
     hasCycle: scan.has_cycle,
     canEnterField: scan.can_enter_field,
     fieldBlockedReason: scan.field_blocked_reason,
+    looksLikeCrop: scan.looks_like_crop, // set when the photo plainly is not the picked crop
   }
 }
 

@@ -41,6 +41,15 @@ MIN_DETAIL = 6.0
 # The model's own "this photo is not a crop leaf" class. It is never a diagnosis.
 NOT_A_LEAF = "Not_a_leaf"
 
+# A picked crop that the full model gives almost no weight to is a wrong pick (a
+# cherry leaf scanned as Chilli), not a look-alike to rescue. Restricting the
+# softmax to that crop would rescale its last 0.1% into a confident answer.
+# Tuned on validation logits of the live model, every wrong pick simulated: the
+# largest cut-off before right-crop losses rise (0.68% at 0.01 and 0.02, 0.97% at
+# 0.05). On test it cuts wrong-crop scans answered with a disease from 31.3% to
+# 0.61%, and loses 0.66% of correct right-crop answers.
+CROP_MASS_MIN = 0.02
+
 
 class ModelUnavailable(RuntimeError):
     """No model on disk. /predict 503s rather than inventing an answer."""
@@ -55,6 +64,7 @@ class Prediction:
     entropy: float
     model_version: str
     cam: np.ndarray | None      # [H, W] for the predicted class, 0..1
+    looks_like: str | None = None  # the full model's class when the picked crop is implausible
 
 
 @dataclass
@@ -155,9 +165,14 @@ def predict(image: Image.Image, allowed: set[str] | None = None) -> Prediction:
     logits, cam = model.session.run(None, {"input": x})
 
     scores = logits[0]
+    wrong_crop = False
     if allowed is not None:
-        keep = np.array([label in allowed or label == NOT_A_LEAF for label in model.labels])
-        scores = np.where(keep, scores, -np.inf)
+        full = _softmax(scores)
+        in_crop = np.array([label in allowed for label in model.labels])
+        full_top = model.labels[int(full.argmax())]
+        wrong_crop = full[in_crop].sum() < CROP_MASS_MIN and full_top != NOT_A_LEAF
+        if not wrong_crop:   # a wrong pick keeps the full model's scores: they are the honest ones
+            scores = np.where(in_crop | (np.array(model.labels) == NOT_A_LEAF), scores, -np.inf)
     probs = _softmax(scores)
     order = np.argsort(probs)[::-1]
     top3 = [{"disease_id": model.labels[i], "confidence": float(probs[i])} for i in order[:3] if probs[i] > 0]
@@ -169,12 +184,17 @@ def predict(image: Image.Image, allowed: set[str] | None = None) -> Prediction:
     # the case entropy is here to catch.
     top_index = int(order[0])
     detail = float(np.asarray(image.convert("L").resize((64, 64)), dtype=np.float32).std())
-    accepted = (
+    confident = (
         detail >= MIN_DETAIL
         and confidence >= model.meta["confidence_threshold"]
         and entropy <= model.meta["entropy_threshold"]
         and model.labels[top_index] != NOT_A_LEAF
     )
+    accepted = confident and not wrong_crop
+    # Name the crop it looks like only when the full model would have answered with it.
+    # A leaf of a plant it was never taught (banana, cabbage) gets the plain "not sure"
+    # message instead of "looks like Tomato": on 2,308 such photos, 77% -> 36% named.
+    looks_like = model.labels[top_index] if wrong_crop and confident else None
 
     return Prediction(
         status="ok" if accepted else "uncertain",
@@ -184,6 +204,7 @@ def predict(image: Image.Image, allowed: set[str] | None = None) -> Prediction:
         entropy=entropy,
         model_version=model.version,
         cam=_normalize_cam(cam[0][top_index]) if accepted else None,
+        looks_like=looks_like,
     )
 
 

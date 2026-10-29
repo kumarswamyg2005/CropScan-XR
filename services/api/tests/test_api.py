@@ -199,7 +199,7 @@ def test_scan_rejects_an_oversized_upload(client, monkeypatch):
 
 @pytest.fixture
 def fake_model(monkeypatch):
-    def _install(status="ok", disease_id="Apple___Apple_scab", confidence=0.94):
+    def _install(status="ok", disease_id="Apple___Apple_scab", confidence=0.94, looks_like=None):
         monkeypatch.setattr("app.storage.put", lambda key, data, ct: key)
         monkeypatch.setattr(
             "app.inference.predict",
@@ -212,6 +212,7 @@ def fake_model(monkeypatch):
                 model_version="convnext_tiny@abc12345",
                 cam=np.linspace(0, 1, 49).reshape(7, 7).astype(np.float32)
                 if status == "ok" else None,
+                looks_like=looks_like,
             ),
         )
     return _install
@@ -382,8 +383,10 @@ def test_not_a_leaf_is_never_a_diagnosis(monkeypatch):
 
 
 def test_a_chosen_crop_limits_the_answer_to_that_crop(monkeypatch):
-    """Tomato-looking logits, but the farmer says Apple: the answer must be an apple class,
-    and Not_a_leaf still competes whatever crop is chosen."""
+    """Tomato-leaning logits that still give Apple real weight (a look-alike), and the
+    farmer says Apple: the answer must be an apple class. Not_a_leaf still competes
+    whatever crop is chosen. A pick the model gives almost no weight is refused and
+    named instead: a cherry leaf scanned as Chilli must not come back as a chilli disease."""
     import numpy as np
     from PIL import Image
     from app import inference
@@ -402,12 +405,42 @@ def test_a_chosen_crop_limits_the_answer_to_that_crop(monkeypatch):
             "confidence_threshold": 0.2, "entropy_threshold": 0.9}
     img = Image.new("RGB", (40, 40), "green")
     apple = {"Apple___Apple_scab", "Apple___healthy"}
-    for logits, want in (([1.0, 4.0, 9.0, -5.0], "Apple___healthy"), ([1.0, 1.0, 1.0, 9.0], inference.NOT_A_LEAF)):
+    for logits, want in (([1.0, 7.0, 9.0, -5.0], "Apple___healthy"), ([1.0, 1.0, 1.0, 9.0], inference.NOT_A_LEAF)):
         model = inference.LoadedModel(session=Session(logits), labels=labels, meta=meta)
         monkeypatch.setattr(inference, "load_model", lambda: model)
         p = inference.predict(img, allowed=apple)
         assert p.top3[0]["disease_id"] == want, p
+        assert p.looks_like is None
         assert all(t["disease_id"] in apple | {inference.NOT_A_LEAF} for t in p.top3)
+
+    leaf = Image.fromarray(np.random.default_rng(0).integers(0, 255, (40, 40, 3), dtype=np.uint8))
+    model = inference.LoadedModel(session=Session([-5.0, -5.0, 12.0, -5.0]), labels=labels, meta=meta)
+    monkeypatch.setattr(inference, "load_model", lambda: model)
+    p = inference.predict(leaf, allowed=apple)
+    assert p.status == "uncertain" and p.disease_id is None, p
+    assert p.looks_like == "Tomato___healthy"
+    assert p.top3[0]["disease_id"] == "Tomato___healthy"  # the honest scores, not rescaled apple ones
+
+    # Still a wrong pick, but the full model is not sure what it is either (a plant it was
+    # never taught): refused, and no crop is named.
+    model = inference.LoadedModel(session=Session([-5.0, -5.0, 12.0, 11.5]), labels=labels,
+                                  meta={**meta, "confidence_threshold": 0.7})
+    monkeypatch.setattr(inference, "load_model", lambda: model)
+    p = inference.predict(leaf, allowed=apple)
+    assert p.status == "uncertain" and p.disease_id is None and p.looks_like is None, p
+
+
+def test_a_wrong_crop_pick_says_what_the_photo_looks_like(client, fake_model):
+    fake_model(status="uncertain", disease_id=None, confidence=0.99, looks_like="Tomato___healthy")
+    r = client.post("/api/scans?crop=Apple", files={"file": ("leaf.png", png_bytes(), "image/png")})
+    assert r.status_code == 201
+    body = r.json()
+    assert body["status"] == "uncertain" and body["disease_id"] is None
+    assert body["looks_like_crop"] == "Tomato"
+    assert body["can_enter_field"] is False and "Tomato" in body["field_blocked_reason"]
+    # and it survives a reload, which rebuilds the reply from the stored row
+    again = client.get(f"/api/scans/{body['id']}").json()
+    assert again["looks_like_crop"] == "Tomato"
 
 
 def test_an_unknown_crop_is_rejected(client):

@@ -186,9 +186,12 @@ export default function Result() {
   const uncertain = status === 'uncertain'
   // The model's own "this is not a plant" answer (the Not_a_leaf class), when it has one
   const notLeaf = uncertain && top3?.[0]?.class_name === NOT_A_LEAF
+  // A cherry leaf scanned with "Chilli" picked: say what it looks like instead of guessing
+  const wrongCrop = uncertain && result.looksLikeCrop ? t(`crop.${result.looksLikeCrop}`) : null
 
   const isHealthy = !uncertain && (info?.is_healthy ?? class_name.includes('healthy'))
   const displayName = notLeaf ? t('result.notLeafTitle')
+    : wrongCrop ? t('result.wrongCropTitle', { crop: wrongCrop })
     : uncertain ? t('result.uncertainTitle') : (info?.name || prettyClass(class_name))
   const plant = info?.plant ?? class_name.split('___')[0].replace(/_/g, ' ')
 
@@ -324,7 +327,9 @@ export default function Result() {
             marginBottom: 28,
           }}>
             <p style={{ margin: '0 0 14px', color: 'var(--color-text)', lineHeight: 1.65 }}>
-              {notLeaf ? t('result.notLeafBody') : t('result.uncertainBody')}
+              {notLeaf ? t('result.notLeafBody')
+                : wrongCrop ? t('result.wrongCropBody', { crop: wrongCrop })
+                : t('result.uncertainBody')}
             </p>
             <ul style={{ margin: 0, paddingLeft: 20, color: 'var(--color-text-muted)', fontSize: '0.9rem', lineHeight: 1.8, listStyle: 'disc' }}>
               <li>{t('detect.tip.singleDesc')}</li>

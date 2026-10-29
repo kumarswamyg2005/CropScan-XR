@@ -29,6 +29,8 @@ class ScanOut(BaseModel):
     # a reason to show. Computed server-side so the two surfaces cannot disagree.
     can_enter_field: bool = False
     field_blocked_reason: str | None = None
+    # The crop the photo looks like, when it plainly is not the crop the user picked.
+    looks_like_crop: str | None = None
 
 
 class DiseaseSummary(BaseModel):
